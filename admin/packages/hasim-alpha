@@ -1,0 +1,9 @@
+
+[Global]
+Buildorder=1000
+Version=1
+Lock=asim-hasim-alpha
+Description=Description of hasim-alpha
+Name=hasim-alpha
+Tag=HEAD
+CSN=CSN-hasim-alpha-0
