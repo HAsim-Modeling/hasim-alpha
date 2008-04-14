@@ -1,0 +1,23 @@
+
+----------
+jsemer      Date: Mon Apr 14 18:17:40 EDT 2008  CSN: CSN-hasim-alpha-2
+                  Mon Apr 14 22:17:40 UTC 2008
+
+
+Directory config/pm/hasim-alpha
+ alpha-unpipelined/        Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined
+ alpha_unpipelined_exe.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha
+ submodels/                Locally Added               0 
+
+Directory config/pm/hasim-alpha/submodels
+ funcp/                    Locally Added               0 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Added               0 
+
+Skeleton for initial Alpha model. Several ISA modules
+still need to be replaced with Alpha versions.

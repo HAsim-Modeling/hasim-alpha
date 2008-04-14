@@ -1,0 +1,136 @@
+
+[Global]
+SaveParameters=0
+Description=Unpipelined Alpha  Model - Exe
+File=alpha_unpipelined_exe
+Version=2.1
+Name=Unpipelined Alpha Model - Exe
+Type=HAsim
+Class=Asim::Model
+
+[Hasim - Hardware (fpga) based system/Requires]
+hasim_funcp=Functional Partition Version 3
+hasim_chip=Uniprocessor chip
+hasim_isa=Hasim - SMIPS ISA
+
+[Model]
+DefaultAttributes=unpipelined alpha hybrid exe hasim
+model=HAsim Hybrid Model Foundation
+
+[Hasim - Hardware (fpga) based system]
+Packagehint=hasim
+File=modules/system/single_chip_system/hasim_system.awb
+
+[Uniprocessor chip/Requires]
+hasim_cpu=Hasim Unpipelined CPU
+hasim_memory=magic memory
+
+[Hasim Unpipelined CPU]
+File=modules/cpu/mips/unpipelined_cpu.awb
+Packagehint=hasim-mips
+
+[Hasim Common Library]
+File=config/pm/hasim/submodels/hasim_common.apm
+Packagehint=hasim
+
+[Uniprocessor chip]
+File=modules/chip/mips/uniprocessor/uniprocessor.awb
+Packagehint=hasim-mips
+
+[magic memory]
+File=modules/memory/magic_memory.awb
+Packagehint=hasim-mips
+
+[Hasim - SMIPS ISA]
+File=modules/isa/smips/hasim_smips_isa.awb
+Packagehint=hasim-mips
+
+
+[FPGA Environment]
+File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
+Packagehint=platforms
+
+[Hasim Common Library/Params]
+TERM_FPGA_SWITCHES=0
+TERM_VDEV_MEMORY=0
+TERM_FPGA_BUTTONS=0
+TERM_VDEV_MEMORY_INVALIDATE=0
+TERM_FPGA_LEDS=0
+
+[Hasim Standard Controller]
+File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm
+Packagehint=hasim
+
+[HAsim Hybrid Model Foundation/Requires]
+hasim_common=Hasim Common Library
+hasim_system=Hasim - Hardware (fpga) based system
+hasim_controller=Hasim Standard Controller
+fpgaenv=FPGA Environment
+
+[HAsim Hybrid Model Foundation]
+File=modules/model/hasim_model.awb
+Packagehint=hasim
+
+[Manager using Macro Ops for Mem State]
+File=modules/hasim/functional-partition/memory-state/manager/macro-ops/memstate_manager_macro_ops.awb
+Packagehint=hasim
+
+[Functional Partition Version 3/Requires]
+funcp_memstate=Memory State for Functional Partition
+hasim_isa_datapath=Hasim - SMIPS Datapath V3
+hasim_isa_emulator=ISA Emulator
+funcp_regstate=Register State for Functional Partition
+
+[Memory State for Functional Partition/Requires]
+funcp_memstate_manager=Manager using Macro Ops for Mem State
+
+[Null Cache for Functional Partition]
+File=modules/hasim/functional-partition/memory-state/cache/null/memstate_cache_null.awb
+Packagehint=hasim
+
+[Scoreboard with One-Hot Encoding]
+File=modules/hasim/functional-partition/register-state/scoreboard/onehot/regstate_scoreboard_onehot.awb
+Packagehint=hasim
+
+[Register State for Functional Partition/Requires]
+funcp_regstate_manager=Register State Manager using Macro Ops
+
+[Register State for Functional Partition]
+File=modules/hasim/functional-partition/register-state/regstate_default.awb
+Packagehint=hasim
+
+[Store Buffer using Bucket Hash]
+File=modules/hasim/functional-partition/memory-state/store-buffer/bucket-hash/memstate_storebuffer_bucket_hash.awb
+Packagehint=hasim
+
+[Memory State for Functional Partition]
+File=modules/hasim/functional-partition/memory-state/memstate_default.awb
+Packagehint=hasim
+
+[Functional Partition Version 3]
+File=modules/hasim/functional-partition/functional_partition_default.awb
+Packagehint=hasim
+
+[Manager using Macro Ops for Mem State/Requires]
+funcp_memstate_storebuffer=Store Buffer using Bucket Hash
+funcp_memstate_cache=Null Cache for Functional Partition
+
+[Register State Manager using Macro Ops/Requires]
+funcp_regstate_freelist=Freelist in BRAM
+funcp_regstate_scoreboard=Scoreboard with One-Hot Encoding
+
+[ISA Emulator]
+File=modules/hasim/functional-partition/isa-emulator/isa-emulator.awb
+Packagehint=hasim
+
+[Freelist in BRAM]
+File=modules/hasim/functional-partition/register-state/freelist/bram/funcp_freelist_bram.awb
+Packagehint=hasim
+
+[Register State Manager using Macro Ops]
+File=modules/hasim/functional-partition/register-state/manager/macro-ops/regstate_manager_macro_ops.awb
+Packagehint=hasim
+
+[Hasim - SMIPS Datapath V3]
+File=modules/isa/smips/hasim_smips_datapath_new.awb
+Packagehint=hasim-mips
