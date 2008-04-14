@@ -21,3 +21,13 @@ Directory config/pm/hasim-alpha/submodels/funcp
 
 Skeleton for initial Alpha model. Several ISA modules
 still need to be replaced with Alpha versions.
+
+----------
+jsemer      Date: Mon Apr 14 18:19:54 EDT 2008  CSN: CSN-hasim-alpha-3
+                  Mon Apr 14 22:19:54 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined
+ alpha_unpipelined_exe.apm Locally Modified            2 
+
+Switch model to use functional partition submodel.

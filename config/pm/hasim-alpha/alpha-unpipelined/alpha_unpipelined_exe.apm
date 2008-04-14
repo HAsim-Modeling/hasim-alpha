@@ -45,7 +45,6 @@ Packagehint=hasim-mips
 File=modules/isa/smips/hasim_smips_isa.awb
 Packagehint=hasim-mips
 
-
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
 Packagehint=platforms
@@ -71,66 +70,21 @@ fpgaenv=FPGA Environment
 File=modules/model/hasim_model.awb
 Packagehint=hasim
 
-[Manager using Macro Ops for Mem State]
-File=modules/hasim/functional-partition/memory-state/manager/macro-ops/memstate_manager_macro_ops.awb
-Packagehint=hasim
 
-[Functional Partition Version 3/Requires]
-funcp_memstate=Memory State for Functional Partition
-hasim_isa_datapath=Hasim - SMIPS Datapath V3
-hasim_isa_emulator=ISA Emulator
-funcp_regstate=Register State for Functional Partition
 
-[Memory State for Functional Partition/Requires]
-funcp_memstate_manager=Manager using Macro Ops for Mem State
 
-[Null Cache for Functional Partition]
-File=modules/hasim/functional-partition/memory-state/cache/null/memstate_cache_null.awb
-Packagehint=hasim
 
-[Scoreboard with One-Hot Encoding]
-File=modules/hasim/functional-partition/register-state/scoreboard/onehot/regstate_scoreboard_onehot.awb
-Packagehint=hasim
 
-[Register State for Functional Partition/Requires]
-funcp_regstate_manager=Register State Manager using Macro Ops
 
-[Register State for Functional Partition]
-File=modules/hasim/functional-partition/register-state/regstate_default.awb
-Packagehint=hasim
 
-[Store Buffer using Bucket Hash]
-File=modules/hasim/functional-partition/memory-state/store-buffer/bucket-hash/memstate_storebuffer_bucket_hash.awb
-Packagehint=hasim
 
-[Memory State for Functional Partition]
-File=modules/hasim/functional-partition/memory-state/memstate_default.awb
-Packagehint=hasim
 
 [Functional Partition Version 3]
-File=modules/hasim/functional-partition/functional_partition_default.awb
-Packagehint=hasim
+File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
+Packagehint=hasim-alpha
 
-[Manager using Macro Ops for Mem State/Requires]
-funcp_memstate_storebuffer=Store Buffer using Bucket Hash
-funcp_memstate_cache=Null Cache for Functional Partition
 
-[Register State Manager using Macro Ops/Requires]
-funcp_regstate_freelist=Freelist in BRAM
-funcp_regstate_scoreboard=Scoreboard with One-Hot Encoding
 
-[ISA Emulator]
-File=modules/hasim/functional-partition/isa-emulator/isa-emulator.awb
-Packagehint=hasim
 
-[Freelist in BRAM]
-File=modules/hasim/functional-partition/register-state/freelist/bram/funcp_freelist_bram.awb
-Packagehint=hasim
 
-[Register State Manager using Macro Ops]
-File=modules/hasim/functional-partition/register-state/manager/macro-ops/regstate_manager_macro_ops.awb
-Packagehint=hasim
 
-[Hasim - SMIPS Datapath V3]
-File=modules/isa/smips/hasim_smips_datapath_new.awb
-Packagehint=hasim-mips
