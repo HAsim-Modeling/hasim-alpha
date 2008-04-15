@@ -31,3 +31,60 @@ Directory config/pm/hasim-alpha/alpha-unpipelined
  alpha_unpipelined_exe.apm Locally Modified            2 
 
 Switch model to use functional partition submodel.
+
+----------
+mcadler     Date: Mon Apr 14 21:04:20 EDT 2008  CSN: CSN-hasim-alpha-4
+                  Tue Apr 15 01:04:20 UTC 2008
+
+
+Directory .
+ configure                 Locally Added               0 
+ Makefile.in               Locally Added               0 
+
+Directory include
+ config.h.in               Locally Added               0 
+
+Directory .
+ include/                  Locally Added               0 
+
+Directory platform
+ m5/                       Locally Added               0 
+
+Directory platform/m5
+ m5-alpha-se.awb           Locally Added               0 
+
+Directory platform
+ Makefile                  Locally Added               0 
+
+Directory .
+ platform/                 Locally Added               0 
+ configure.in              Locally Added               0 
+
+Directory scripts
+ missing                   Locally Added               0 
+ install-sh                Locally Added               0 
+
+Directory .
+ scripts/                  Locally Added               0 
+
+Directory admin/packages
+ hasim-alpha               Locally Modified            3 
+
+Directory .
+ README                    Locally Added               0 
+
+Directory config/pm/hasim-alpha
+ alpha-5stage/             Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-5stage
+ alpha_5stage_hybrid_sim.apm Locally Added               0 
+
+Directory .
+ Makefile.am               Locally Added               0 
+ aclocal.m4                Locally Added               0 
+
+- Build user-mode versions of m5 for Alpha as part of the configure/top level
+  make step of hasim-alpha.
+- Define a 5 stage model.  It is still basically the MIPS model, but it
+  links with m5.  The model doesn't run yet, since m5 arguments aren't
+  passed correctly.

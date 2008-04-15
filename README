@@ -1,0 +1,9 @@
+Alpha ISA-specific libraries for HAsim.
+
+For developers: To reconfigure the autoconfigure script use the following:
+
+   # aclocal
+   # autoheader
+   # automake -a -c --foreign
+   # autoconf
+   # ./configure
