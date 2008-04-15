@@ -11,7 +11,7 @@ Class=Asim::Model
 [Hasim - Hardware (fpga) based system/Requires]
 hasim_funcp=Functional Partition Version 3
 hasim_chip=Uniprocessor chip
-hasim_isa=Hasim - SMIPS ISA
+hasim_isa=Alpha ISA Definition
 
 [Model]
 DefaultAttributes=unpipelined alpha hybrid exe hasim
@@ -41,9 +41,6 @@ Packagehint=hasim-mips
 File=modules/memory/magic_memory.awb
 Packagehint=hasim-mips
 
-[Hasim - SMIPS ISA]
-File=modules/isa/smips/hasim_smips_isa.awb
-Packagehint=hasim-mips
 
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
@@ -70,21 +67,11 @@ fpgaenv=FPGA Environment
 File=modules/model/hasim_model.awb
 Packagehint=hasim
 
-
-
-
-
-
-
-
-
-
 [Functional Partition Version 3]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
 Packagehint=hasim-alpha
 
 
-
-
-
-
+[Alpha ISA Definition]
+File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
+Packagehint=hasim-alpha

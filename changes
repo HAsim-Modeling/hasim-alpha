@@ -88,3 +88,53 @@ Directory .
 - Define a 5 stage model.  It is still basically the MIPS model, but it
   links with m5.  The model doesn't run yet, since m5 arguments aren't
   passed correctly.
+
+----------
+pellauer    Date: Tue Apr 15 11:56:51 EDT 2008  CSN: CSN-hasim-alpha-5
+                  Tue Apr 15 15:56:51 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined
+ alpha_unpipelined_exe.apm Locally Modified            4 
+
+Directory config/pm/hasim-alpha/alpha-5stage
+ alpha_5stage_hybrid_sim.apm Locally Modified            4 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified            4 
+
+Directory modules
+ hasim/                    Locally Added               0 
+
+Directory modules/hasim
+ functional-partition/     Locally Added               0 
+
+Directory modules/hasim/functional-partition
+ isa/                      Locally Added               0 
+
+Directory modules/hasim/functional-partition/isa
+ datapath/                 Locally Added               0 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.awb    Locally Added               0 
+ isa_datapath_alpha.bsv    Locally Added               0 
+
+Directory modules/hasim/functional-partition/isa
+ definition/               Locally Added               0 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Added               0 
+ isa_definition_alpha.awb  Locally Added               0 
+ isa_datatypes.bsv         Locally Added               0 
+ isa_memory_conversions.bsv Locally Added               0 
+ isa_derived_types.bsv     Locally Added               0 
+ README.txt                Locally Added               0 
+
+
+Added skeleton Alpha ISA. It just tells the functional partition to execute
+every instruction in software via emulation.
+
+This isn't quite enough to run a benchmarks because it means branches cannot be
+taken.
+
+Michael P.

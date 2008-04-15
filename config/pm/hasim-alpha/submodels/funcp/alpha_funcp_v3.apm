@@ -8,22 +8,9 @@ Name=Alpha Functional Model - V3
 Type=HAsim
 Class=Asim::Model
 
-
 [Model]
 DefaultAttributes=alpha hybrid hasim
 model=Functional Partition Version 3
-
-
-
-
-
-
-
-
-
-
-
-
 
 [Manager using Macro Ops for Mem State]
 File=modules/hasim/functional-partition/memory-state/manager/macro-ops/memstate_manager_macro_ops.awb
@@ -31,7 +18,7 @@ Packagehint=hasim
 
 [Functional Partition Version 3/Requires]
 funcp_memstate=Memory State for Functional Partition
-hasim_isa_datapath=Hasim - SMIPS Datapath V3
+hasim_isa_datapath=Alpha ISA Datapath
 hasim_isa_emulator=ISA Emulator
 funcp_regstate=Register State for Functional Partition
 
@@ -85,6 +72,7 @@ Packagehint=hasim
 File=modules/hasim/functional-partition/register-state/manager/macro-ops/regstate_manager_macro_ops.awb
 Packagehint=hasim
 
-[Hasim - SMIPS Datapath V3]
-File=modules/isa/smips/hasim_smips_datapath_new.awb
-Packagehint=hasim-mips
+
+[Alpha ISA Datapath]
+File=modules/hasim/functional-partition/isa/datapath/isa_datapath_alpha.awb
+Packagehint=hasim-alpha
