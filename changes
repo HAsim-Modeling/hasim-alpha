@@ -155,3 +155,16 @@ Directory modules/hasim/functional-partition/isa/definition
 
 - Use %library for m5 libraries
 - Add SIMULATED_ISA param to isa_definition module (needed by m5)
+
+----------
+mcadler     Date: Wed Apr 16 15:21:45 EDT 2008  CSN: CSN-hasim-alpha-7
+                  Wed Apr 16 19:21:45 UTC 2008
+
+
+Directory config/bm
+ alpha/                    Locally Added               0 
+
+Directory config/bm/alpha
+ 6_375.cfx                 Locally Added               0 
+
+Alpha versions of 6.375 programs.

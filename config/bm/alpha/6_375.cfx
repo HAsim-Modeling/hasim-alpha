@@ -1,0 +1,29 @@
+: # -*-Perl-*-
+eval 'exec perl -w "$0" ${1+"$@"}'
+   if 0;
+
+use Asim;
+use strict;
+
+##
+## Generate cfg files for 6.375 tests and benchmarks.
+##
+
+my $gcfg = Asim::GenCFG->new();
+
+my @bmarks = ("median",
+              "multiply",
+	      "towers",
+	      "qsort",
+	      "vvadd");
+	      
+foreach my $bmark (@bmarks) {
+    $gcfg->add(name => $bmark,
+               tree => [ "benchmarks" ],
+               setup => "tools/scripts/bmark/setup-bmark $bmark --isa alpha",
+               feeder => "m5",
+               feedflags => "m5_configs/se.py --hasim-sim --cmd program/${bmark}.alpha.bin",
+              );
+}
+
+$gcfg->action(@ARGV);
