@@ -15,7 +15,8 @@
 # We do this to avoid modifying m5, making it easier to upgrade to new versions.
 # 
 
-%param M5_BUILD_DIR  "hasim-alpha/platform/m5/build" "m5 Build Directory"
-%param M5_BUILD_NAME "ALPHA_SE"                      "m5 Build Name"
+%param M5_BUILD_DIR "platform/m5/build/ALPHA_SE"        "m5 Build directory"
+%library platform/m5/build/ALPHA_SE/libm5_opt.a
+%library platform/m5/build/ALPHA_SE/libelf.a
 
 %AWB_END

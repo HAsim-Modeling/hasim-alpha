@@ -138,3 +138,20 @@ This isn't quite enough to run a benchmarks because it means branches cannot be
 taken.
 
 Michael P.
+
+----------
+mcadler     Date: Wed Apr 16 15:10:05 EDT 2008  CSN: CSN-hasim-alpha-6
+                  Wed Apr 16 19:10:05 UTC 2008
+
+
+Directory platform/m5
+ m5-alpha-se.awb           Locally Modified            5 
+
+Directory platform
+ Makefile                  Locally Modified            5 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_definition_alpha.awb  Locally Modified            5 
+
+- Use %library for m5 libraries
+- Add SIMULATED_ISA param to isa_definition module (needed by m5)
