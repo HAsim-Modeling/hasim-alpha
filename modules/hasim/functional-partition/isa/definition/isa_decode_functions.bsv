@@ -6,11 +6,36 @@
 
 // TODO: Support decoding variable-width instructions.
 
-
 // isaGetSrc
 
 // Given an instruction, return the nth source register.
 // Or return Invalid if there is no such source for this instruction.
+
+typedef Bit#(6) Opcode;
+typedef Bit#(6) Funct;
+typedef Bit#(16) MemImm;
+
+Opcode opcode01 = 'h01;
+Opcode bsr = 'h34;
+Opcode lda = 'h08;
+Opcode ldl = 'h28;
+Opcode ldq = 'h29;
+Opcode ldwu = 'h0c;
+Opcode ldbu = 'h0a;
+Opcode ldq_u = 'h0b;
+Opcode arith = 'h10;
+Opcode logical = 'h11;
+Opcode byteManipulation = 'h12;
+
+Funct addq = 'h20;
+Funct cmpeq = 'h2d;
+
+Funct andOp = 'h00;
+Funct xorOp = 'h40;
+Funct eqvOp = 'h48;
+Funct bisOp = 'h20;
+
+Funct zapnot = 'h31;
 
 function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n);
 
@@ -26,7 +51,41 @@ endfunction
 
 function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
 
-  return tagged Invalid; // You should write this.
+    let    opcode = inst[31:26];
+    Bool   useLit = unpack(inst[12]);
+    let     funct = inst[11:5];
+    let    memImm = inst[15:0];
+
+    ISA_REG_INDEX ret = tagged Invalid;
+
+    case (opcode)
+        opcode01:
+        begin
+            case (memImm)
+                exit:
+                begin
+                    if(n == 1)
+                        ret = tagged ArchReg ra;
+                end
+            endcase
+        end
+
+        bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u:
+        begin
+            if(n == 1)
+                ret = tagged ArchReg ra;
+        end
+
+        arith, logical, byteManipulation:
+        begin
+            if(n == 1)
+                ret = tagged ArchReg ra;
+            else if(n == 2 && useLit)
+                ret = tagged ArchReg rb;
+        end
+    endcase
+
+    return ret;
  
 endfunction
 
@@ -36,7 +95,14 @@ endfunction
 
 function Integer isaGetNumDsts(ISA_INSTRUCTION i);
 
-  return 0; // You should write this.
+    let    opcode = inst[31:26];
+    let     funct = inst[11:5];
+    let    memImm = inst[15:0];
+
+    return case (opcode)
+               opcode01: return 0;
+               bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u, arith, logical, byteManipulation: return 1;
+           endcase;
  
 endfunction
 
@@ -47,7 +113,14 @@ endfunction
 
 function Bool isaIsLoad(ISA_INSTRUCTION i);
 
-    return False; // You should write this.
+    Opcode opcode = i[31:26];
+    Funct   funct = i[11:5];
+    MemImm memImm = i[15:0];
+
+    return case (opcode)
+               lda, ldl, ldq, ldwu, ldbu, ldq_u: return True;
+               default: return False; 
+           endcase;
 
 endfunction
 
@@ -69,19 +142,24 @@ endfunction
 
 function ISA_MEMOP_TYPE isaLoadType(ISA_INSTRUCTION i);
 
-    return MEMOP_Word; // You should write this.
+    return case (opcode)
+               ldl: return MEMOP_32;
+               ldq: return MEMOP_64;
+               ldwu: return MEMOP_16;
+               ldbu: return MEMOP_8;
+           endcase;
 
 endfunction
 
 
 // isaStoreType
 
-// Returns the ISA_STORE_TYPE (which you defined in isa_datatypes.bsv) of a given instruction.
+// Returns the ISA_MEMOP_TYPE (which you defined in isa_datatypes.bsv) of a given instruction.
 // This will only be called on instructions where isaIsStore() returns True.
 
 function ISA_MEMOP_TYPE isaStoreType(ISA_INSTRUCTION i);
 
-    return MEMOP_Word; // You should write this.
+    return MEMOP_64; // You should write this.
 
 endfunction
 
@@ -131,7 +209,10 @@ endfunction
 
 function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
 
-    return True; // Emulate all instructions in software.
+    return case (opcode)
+               opcode01, bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u, arith, logical, byteManipulation: return False;
+               default: return True;
+           endcase;
 
 endfunction
 

@@ -86,7 +86,7 @@ module [HASim_Module] mkISA_Datapath
         // Some convenient variables to return.
 
         // The result for the timing partition.
-        ISA_EXECUTION_RESULT timep_result;
+        ISA_EXECUTION_RESULT timep_result = tagged RNop;
         
         // The effective address for Loads/Stores
         ISA_ADDRESS effective_addr = 0;
@@ -94,11 +94,78 @@ module [HASim_Module] mkISA_Datapath
         // The writebacks which are sent to the register file.
         ISA_RESULT_VALUES writebacks = Vector::replicate(Invalid);
 
-        case (inst) matches // You should write this.
-            default: 
+        let    opcode = inst[31:26];
+        let        ra = inst[25:21];
+        let        rb = inst[20:16];
+        let       lit = inst[20:13];
+        Bool   useLit = unpack(inst[12]);
+        let     funct = inst[11:5];
+        let        rc = inst[4:0];
+        let branchImm = inst[20:0];
+        let    memImm = inst[15:0];
+
+        ISA_VALUE src1 = useLit? signExtend(lit): srcs[1];
+
+        function ISA_VALUE byteZap(ISA_VALUE srcBits, Bit#(ISA_MASK_NUM) mask);
+            Vector#(ISA_MASK_NUM, Bit#(ISA_MASK_SIZE)) ret = newVector();
+            Vector#(ISA_MASK_NUM, Bit#(ISA_MASK_SIZE)) src = unpack(srcBits);
+            for(Integer i = 0; i < `ISA_MASK_NUM; i=i+1)
+                res[i] = mask[i] == 1? src[i]: 0;
+            return pack(res);
+        endfunction
+
+        case (opcode)
+            opcode01:
             begin
-                timep_result = tagged RNop;
-                $fdisplay(debug_log, "WARNING: EXECUTING UNDEFINED INSTRUCTION.");
+                case (memImm)
+                    exit: timep_result = tagged RTerminate src[0];
+                endcase
+            end
+
+            bsr:
+            begin
+                writebacks[0] = tagged Valid addr;
+                let newAddr = addr + (srcs[0] << 2);
+                timep_result = tagged RBranchTaken newAddr;
+            end
+
+            lda:
+            begin
+                writebacks[0] = tagged Valid (srcs[0] + signExtend(memImm));
+            end
+
+            ldl, ldq, ldwu, ldbu, ldq_u:
+            begin
+                effective_addr = case (opcode)
+                                     ldq_u  : return (srcs[0] + signExtend(memImm)) & ~7;
+                                     default: return srcs[0] + signExtend(memImm);
+                                 endcase;
+                timep_result = tagged REffectiveAddr effective_addr;
+            end
+
+            arith:
+            begin
+                case (funct)
+                    addq  : writebacks[0] = tagged Valid (src[0] + src1);
+                    cmpeq : writebacks[0] = tagged Valid zeroExtend(pack(src[0] == src1));
+                endcase
+            end
+
+            logical:
+            begin
+                case (funct)
+                    andOp : writebacks[0] = tagged Valid (src[0] & src1);
+                    xorOp : writebacks[0] = tagged Valid (src[0] ^ src1);
+                    eqvOp : writebacks[0] = tagged Valid (~(src[0] ^ src1));
+                    bisOp : writebacks[0] = tagged Valid (src[0] | src1);
+                endcase
+            end
+
+            byteManipulation:
+            begin
+                case (funct)
+                    zapnot: byteZap(src[0], src1[7:0]);
+                endcase
             end
         endcase
 

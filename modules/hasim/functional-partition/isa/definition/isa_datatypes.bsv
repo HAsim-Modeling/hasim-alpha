@@ -8,7 +8,7 @@
 
 // An ISA-specific address.
 
-typedef Bit#(32) ISA_ADDRESS;
+typedef Bit#(64) ISA_ADDRESS;
 
 
 // ISA_VALUE
@@ -16,7 +16,10 @@ typedef Bit#(32) ISA_ADDRESS;
 // The value stored in registers.
 // TODO: Support: multiple value lengths for registers.
 
-typedef Bit#(32) ISA_VALUE;
+typedef Bit#(64) ISA_VALUE;
+
+typedef 8 ISA_MASK_NUM;
+typedef 8 ISA_MASK_SIZE;
 
 
 // ISA_INSTRUCTION
@@ -30,7 +33,7 @@ typedef Bit#(32) ISA_INSTRUCTION;
 
 // The maximum number of source registers an instruction can read.
 
-typedef 2 ISA_MAX_SRCS;
+typedef 3 ISA_MAX_SRCS;
 
 
 // ISA_MAX_DSTS
@@ -48,7 +51,10 @@ typedef 1 ISA_MAX_DSTS;
 
 typedef enum
 {
-  MEMOP_Word
+    MEM_ZERO_8,
+    MEM_ZERO_16,
+    MEM_SIGN_32,
+    MEM_64
 }
   ISA_MEMOP_TYPE
      deriving (Eq, Bits);
@@ -59,6 +65,7 @@ typedef enum
 // encapsulating every addressable register in the system. This should pack into an efficient
 // number of bits, so you may want to define a custom instance of bits.
 
-typedef Bit#(5) ISA_REG_INDEX;
-
+typedef union tagged {
+    Bit#(5) ArchReg;
+} ISA_REG_INDEX deriving (Bits, Eq);
 

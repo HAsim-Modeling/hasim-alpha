@@ -8,7 +8,7 @@
 
 function MEM_ADDRESS isaAddressToMemAddress(ISA_ADDRESS a);
 
-    return unpack(a); // If you need more than this write it here.
+    return truncate(a); // If you need more than this write it here.
 
 endfunction
 
@@ -20,7 +20,7 @@ endfunction
 
 function ISA_ADDRESS isaAddressFromMemAddress(MEM_ADDRESS a);
 
-    return unpack(a); // If you need more than this write it here.
+    return zeroExtend(a); // If you need more than this write it here.
 
 endfunction
 
@@ -59,7 +59,12 @@ endfunction
 
 function ISA_VALUE isaValueFromMemValue(MEM_VALUE v, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr);
 
-    return unpack(v); // If you need more than this write it here.
+    return case (memtype) matches
+               MEM_ZERO_8: return zeroExtend(v[7:0]);
+               MEM_ZERO_16: return zeroExtend(v[15:0]);
+               MEM_SIGN_32: return signExtend(v[31:0]);
+               MEM_64: return v;
+           endcase;
 
 endfunction
 
@@ -72,7 +77,12 @@ endfunction
 
 function Bool isaMemOpRequiresReadModifyWrite(ISA_MEMOP_TYPE memtype);
 
-    return False; // You should write this.
+    return case (memtype) matches
+               MEM_ZERO_8: return True;
+               MEM_ZERO_16: return True;
+               MEM_SIGN_32: return True;
+               MEM_64: return False;
+           endcase;
 
 endfunction
 
@@ -86,7 +96,12 @@ endfunction
 
 function MEM_VALUE isaValueToMemValue(ISA_VALUE v, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr);
  
-    return unpack(v); // If you need more than this write it here.
+    return case (memtype) matches
+               MEM_ZERO_8: return zeroExtend(v[7:0]);
+               MEM_ZERO_16: return zeroExtend(v[15:0]);
+               MEM_SIGN_32: return signExtend(v[31:0]);
+               MEM_64: return v;
+           endcase;
     
 endfunction
 
@@ -99,7 +114,12 @@ endfunction
 
 function MEM_VALUE isaValueToMemValueRMW(ISA_VALUE v, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr, MEM_VALUE existing_value);
  
-    return existing_value; // If you need more than this write it here.
+    return case (memtype) matches
+               MEM_ZERO_8: return {existing_value[63:8], v[7:0]};
+               MEM_ZERO_16: return {existing_value[63:16], v[15:0]};
+               MEM_SIGN_32: return {existing_value[63:32], v[31:0]};
+               MEM_64: return v;
+           endcase;
     
 endfunction
 

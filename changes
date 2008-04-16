@@ -168,3 +168,25 @@ Directory config/bm/alpha
  6_375.cfx                 Locally Added               0 
 
 Alpha versions of 6.375 programs.
+
+----------
+vmurali     Date: Wed Apr 16 17:53:14 EDT 2008  CSN: CSN-hasim-alpha-8
+                  Wed Apr 16 21:53:14 UTC 2008
+
+
+Directory admin/packages
+ hasim-alpha               Locally Modified            7 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified            7 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified            7 
+ isa_datatypes.bsv         Locally Modified            7 
+ isa_memory_conversions.bsv Locally Modified            7 
+
+Initial (non-working) checkin of Alpha ISA
+
+Removed package dependencies, due to bug in 
+package dependency checks on commit.
+
