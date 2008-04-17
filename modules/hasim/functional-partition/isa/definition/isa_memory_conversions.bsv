@@ -115,10 +115,11 @@ endfunction
 function MEM_VALUE isaValueToMemValueRMW(ISA_VALUE v, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr, MEM_VALUE existing_value);
  
     return case (memtype) matches
-               MEM_ZERO_8: return {existing_value[63:8], v[7:0]};
-               MEM_ZERO_16: return {existing_value[63:16], v[15:0]};
-               MEM_SIGN_32: return {existing_value[63:32], v[31:0]};
+               //MEM_ZERO_8: return {existing_value[63:8], v[7:0]};
+               //MEM_ZERO_16: return {existing_value[63:16], v[15:0]};
+               //MEM_SIGN_32: return {existing_value[63:32], v[31:0]};
                MEM_64: return v;
+               default: return v;
            endcase;
     
 endfunction

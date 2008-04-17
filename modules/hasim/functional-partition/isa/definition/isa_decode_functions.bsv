@@ -12,7 +12,7 @@
 // Or return Invalid if there is no such source for this instruction.
 
 typedef Bit#(6) Opcode;
-typedef Bit#(6) Funct;
+typedef Bit#(7) Funct;
 typedef Bit#(16) MemImm;
 
 Opcode opcode01 = 'h01;
@@ -37,6 +37,8 @@ Funct bisOp = 'h20;
 
 Funct zapnot = 'h31;
 
+MemImm exit = 'h21;
+
 function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n);
 
     return tagged Invalid; // You should write this.
@@ -51,12 +53,14 @@ endfunction
 
 function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
 
-    let    opcode = inst[31:26];
-    Bool   useLit = unpack(inst[12]);
-    let     funct = inst[11:5];
-    let    memImm = inst[15:0];
+    let    opcode = i[31:26];
+    Bool   useLit = unpack(i[12]);
+    let     funct = i[11:5];
+    let    memImm = i[15:0];
+    let        ra = i[25:21];
+    let        rb = i[20:16];
 
-    ISA_REG_INDEX ret = tagged Invalid;
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
         opcode01:
@@ -65,7 +69,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
                 exit:
                 begin
                     if(n == 1)
-                        ret = tagged ArchReg ra;
+                        ret = tagged Valid ( ra);
                 end
             endcase
         end
@@ -73,15 +77,15 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
         bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u:
         begin
             if(n == 1)
-                ret = tagged ArchReg ra;
+                ret = tagged Valid ( ra);
         end
 
         arith, logical, byteManipulation:
         begin
             if(n == 1)
-                ret = tagged ArchReg ra;
+                ret = tagged Valid ( ra);
             else if(n == 2 && useLit)
-                ret = tagged ArchReg rb;
+                ret = tagged Valid ( rb);
         end
     endcase
 
@@ -95,9 +99,9 @@ endfunction
 
 function Integer isaGetNumDsts(ISA_INSTRUCTION i);
 
-    let    opcode = inst[31:26];
-    let     funct = inst[11:5];
-    let    memImm = inst[15:0];
+    let    opcode = i[31:26];
+    let     funct = i[11:5];
+    let    memImm = i[15:0];
 
     return case (opcode)
                opcode01: return 0;
@@ -113,9 +117,9 @@ endfunction
 
 function Bool isaIsLoad(ISA_INSTRUCTION i);
 
-    Opcode opcode = i[31:26];
-    Funct   funct = i[11:5];
-    MemImm memImm = i[15:0];
+    let opcode = i[31:26];
+    let   funct = i[11:5];
+    let memImm = i[15:0];
 
     return case (opcode)
                lda, ldl, ldq, ldwu, ldbu, ldq_u: return True;
@@ -142,11 +146,13 @@ endfunction
 
 function ISA_MEMOP_TYPE isaLoadType(ISA_INSTRUCTION i);
 
+    Opcode opcode = i[31:26];
+
     return case (opcode)
-               ldl: return MEMOP_32;
-               ldq: return MEMOP_64;
-               ldwu: return MEMOP_16;
-               ldbu: return MEMOP_8;
+               ldl: return MEM_SIGN_32;
+               ldq: return MEM_64;
+               ldwu: return MEM_ZERO_16;
+               ldbu: return MEM_ZERO_8;
            endcase;
 
 endfunction
@@ -159,7 +165,7 @@ endfunction
 
 function ISA_MEMOP_TYPE isaStoreType(ISA_INSTRUCTION i);
 
-    return MEMOP_64; // You should write this.
+    return MEM_64; // You should write this.
 
 endfunction
 
@@ -208,6 +214,8 @@ endfunction
 // Returns true if the given instruction should be emulated in software.
 
 function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
+
+    Opcode opcode = i[31:26];
 
     return case (opcode)
                opcode01, bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u, arith, logical, byteManipulation: return False;

@@ -8,7 +8,7 @@
 
 // An ISA-specific address.
 
-typedef Bit#(64) ISA_ADDRESS;
+typedef Bit#(32) ISA_ADDRESS;
 
 
 // ISA_VALUE
@@ -16,10 +16,10 @@ typedef Bit#(64) ISA_ADDRESS;
 // The value stored in registers.
 // TODO: Support: multiple value lengths for registers.
 
-typedef Bit#(64) ISA_VALUE;
+typedef Bit#(32) ISA_VALUE;
 
 typedef 8 ISA_MASK_NUM;
-typedef 8 ISA_MASK_SIZE;
+typedef 4 ISA_MASK_SIZE;
 
 
 // ISA_INSTRUCTION
@@ -65,7 +65,5 @@ typedef enum
 // encapsulating every addressable register in the system. This should pack into an efficient
 // number of bits, so you may want to define a custom instance of bits.
 
-typedef union tagged {
-    Bit#(5) ArchReg;
-} ISA_REG_INDEX deriving (Bits, Eq);
+typedef Bit#(5) ISA_REG_INDEX;
 

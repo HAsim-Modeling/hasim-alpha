@@ -107,10 +107,10 @@ module [HASim_Module] mkISA_Datapath
         ISA_VALUE src1 = useLit? signExtend(lit): srcs[1];
 
         function ISA_VALUE byteZap(ISA_VALUE srcBits, Bit#(ISA_MASK_NUM) mask);
-            Vector#(ISA_MASK_NUM, Bit#(ISA_MASK_SIZE)) ret = newVector();
+            Vector#(ISA_MASK_NUM, Bit#(ISA_MASK_SIZE)) res = newVector();
             Vector#(ISA_MASK_NUM, Bit#(ISA_MASK_SIZE)) src = unpack(srcBits);
-            for(Integer i = 0; i < `ISA_MASK_NUM; i=i+1)
-                res[i] = mask[i] == 1? src[i]: 0;
+            for(Integer i = 0; i < valueOf(ISA_MASK_NUM); i=i+1)
+                res[i] = (mask[i] == 1)? src[i]: 0;
             return pack(res);
         endfunction
 
@@ -118,7 +118,7 @@ module [HASim_Module] mkISA_Datapath
             opcode01:
             begin
                 case (memImm)
-                    exit: timep_result = tagged RTerminate src[0];
+                    exit: timep_result = tagged RTerminate unpack(truncate(srcs[0]));
                 endcase
             end
 
@@ -146,25 +146,25 @@ module [HASim_Module] mkISA_Datapath
             arith:
             begin
                 case (funct)
-                    addq  : writebacks[0] = tagged Valid (src[0] + src1);
-                    cmpeq : writebacks[0] = tagged Valid zeroExtend(pack(src[0] == src1));
+                    addq  : writebacks[0] = tagged Valid (srcs[0] + src1);
+                    cmpeq : writebacks[0] = tagged Valid zeroExtend(pack(srcs[0] == src1));
                 endcase
             end
 
             logical:
             begin
                 case (funct)
-                    andOp : writebacks[0] = tagged Valid (src[0] & src1);
-                    xorOp : writebacks[0] = tagged Valid (src[0] ^ src1);
-                    eqvOp : writebacks[0] = tagged Valid (~(src[0] ^ src1));
-                    bisOp : writebacks[0] = tagged Valid (src[0] | src1);
+                    andOp : writebacks[0] = tagged Valid (srcs[0] & src1);
+                    xorOp : writebacks[0] = tagged Valid (srcs[0] ^ src1);
+                    eqvOp : writebacks[0] = tagged Valid (~(srcs[0] ^ src1));
+                    bisOp : writebacks[0] = tagged Valid (srcs[0] | src1);
                 endcase
             end
 
             byteManipulation:
             begin
                 case (funct)
-                    zapnot: byteZap(src[0], src1[7:0]);
+                    zapnot: writebacks[0] = tagged Valid (byteZap(srcs[0], src1[7:0]));
                 endcase
             end
         endcase

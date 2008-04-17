@@ -190,3 +190,18 @@ Initial (non-working) checkin of Alpha ISA
 Removed package dependencies, due to bug in 
 package dependency checks on commit.
 
+
+----------
+vmurali     Date: Thu Apr 17 01:34:41 EDT 2008  CSN: CSN-hasim-alpha-9
+                  Thu Apr 17 05:34:41 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified            8 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified            8 
+ isa_datatypes.bsv         Locally Modified            8 
+ isa_memory_conversions.bsv Locally Modified            8 
+
+hasim-alpha ISA compiles. I changed the width of memory values to 32 bits temporarily to get going. This will change to 64 bit values soon.
