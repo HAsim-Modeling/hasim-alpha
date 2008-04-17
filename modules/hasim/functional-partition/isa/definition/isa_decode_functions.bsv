@@ -39,19 +39,7 @@ Funct zapnot = 'h31;
 
 MemImm exit = 'h21;
 
-function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n);
-
-    return tagged Invalid; // You should write this.
-    
-endfunction
-
-
-// isaGetDst
-
-// Given an instruction, return the nth destination register.
-// Or return Invalid if there is no such destination for this instruction.
-
-function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
+function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
 
     let    opcode = i[31:26];
     Bool   useLit = unpack(i[12]);
@@ -69,23 +57,59 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
                 exit:
                 begin
                     if(n == 1)
-                        ret = tagged Valid ( ra);
+                        ret = tagged Valid pack( ra);
                 end
             endcase
         end
 
-        bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u:
+        lda, ldl, ldq, ldwu, ldbu, ldq_u:
         begin
             if(n == 1)
-                ret = tagged Valid ( ra);
+                ret = tagged Valid pack( rb);
         end
 
         arith, logical, byteManipulation:
         begin
             if(n == 1)
-                ret = tagged Valid ( ra);
+                ret = tagged Valid pack( ra);
             else if(n == 2 && useLit)
-                ret = tagged Valid ( rb);
+                ret = tagged Valid pack( rb);
+        end
+    endcase
+
+    return ret;
+ 
+endfunction
+
+
+// isaGetDst
+
+// Given an instruction, return the nth destination register.
+// Or return Invalid if there is no such destination for this instruction.
+
+function Maybe#(Bit#(rname_SZ)) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
+
+    let    opcode = i[31:26];
+    Bool   useLit = unpack(i[12]);
+    let     funct = i[11:5];
+    let    memImm = i[15:0];
+    let        ra = i[25:21];
+    let        rb = i[20:16];
+    let        rc = i[4:0];
+
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
+
+    case (opcode)
+        bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u:
+        begin
+            if(n == 1)
+                ret = tagged Valid pack( ra);   
+        end
+
+        arith, logical, byteManipulation:
+        begin
+            if(n == 1)
+                ret = tagged Valid pack( rc);
         end
     endcase
 

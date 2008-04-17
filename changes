@@ -205,3 +205,14 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_memory_conversions.bsv Locally Modified            8 
 
 hasim-alpha ISA compiles. I changed the width of memory values to 32 bits temporarily to get going. This will change to 64 bit values soon.
+
+----------
+vmurali     Date: Thu Apr 17 01:53:08 EDT 2008  CSN: CSN-hasim-alpha-10
+                  Thu Apr 17 05:53:08 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified            9 
+
+
+Changed the isaGetSrc and isaGetDst functions.
