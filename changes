@@ -216,3 +216,30 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 Changed the isaGetSrc and isaGetDst functions.
+
+----------
+jsemer      Date: Fri Apr 18 15:13:13 EDT 2008  CSN: CSN-hasim-alpha-11
+                  Fri Apr 18 19:13:13 UTC 2008
+
+
+Directory .
+ include/                  Locally Modified           10 
+
+Directory platform
+ m5/                       Locally Modified           10 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined
+ alpha_unpipelined_exe.apm Locally Modified           10 
+
+Directory config/pm/hasim-alpha/alpha-5stage
+ alpha_5stage_hybrid_sim.apm Locally Modified           10 
+
+Directory .
+ ./                        Locally Modified           10 
+
+The unpipelined and 5 stage models now use submodels for
+the functional partition and common. The unpipelined model
+did not and still does not compile.
+
+Added svn:ignore properties for varous build outputs that
+aren't checked in.
