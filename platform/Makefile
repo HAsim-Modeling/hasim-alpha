@@ -7,7 +7,6 @@ all:
 	# always gets a unique path
 	ln -fs ../libelf/libelf.a m5/build/ALPHA_SE/libelf.a
 	rm -f m5/build/ALPHA_SE/include
-	ln -fs . m5/build/ALPHA_SE/include
 	@echo Done
 
 clean:

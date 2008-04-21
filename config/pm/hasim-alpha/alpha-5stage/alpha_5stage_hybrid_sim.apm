@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=5-Stage Alpha Model V3
-File=alpha_5stage_hybrid_sim2
+File=alpha_5stage_hybrid_sim
 Version=2.1
 Name=5-Stage Alpha Model V3
 Type=HAsim
@@ -45,14 +45,12 @@ File=modules/memory/magic_memory.awb
 Packagehint=hasim-mips
 
 [FPGA Environment]
-File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-m5-alpha-sim.apm
+File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
 Packagehint=platforms
 
 [New 5-stage pipeline Mem]
 File=modules/cpu/mips/pipeline/mem/simple-newfuncp/mem_simple_newfuncp.awb
 Packagehint=hasim-mips
-
-
 
 [New 5-stage pipeline Execute]
 File=modules/cpu/mips/pipeline/execute/simple-newfuncp/execute_simple_newfuncp.awb
@@ -66,8 +64,6 @@ Packagehint=hasim-mips
 File=modules/cpu/mips/pipeline/fetch/simple-newfuncp/fetch_simple_newfuncp.awb
 Packagehint=hasim-mips
 
-
-
 [New 5-stage pipeline Fetch/Requires]
 hasim_branch_pred=Always not taken Branch Predictor V3
 
@@ -75,12 +71,9 @@ hasim_branch_pred=Always not taken Branch Predictor V3
 File=modules/cpu/mips/pipeline/writeback/simple-newfuncp/writeback_simple_newfuncp.awb
 Packagehint=hasim-mips
 
-
 [New Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common_v2.apm
 Packagehint=hasim
-
-
 
 [Hasim Standard Controller]
 File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm

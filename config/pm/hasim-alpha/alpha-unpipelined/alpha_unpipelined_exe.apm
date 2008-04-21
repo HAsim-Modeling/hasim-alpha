@@ -29,7 +29,6 @@ hasim_memory=magic memory
 File=modules/cpu/mips/unpipelined_cpu.awb
 Packagehint=hasim-mips
 
-
 [Uniprocessor chip]
 File=modules/chip/mips/uniprocessor/uniprocessor.awb
 Packagehint=hasim-mips
@@ -41,7 +40,6 @@ Packagehint=hasim-mips
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
 Packagehint=platforms
-
 
 [Hasim Standard Controller]
 File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm
