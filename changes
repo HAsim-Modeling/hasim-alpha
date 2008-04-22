@@ -282,3 +282,18 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 added more instructions.
+
+----------
+vmurali     Date: Tue Apr 22 11:41:37 EDT 2008  CSN: CSN-hasim-alpha-14
+                  Tue Apr 22 15:41:37 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           13 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           13 
+ isa_datatypes.bsv         Locally Modified           12 
+
+
+Added few more instructions. Changed ISA_REG_INDEX type to tagged union going forward.

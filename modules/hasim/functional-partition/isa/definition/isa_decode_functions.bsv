@@ -59,9 +59,22 @@ Funct s4subq = 'h2B;
 Funct s8subq = 'h3B;
 
 Funct andOp = 'h00;
-Funct xorOp = 'h40;
-Funct eqvOp = 'h48;
+Funct bicOp = 'h08;
 Funct bisOp = 'h20;
+Funct eqvOp = 'h48;
+Funct orNotOp = 'h28;
+Funct xorOp = 'h40;
+Funct cmoveq = 'h24;
+Funct cmovge = 'h46;
+Funct cmovgt = 'h66;
+Funct cmovlbc = 'h16;
+Funct cmovlbs = 'h14;
+Funct cmovle = 'h64;
+Funct cmovlt = 'h44;
+Funct cmovne = 'h26;
+Funct sll = 'h39;
+Funct srl = 'h34;
+Funct sra = 'h3c;
 
 Funct zapnot = 'h31;
 
@@ -75,8 +88,9 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
     let    memImm = i[15:0];
     let        ra = i[25:21];
     let        rb = i[20:16];
+    let        rc = i[4:0];
 
-    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
+    Maybe#(Bit#(rname_SZ)) ret = tagged Invalid;
 
     case (opcode)
         opcode01:
@@ -85,7 +99,7 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
                 exit:
                 begin
                     if(n == 1)
-                        ret = tagged Valid pack( ra);
+                        ret = tagged Valid pack(tagged ArchReg ra);
                 end
             endcase
         end
@@ -93,15 +107,21 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
         jmp, lda, ldl, ldq, ldwu, ldbu, ldq_u:
         begin
             if(n == 1)
-                ret = tagged Valid pack( rb);
+                ret = tagged Valid pack(tagged ArchReg rb);
         end
 
         arith, logical, byteManipulation:
         begin
             if(n == 1)
-                ret = tagged Valid pack( ra);
+                ret = tagged Valid pack(tagged ArchReg ra);
             else if(n == 2 && useLit)
-                ret = tagged Valid pack( rb);
+                ret = tagged Valid pack(tagged ArchReg rb);
+            else if(n == 3)
+            begin
+                ret = case (funct)
+                          cmoveq, cmovge, cmovgt, cmovlbc, cmovlbs, cmovle, cmovlt, cmovne: return tagged Valid pack(tagged ArchReg rc);
+                      endcase;
+            end
         end
     endcase
 
@@ -125,19 +145,19 @@ function Maybe#(Bit#(rname_SZ)) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos
     let        rb = i[20:16];
     let        rc = i[4:0];
 
-    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
+    Maybe#(Bit#(rname_SZ)) ret = tagged Invalid;
 
     case (opcode)
         br, bsr, jmp, lda, ldl, ldq, ldwu, ldbu, ldq_u:
         begin
             if(n == 1)
-                ret = tagged Valid pack( ra);   
+                ret = tagged Valid pack(tagged ArchReg ra);   
         end
 
         arith, logical, byteManipulation:
         begin
             if(n == 1)
-                ret = tagged Valid pack( rc);
+                ret = tagged Valid pack(tagged ArchReg rc);
         end
     endcase
 

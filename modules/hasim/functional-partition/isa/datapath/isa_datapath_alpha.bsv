@@ -201,10 +201,23 @@ module [HASim_Module] mkISA_Datapath
             logical:
             begin
                 case (funct)
-                    andOp : writebacks[0] = tagged Valid (srcs[0] & src1);
-                    xorOp : writebacks[0] = tagged Valid (srcs[0] ^ src1);
-                    eqvOp : writebacks[0] = tagged Valid (~(srcs[0] ^ src1));
-                    bisOp : writebacks[0] = tagged Valid (srcs[0] | src1);
+                    andOp  : writebacks[0] = tagged Valid (srcs[0] & src1);
+                    bicOp  : writebacks[0] = tagged Valid (srcs[0] & ~src1);
+                    bisOp  : writebacks[0] = tagged Valid (srcs[0] | src1);
+                    eqvOp  : writebacks[0] = tagged Valid (srcs[0] ^ ~src1);
+                    orNotOp: writebacks[0] = tagged Valid (srcs[0] | ~src1);
+                    xorOp  : writebacks[0] = tagged Valid (srcs[0] ^ src1);
+                    cmoveq : writebacks[0] = tagged Valid ((srcs[0] == 0)? src1: srcs[2]);
+                    cmovge : writebacks[0] = tagged Valid ((srcs[0] >= 0)? src1: srcs[2]);
+                    cmovgt : writebacks[0] = tagged Valid ((srcs[0] > 0)? src1: srcs[2]);
+                    cmovlbc : writebacks[0] = tagged Valid ((truncate(srcs[0]) == 1'b0)? src1: srcs[2]);
+                    cmovlbs : writebacks[0] = tagged Valid ((truncate(srcs[0]) == 1'b1)? src1: srcs[2]);
+                    cmovle : writebacks[0] = tagged Valid ((srcs[0] <= 0)? src1: srcs[2]);
+                    cmovlt : writebacks[0] = tagged Valid ((srcs[0] < 0)? src1: srcs[2]);
+                    cmovne : writebacks[0] = tagged Valid ((srcs[0] != 0)? src1: srcs[2]);
+                    sll    : writebacks[0] = tagged Valid (srcs[0] << src1[5:0]);
+                    srl    : writebacks[0] = tagged Valid (srcs[0] >> src1[5:0]);
+                    sra    : writebacks[0] = tagged Valid signedShiftRight(srcs[0], src1[5:0]);
                 endcase
             end
 

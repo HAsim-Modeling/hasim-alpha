@@ -65,5 +65,8 @@ typedef enum
 // encapsulating every addressable register in the system. This should pack into an efficient
 // number of bits, so you may want to define a custom instance of bits.
 
-typedef Bit#(5) ISA_REG_INDEX;
+typedef union tagged {
+    Bit#(5) ArchReg;
+} ISA_REG_INDEX deriving (Bits, Eq);
+//typedef Bit#(5) ISA_REG_INDEX;
 
