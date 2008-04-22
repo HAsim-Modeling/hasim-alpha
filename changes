@@ -297,3 +297,13 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 Added few more instructions. Changed ISA_REG_INDEX type to tagged union going forward.
+
+----------
+mcadler     Date: Tue Apr 22 16:07:56 EDT 2008  CSN: CSN-hasim-alpha-15
+                  Tue Apr 22 20:07:56 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           14 
+
+Fix branch instructions (immediate, not register displacements).

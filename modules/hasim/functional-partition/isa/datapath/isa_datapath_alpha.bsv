@@ -126,14 +126,15 @@ module [HASim_Module] mkISA_Datapath
             br, bsr:
             begin
                 writebacks[0] = tagged Valid addr;
-                let newAddr = addr + (srcs[0] << 2);
+                let newAddr = addr + (signExtend(branchImm) << 2) + 4;
+                debug(2, $fdisplay(debug_log, "BxR from 0x%x to 0x%x, branchImm is 0x%x", addr, newAddr, branchImm));
                 timep_result = tagged RBranchTaken newAddr;
             end
 
             //Branch Instructions
             beq, bge, bgt, blbc, blbs, ble, blt, bne:
             begin
-                let newAddr = addr + (srcs[0] << 2);
+                let newAddr = addr + (signExtend(branchImm) << 2) + 4;
                 Bool taken = case (opcode)
                                  beq : return srcs[0] == 0;
                                  bge : return srcs[0] >= 0;
@@ -144,6 +145,7 @@ module [HASim_Module] mkISA_Datapath
                                  blt : return srcs[0] < 0;
                                  bne : return srcs[0] != 0;
                              endcase;
+                debug(2, $fdisplay(debug_log, "Bxx from 0x%x to 0x%x, %s taken", taken? "": "not "));
                 timep_result = taken? tagged RBranchTaken newAddr: tagged RBranchNotTaken (addr + 4);
             end
 
