@@ -16,7 +16,17 @@ typedef Bit#(7) Funct;
 typedef Bit#(16) MemImm;
 
 Opcode opcode01 = 'h01;
+Opcode br = 'h39;
 Opcode bsr = 'h34;
+Opcode beq = 'h39;
+Opcode bge = 'h3e;
+Opcode bgt ='h3f;
+Opcode blbc = 'h38;
+Opcode blbs = 'h3c;
+Opcode ble = 'h3b;
+Opcode blt = 'h3a;
+Opcode bne = 'h3d;
+Opcode jmp = 'h1a;
 Opcode lda = 'h08;
 Opcode ldl = 'h28;
 Opcode ldq = 'h29;
@@ -27,8 +37,26 @@ Opcode arith = 'h10;
 Opcode logical = 'h11;
 Opcode byteManipulation = 'h12;
 
+Funct addl = 'h00;
+Funct s4addl = 'h02;
+Funct s8addl = 'h12;
 Funct addq = 'h20;
+Funct s4addq = 'h22;
+Funct s8addq = 'h32;
 Funct cmpeq = 'h2d;
+Funct cmple = 'h6d;
+Funct cmplt = 'h4d;
+Funct cmpule = 'h3d;
+Funct cmpult = 'h1d;
+Funct mull = 'h00;
+Funct mulq = 'h20;
+Funct umulh = 'h30;
+Funct subl = 'h09;
+Funct s4subl = 'h0B;
+Funct s8subl = 'h1B;
+Funct subq = 'h29;
+Funct s4subq = 'h2B;
+Funct s8subq = 'h3B;
 
 Funct andOp = 'h00;
 Funct xorOp = 'h40;
@@ -62,7 +90,7 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
             endcase
         end
 
-        lda, ldl, ldq, ldwu, ldbu, ldq_u:
+        jmp, lda, ldl, ldq, ldwu, ldbu, ldq_u:
         begin
             if(n == 1)
                 ret = tagged Valid pack( rb);
@@ -100,7 +128,7 @@ function Maybe#(Bit#(rname_SZ)) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u:
+        br, bsr, jmp, lda, ldl, ldq, ldwu, ldbu, ldq_u:
         begin
             if(n == 1)
                 ret = tagged Valid pack( ra);   
@@ -128,8 +156,8 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
     let    memImm = i[15:0];
 
     return case (opcode)
-               opcode01: return 0;
-               bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u, arith, logical, byteManipulation: return 1;
+               opcode01, beq, bge, bgt, blbc, blbs, ble, blt, bne: return 0;
+               br, bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u, arith, logical, byteManipulation: return 1;
            endcase;
  
 endfunction
@@ -200,7 +228,12 @@ endfunction
 
 function Bool isaIsBranch(ISA_INSTRUCTION i);
 
-    return False; // You should write this.
+    Opcode opcode = i[31:26];
+
+    return case (opcode)
+               br, bsr, jmp, beq, bge, bgt, blbc, blbs, ble, blt, bne: True;
+               default: return False;
+           endcase;
 
 endfunction
 
@@ -242,7 +275,7 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
     Opcode opcode = i[31:26];
 
     return case (opcode)
-               opcode01, bsr, lda, ldl, ldq, ldwu, ldbu, ldq_u, arith, logical, byteManipulation: return False;
+               opcode01, br, bsr, jmp, beq, bge, bgt, blbc, blbs, ble, blt, bne, lda, ldl, ldq, ldwu, ldbu, ldq_u, arith, logical, byteManipulation: return False;
                default: return True;
            endcase;
 

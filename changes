@@ -268,3 +268,17 @@ Directory modules/hasim/functional-partition/isa/definition
   under the functional model.  The memory defined in the FPGA environment
   is now just scratchpad memory.  Either memory may be hybrid.
 - Remove include file loop.
+
+----------
+vmurali     Date: Tue Apr 22 03:58:54 EDT 2008  CSN: CSN-hasim-alpha-13
+                  Tue Apr 22 07:58:54 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           12 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           12 
+
+
+added more instructions.

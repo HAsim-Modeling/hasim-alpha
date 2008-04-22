@@ -122,10 +122,35 @@ module [HASim_Module] mkISA_Datapath
                 endcase
             end
 
-            bsr:
+            //Memory Format Jump instructions
+            br, bsr:
             begin
                 writebacks[0] = tagged Valid addr;
                 let newAddr = addr + (srcs[0] << 2);
+                timep_result = tagged RBranchTaken newAddr;
+            end
+
+            //Branch Instructions
+            beq, bge, bgt, blbc, blbs, ble, blt, bne:
+            begin
+                let newAddr = addr + (srcs[0] << 2);
+                Bool taken = case (opcode)
+                                 beq : return srcs[0] == 0;
+                                 bge : return srcs[0] >= 0;
+                                 bgt : return srcs[0] > 0;
+                                 blbc: return truncate(srcs[0]) == 1'b0;
+                                 blbs: return truncate(srcs[0]) == 1'b1;
+                                 ble : return srcs[0] <= 0;
+                                 blt : return srcs[0] < 0;
+                                 bne : return srcs[0] != 0;
+                             endcase;
+                timep_result = taken? tagged RBranchTaken newAddr: tagged RBranchNotTaken (addr + 4);
+            end
+
+            jmp:
+            begin
+                let newAddr = srcs[1] & ~3;
+                writebacks[0] = tagged Valid addr;
                 timep_result = tagged RBranchTaken newAddr;
             end
 
@@ -146,8 +171,30 @@ module [HASim_Module] mkISA_Datapath
             arith:
             begin
                 case (funct)
+                    addl  : writebacks[0] = tagged Valid signExtend((srcs[0] + src1)[31:0]);
+                    s4addl: writebacks[0] = tagged Valid signExtend(((srcs[0] << 2) + src1)[31:0]);
+                    s8addl: writebacks[0] = tagged Valid signExtend(((srcs[0] << 3) + src1)[31:0]);
                     addq  : writebacks[0] = tagged Valid (srcs[0] + src1);
+                    s4addq: writebacks[0] = tagged Valid ((srcs[0] << 2) + src1);
+                    s8addq: writebacks[0] = tagged Valid ((srcs[0] << 3) + src1);
                     cmpeq : writebacks[0] = tagged Valid zeroExtend(pack(srcs[0] == src1));
+                    cmple : writebacks[0] = tagged Valid zeroExtend(pack(signedLE(srcs[0], src1)));
+                    cmplt : writebacks[0] = tagged Valid zeroExtend(pack(signedLT(srcs[0], src1)));
+                    cmpule: writebacks[0] = tagged Valid zeroExtend(pack(srcs[0] <= src1));
+                    cmpult: writebacks[0] = tagged Valid zeroExtend(pack(srcs[0] < src1));
+                    mull  : writebacks[0] = tagged Valid signExtend((srcs[0] * src1)[31:0]);
+                    mulq  : writebacks[0] = tagged Valid (srcs[0] * src1);
+                    umulh :
+                    begin
+                        Bit#(128) res = zeroExtend(srcs[0]) * zeroExtend(src1);
+                        writebacks[0] = tagged Valid truncate(res[127:64]);
+                    end
+                    subl  : writebacks[0] = tagged Valid signExtend((srcs[0] - src1)[31:0]);
+                    s4subl: writebacks[0] = tagged Valid signExtend(((srcs[0] << 2) - src1)[31:0]);
+                    s8subl: writebacks[0] = tagged Valid signExtend(((srcs[0] << 3) - src1)[31:0]);
+                    subq  : writebacks[0] = tagged Valid (srcs[0] - src1);
+                    s4subq: writebacks[0] = tagged Valid ((srcs[0] << 2) - src1);
+                    s8subq: writebacks[0] = tagged Valid ((srcs[0] << 3) - src1);
                 endcase
             end
 
