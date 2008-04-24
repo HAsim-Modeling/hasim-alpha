@@ -18,5 +18,6 @@
 %param M5_BUILD_DIR "platform/m5/build/ALPHA_SE"        "m5 Build directory"
 %library platform/m5/build/ALPHA_SE/libm5_opt.a
 %library platform/m5/build/ALPHA_SE/libelf.a
+%include platform/m5/build/ALPHA_SE
 
 %AWB_END

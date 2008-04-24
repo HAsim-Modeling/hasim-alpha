@@ -195,7 +195,7 @@ module [HASim_Module] mkISA_Datapath
                                  blt : return src0 < 0;
                                  bne : return src0 != 0;
                              endcase;
-                debug(2, $fdisplay(debug_log, "Bxx from 0x%x to 0x%x, %s taken", taken? "": "not "));
+                debug(2, $fdisplay(debug_log, "[0x%x] Bxx to 0x%x, %staken", addr, newAddr, taken? "": "not "));
                 timep_result = taken? tagged RBranchTaken truncate(newAddr): tagged RBranchNotTaken truncate(addr + 4);
             end
 
@@ -203,7 +203,7 @@ module [HASim_Module] mkISA_Datapath
             begin
                 writebacks[0] = tagged Valid (addr + 4);
                 let newAddr = addr + 4 + (signExtend(branchImm) << 2);
-                debug(2, $fdisplay(debug_log, "BxR from 0x%x to 0x%x, branchImm is 0x%x", addr, newAddr, branchImm));
+                debug(2, $fdisplay(debug_log, "[0x%x] BxR to 0x%x", addr, newAddr));
                 timep_result = tagged RBranchTaken truncate(newAddr);
             end
 
@@ -211,6 +211,7 @@ module [HASim_Module] mkISA_Datapath
             begin
                 let newAddr = src0 & ~3;
                 writebacks[0] = tagged Valid (addr + 4);
+                debug(2, $fdisplay(debug_log, "[0x%x] JMP to 0x%x", addr, newAddr));
                 timep_result = tagged RBranchTaken truncate(newAddr);
             end
 

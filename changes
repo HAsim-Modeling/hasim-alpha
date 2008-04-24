@@ -341,3 +341,20 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 - Added memory instructions in hasim-alpha
+
+----------
+mcadler     Date: Thu Apr 24 00:03:16 EDT 2008  CSN: CSN-hasim-alpha-18
+                  Thu Apr 24 04:03:16 UTC 2008
+
+
+Directory platform/m5
+ m5-alpha-se.awb           Locally Modified           17 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           17 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           17 
+
+- Off by 1 in operand numbering in isa_decode_functions
+- Tweak some debug statements in isa_datapath_alpha
