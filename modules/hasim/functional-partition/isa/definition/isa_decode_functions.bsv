@@ -197,7 +197,7 @@ FUNCT maxsw4    = 'h3f;
 FUNCT ftoit     = 'h70;
 FUNCT ftois     = 'h78;
 
-function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
+function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
 
     OPCODE    opcode = i[31:26];
     Bool      useLit = unpack(i[12]);
@@ -208,7 +208,7 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
     let           rb = i[20:16];
     let           rc = i[4:0];
 
-    Maybe#(Bit#(rname_SZ)) ret = tagged Invalid;
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
         opc01:
@@ -217,7 +217,7 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
                 exit:
                 begin
                     if(n == 0)
-                        ret = tagged Valid pack(tagged ArchReg ra);
+                        ret = tagged Valid (tagged ArchReg ra);
                 end
             endcase
         end
@@ -225,50 +225,50 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
         lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg rb);
+                ret = tagged Valid (tagged ArchReg rb);
         end
 
         stl_c, stq_c, stb, stl, stq, stw, stq_u:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg rb);
+                ret = tagged Valid (tagged ArchReg rb);
             if(n == 1)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
         end
         stl_c, stq_c:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg rb);
+                ret = tagged Valid (tagged ArchReg rb);
             if(n == 1)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
             if(n == 2)
-                ret = tagged Valid pack(tagged LockReg);
+                ret = tagged Valid (tagged LockReg);
         end
 
         beq, bge, bgt, blbc, blbs, ble, blt, bne:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
         end
 
         jmp:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg rb);
+                ret = tagged Valid (tagged ArchReg rb);
         end
 
         opc10:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
             if(n == 1 && !useLit)
-                ret = tagged Valid pack(tagged ArchReg rb);
+                ret = tagged Valid (tagged ArchReg rb);
 
             case (funct)
                 addlv, addqv, sublv, subqv:
                 begin
                     if(n == 2)
-                        ret = tagged Valid pack(tagged ControlReg); // TODO must properly write this
+                        ret = tagged Valid (tagged ControlReg); // TODO must properly write this
                 end
             endcase
         end
@@ -280,9 +280,9 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
                 default:
                 begin
                     if(n == 0)
-                        ret = tagged Valid pack(tagged ArchReg ra);
+                        ret = tagged Valid (tagged ArchReg ra);
                     if(n == 1 && !useLit)
-                        ret = tagged Valid pack(tagged ArchReg rb);
+                        ret = tagged Valid (tagged ArchReg rb);
                 end
             endcase
         end
@@ -290,23 +290,23 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
         opc12:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
             if(n == 1 && !useLit)
-                ret = tagged Valid pack(tagged ArchReg rb);
+                ret = tagged Valid (tagged ArchReg rb);
         end
 
         opc13:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
             if(n == 1 && !useLit)
-                ret = tagged Valid pack(tagged ArchReg rb);
+                ret = tagged Valid (tagged ArchReg rb);
 
             case (funct)
                 mullv, mulqv:
                 begin
                     if(n == 2)
-                        ret = tagged Valid pack(tagged ControlReg); // TODO must properly write this
+                        ret = tagged Valid (tagged ControlReg); // TODO must properly write this
                 end
             endcase
         end
@@ -317,15 +317,15 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
                 perr:
                 begin
                     if(n == 0)
-                        ret = tagged Valid pack(tagged ArchReg ra);
+                        ret = tagged Valid (tagged ArchReg ra);
                     if(n == 1)
-                        ret = tagged Valid pack(tagged ArchReg rb);
+                        ret = tagged Valid (tagged ArchReg rb);
                 end
 
                 default:
                 begin
                     if(n == 0)
-                        ret = tagged Valid pack(tagged ArchReg rb);
+                        ret = tagged Valid (tagged ArchReg rb);
                 end
             endcase
         end
@@ -341,7 +341,7 @@ endfunction
 // Given an instruction, return the nth destination register.
 // Or return Invalid if there is no such destination for this instruction.
 
-function Maybe#(Bit#(rname_SZ)) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
+function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
 
     OPCODE    opcode = i[31:26];
     FUNCT      funct = i[11:5];
@@ -351,57 +351,57 @@ function Maybe#(Bit#(rname_SZ)) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos
     let           rb = i[20:16];
     let           rc = i[4:0];
 
-    Maybe#(Bit#(rname_SZ)) ret = tagged Invalid;
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
         lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
         end
 
         ldl_l, ldq_l:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
             if(n == 1)
-                ret = tagged Valid pack(tagged LockReg);
+                ret = tagged Valid (tagged LockReg);
             if(n == 2)
-                ret = tagged Valid pack(tagged LockAddrReg);
+                ret = tagged Valid (tagged LockAddrReg);
         end
 
         stl_c, stq_c:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
             if(n == 1)
-                ret = tagged Valid pack(tagged LockReg);
+                ret = tagged Valid (tagged LockReg);
         end       
 
         br, bsr, jmp:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg ra);
+                ret = tagged Valid (tagged ArchReg ra);
         end
 
         opc10, opc11, opc12, opc13:
         begin
             if(n == 0)
-                ret = tagged Valid pack(tagged ArchReg rc);
+                ret = tagged Valid (tagged ArchReg rc);
             if(n == 1)
             begin
                 case (opcode)
                     opc10:
                     begin
                         case (funct)
-                            addlv, addqv, sublv, subqv: ret = tagged Valid pack(tagged ControlReg); // TODO correct this
+                            addlv, addqv, sublv, subqv: ret = tagged Valid (tagged ControlReg); // TODO correct this
                         endcase
                     end
 
                     opc13:
                     begin
                         case (funct)
-                            mullv, mulqv: ret = tagged Valid pack(tagged ControlReg);
+                            mullv, mulqv: ret = tagged Valid (tagged ControlReg);
                         endcase
                     end
                 endcase

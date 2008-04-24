@@ -358,3 +358,17 @@ Directory modules/hasim/functional-partition/isa/definition
 
 - Off by 1 in operand numbering in isa_decode_functions
 - Tweak some debug statements in isa_datapath_alpha
+
+----------
+vmurali     Date: Thu Apr 24 16:10:16 EDT 2008  CSN: CSN-hasim-alpha-19
+                  Thu Apr 24 20:10:16 UTC 2008
+
+
+Directory config/bm/alpha
+ 6_375.cfx                 Locally Modified           18 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           18 
+
+- Modified isaGetSrcs and isaGetDsts to return ISA_REG_INDEX
+

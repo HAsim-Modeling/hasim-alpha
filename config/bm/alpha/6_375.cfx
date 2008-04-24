@@ -11,12 +11,23 @@ use strict;
 
 my $gcfg = Asim::GenCFG->new();
 
+my @tests = ("simple");
+
 my @bmarks = ("median",
               "multiply",
 	      "towers",
 	      "qsort",
 	      "vvadd");
 	      
+foreach my $test (@tests) {
+    $gcfg->add(name => $test,
+               tree => [ "tests" ],
+               setup => "tools/scripts/bmark/setup-bmark --group instruction-tests --isa alpha $test",
+               feeder => "vcs",
+               feedflags => "program/${test}.alpha.vmh",
+              );
+}
+
 foreach my $bmark (@bmarks) {
     $gcfg->add(name => $bmark,
                tree => [ "benchmarks" ],
