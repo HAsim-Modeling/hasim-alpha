@@ -18,10 +18,6 @@ typedef Bit#(32) ISA_ADDRESS;
 
 typedef Bit#(32) ISA_VALUE;
 
-typedef 8 ISA_MASK_NUM;
-typedef 4 ISA_MASK_SIZE;
-
-
 // ISA_INSTRUCTION
 
 // An ISA-specific instruction.
@@ -40,7 +36,7 @@ typedef 3 ISA_MAX_SRCS;
 
 // The maximum number of destination registers an instruction can write.
 
-typedef 1 ISA_MAX_DSTS;
+typedef 2 ISA_MAX_DSTS;
 
 
 // ISA_MEMOP_TYPE
@@ -51,10 +47,17 @@ typedef 1 ISA_MAX_DSTS;
 
 typedef enum
 {
-    MEM_ZERO_8,
-    MEM_ZERO_16,
-    MEM_SIGN_32,
-    MEM_64
+    STORE_8,
+    STORE_16,
+    STORE_32,
+    STORE_64,
+    STORE_UNALIGNED_64,
+
+    LOAD_ZERO_8,
+    LOAD_ZERO_16,
+    LOAD_SIGN_32,
+    LOAD_64,
+    LOAD_UNALIGNED_64
 }
   ISA_MEMOP_TYPE
      deriving (Eq, Bits);
@@ -67,6 +70,7 @@ typedef enum
 
 typedef union tagged {
     Bit#(5) ArchReg;
+    void ControlReg;
 } ISA_REG_INDEX deriving (Bits, Eq);
 //typedef Bit#(5) ISA_REG_INDEX;
 

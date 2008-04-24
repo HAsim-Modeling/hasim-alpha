@@ -307,3 +307,22 @@ Directory modules/hasim/functional-partition/isa/datapath
  isa_datapath_alpha.bsv    Locally Modified           14 
 
 Fix branch instructions (immediate, not register displacements).
+
+----------
+vmurali     Date: Wed Apr 23 21:56:42 EDT 2008  CSN: CSN-hasim-alpha-16
+                  Thu Apr 24 01:56:42 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           15 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           15 
+ isa_datatypes.bsv         Locally Modified           15 
+ isa_memory_conversions.bsv Locally Modified           15 
+
+
+- Added most of the instructions
+- Removed datapath for all memory instructions
+- Kept bit-sizes at 32, as changing it to 64 created problems in regstate-manager. Will take a look at that now.
+

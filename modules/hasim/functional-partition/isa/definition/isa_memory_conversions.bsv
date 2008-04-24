@@ -8,6 +8,7 @@
 
 function MEM_ADDRESS isaAddressToMemAddress(ISA_ADDRESS a);
 
+    // TODO: write this correctly
     return truncate(a); // If you need more than this write it here.
 
 endfunction
@@ -20,6 +21,7 @@ endfunction
 
 function ISA_ADDRESS isaAddressFromMemAddress(MEM_ADDRESS a);
 
+    // TODO: write this correctly
     return zeroExtend(a); // If you need more than this write it here.
 
 endfunction
@@ -33,6 +35,7 @@ endfunction
 
 function ISA_INSTRUCTION isaInstructionFromMemValue(MEM_VALUE v);
 
+    // TODO: write this correctly
     return unpack(v); // If you need more than this write it here.
 
 endfunction
@@ -45,7 +48,8 @@ endfunction
 
 function MEM_VALUE isaInstructionToMemValue(ISA_INSTRUCTION i);
 
-   return unpack(i); // If you need more than this write it here.
+    // TODO: write this correctly
+    return unpack(i); // If you need more than this write it here.
 
 endfunction
 
@@ -57,13 +61,18 @@ endfunction
 // original address, so all byte selection and extension can be performed here.
 
 
-function ISA_VALUE isaValueFromMemValue(MEM_VALUE v, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr);
+function ISA_VALUE isaValueFromMemValue(MEM_VALUE val, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr);
 
-    return case (memtype) matches
-               MEM_ZERO_8: return zeroExtend(v[7:0]);
-               MEM_ZERO_16: return zeroExtend(v[15:0]);
-               MEM_SIGN_32: return signExtend(v[31:0]);
-               MEM_64: return v;
+    // TODO: get rid of the following line, support unaligned
+    ISA_VALUE v = signExtend(val);
+
+    return  case (memtype) matches
+               LOAD_ZERO_8: return zeroExtend(v[7:0]);
+               LOAD_ZERO_16: return zeroExtend(v[15:0]);
+               LOAD_SIGN_32: return signExtend(v[31:0]);
+               LOAD_64: return v;
+               LOAD_UNALIGNED_64: return v;
+               default: return v;
            endcase;
 
 endfunction
@@ -78,10 +87,12 @@ endfunction
 function Bool isaMemOpRequiresReadModifyWrite(ISA_MEMOP_TYPE memtype);
 
     return case (memtype) matches
-               MEM_ZERO_8: return True;
-               MEM_ZERO_16: return True;
-               MEM_SIGN_32: return True;
-               MEM_64: return False;
+               STORE_8: return True;
+               STORE_16: return True;
+               STORE_32: return True;
+               STORE_64: return False;
+               STORE_UNALIGNED_64: return True;
+               default: return True;
            endcase;
 
 endfunction
@@ -95,13 +106,9 @@ endfunction
 // This function is called ONLY if the above function returns False.
 
 function MEM_VALUE isaValueToMemValue(ISA_VALUE v, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr);
- 
-    return case (memtype) matches
-               MEM_ZERO_8: return zeroExtend(v[7:0]);
-               MEM_ZERO_16: return zeroExtend(v[15:0]);
-               MEM_SIGN_32: return signExtend(v[31:0]);
-               MEM_64: return v;
-           endcase;
+
+    // TODO: write this correctly
+    return truncate(v);
     
 endfunction
 
@@ -113,14 +120,9 @@ endfunction
 // This function is called ONLY if the above function returns True.
 
 function MEM_VALUE isaValueToMemValueRMW(ISA_VALUE v, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr, MEM_VALUE existing_value);
- 
-    return case (memtype) matches
-               //MEM_ZERO_8: return {existing_value[63:8], v[7:0]};
-               //MEM_ZERO_16: return {existing_value[63:16], v[15:0]};
-               //MEM_SIGN_32: return {existing_value[63:32], v[31:0]};
-               MEM_64: return v;
-               default: return v;
-           endcase;
-    
+
+    // TODO: write this function
+    return truncate(v);
+
 endfunction
 
