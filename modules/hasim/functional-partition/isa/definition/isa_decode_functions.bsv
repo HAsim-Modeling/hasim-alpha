@@ -235,6 +235,15 @@ function Maybe#(Bit#(rname_SZ)) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos
             if(n == 2)
                 ret = tagged Valid pack(tagged ArchReg ra);
         end
+        stl_c, stq_c:
+        begin
+            if(n == 1)
+                ret = tagged Valid pack(tagged ArchReg rb);
+            if(n == 2)
+                ret = tagged Valid pack(tagged ArchReg ra);
+            if(n == 3)
+                ret = tagged Valid pack(tagged LockReg);
+        end
 
         beq, bge, bgt, blbc, blbs, ble, blt, bne:
         begin
@@ -345,11 +354,29 @@ function Maybe#(Bit#(rname_SZ)) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos
     Maybe#(Bit#(rname_SZ)) ret = tagged Invalid;
 
     case (opcode)
-        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l, stl_c, stq_c:
+        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u:
         begin
             if(n == 1)
                 ret = tagged Valid pack(tagged ArchReg ra);
         end
+
+        ldl_l, ldq_l:
+        begin
+            if(n == 1)
+                ret = tagged Valid pack(tagged ArchReg ra);
+            if(n == 2)
+                ret = tagged Valid pack(tagged LockReg);
+            if(n == 3)
+                ret = tagged Valid pack(tagged LockAddrReg);
+        end
+
+        stl_c, stq_c:
+        begin
+            if(n == 1)
+                ret = tagged Valid pack(tagged ArchReg ra);
+            if(n == 2)
+                ret = tagged Valid pack(tagged LockReg);
+        end       
 
         br, bsr, jmp:
         begin
@@ -401,7 +428,9 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l, stl_c, stq_c: return 1;
+               lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u: return 1;
+               ldl_l, ldq_l: return 3;
+               stl_c, stq_c: return 2;
                br, bsr, jmp: return 1;
                opc10:
                begin

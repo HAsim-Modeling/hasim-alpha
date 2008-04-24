@@ -36,7 +36,7 @@ typedef 3 ISA_MAX_SRCS;
 
 // The maximum number of destination registers an instruction can write.
 
-typedef 2 ISA_MAX_DSTS;
+typedef 3 ISA_MAX_DSTS;
 
 
 // ISA_MEMOP_TYPE
@@ -71,6 +71,8 @@ typedef enum
 typedef union tagged {
     Bit#(5) ArchReg;
     void ControlReg;
+    void LockReg;
+    void LockAddrReg;
 } ISA_REG_INDEX deriving (Bits, Eq);
 //typedef Bit#(5) ISA_REG_INDEX;
 

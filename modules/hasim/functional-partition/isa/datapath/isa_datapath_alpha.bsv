@@ -113,7 +113,7 @@ module [HASim_Module] mkISA_Datapath
 
         OPCODE    opcode = inst[31:26];
         FUNCT      funct = inst[11:5];
-        MEM_FUNC  memImm = inst[15:0];
+        MEM_FUNC memDisp = inst[15:0];
         let          lit = inst[20:13];
         Bool      useLit = unpack(inst[12]);
         let    branchImm = inst[20:0];
@@ -150,10 +150,37 @@ module [HASim_Module] mkISA_Datapath
         case (opcode)
             opc01:
             begin
-                case (memImm)
+                case (memDisp)
                     exit: timep_result = tagged RTerminate unpack(truncate(src0));
                 endcase
             end
+
+            lda, ldah:
+            begin
+                Bit#(64) disp = case(opcode)
+                                    lda: signExtend(memDisp);
+                                    ldah: signExtend(memDisp<<16);
+                                endcase;
+                writebacks[0] = tagged Valid (src0 + disp);
+            end
+
+            ldbu, ldl, ldq, ldwu: effective_addr = src0 + signExtend(memDisp);
+            ldq_u: effective_addr = ((src0 + signExtend(memDisp)) & ~7);
+            ldl_l, ldq_l:
+            begin
+                effective_addr = src0 + signExtend(memDisp);
+                writebacks[1] = tagged Valid 1;
+                writebacks[2] = tagged Valid effective_addr;
+            end
+
+            stl_c, stq_c:
+            begin
+                effective_addr = src0 + signExtend(memDisp);
+                writebacks[0] = tagged Valid src2;
+                writebacks[1] = tagged Valid 0;
+            end
+            stb, stl, stq, stw: effective_addr = src0 + signExtend(memDisp);
+            stq_u: effective_addr = ((src0 + signExtend(memDisp)) & ~7);
 
             beq, bge, bgt, blbc, blbs, ble, blt, bne:
             begin

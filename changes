@@ -326,3 +326,18 @@ Directory modules/hasim/functional-partition/isa/definition
 - Removed datapath for all memory instructions
 - Kept bit-sizes at 32, as changing it to 64 created problems in regstate-manager. Will take a look at that now.
 
+
+----------
+vmurali     Date: Wed Apr 23 23:40:27 EDT 2008  CSN: CSN-hasim-alpha-17
+                  Thu Apr 24 03:40:27 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           16 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           16 
+ isa_datatypes.bsv         Locally Modified           16 
+
+
+- Added memory instructions in hasim-alpha
