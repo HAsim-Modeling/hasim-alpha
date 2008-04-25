@@ -66,7 +66,7 @@ funcp_memstate_manager=Manager using Macro Ops for Mem State
 funcp_memory=Hybrid Memory for Functional Partition
 
 [Hybrid Memory for Functional Partition]
-File=modules/hasim/functional-partition/memory-state/memory/hybrid/memory_virtual_device_hybrid.awb
+File=modules/hasim/functional-partition/memory-state/memory/hybrid/hybrid-funcp-memory.awb
 Packagehint=hasim
 
 [Hybrid Memory for Functional Partition/Requires]
