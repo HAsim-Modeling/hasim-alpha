@@ -64,5 +64,5 @@ File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
 [New Hasim Common Library]
-File=config/pm/hasim/submodels/common/hasim_common_v2.apm
+File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim

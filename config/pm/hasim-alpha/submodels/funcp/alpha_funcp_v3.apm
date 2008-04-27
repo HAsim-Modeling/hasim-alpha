@@ -57,10 +57,6 @@ Packagehint=hasim
 File=modules/hasim/functional-partition/isa/datapath/isa_datapath_alpha.awb
 Packagehint=hasim-alpha
 
-[VMH hybrid memory]
-File=modules/hasim/functional-partition/memory-state/memory/hybrid/vmh/vmh-memory.awb
-Packagehint=hasim
-
 [Memory State for Functional Partition/Requires]
 funcp_memstate_manager=Manager using Macro Ops for Mem State
 funcp_memory=Hybrid Memory for Functional Partition
@@ -94,3 +90,12 @@ Packagehint=hasim
 [Hybrid ISA Semantics/Requires]
 isa_emulator=Hybrid ISA Emulator
 hasim_isa_datapath=Alpha ISA Datapath
+
+
+
+
+
+
+[VMH hybrid memory]
+File=modules/hasim/functional-partition/memory-state/memory/hybrid/vmh/vmh-memory.awb
+Packagehint=hasim

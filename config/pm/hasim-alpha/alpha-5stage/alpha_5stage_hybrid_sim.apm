@@ -72,7 +72,7 @@ File=modules/cpu/mips/pipeline/writeback/simple-newfuncp/writeback_simple_newfun
 Packagehint=hasim-mips
 
 [New Hasim Common Library]
-File=config/pm/hasim/submodels/common/hasim_common_v2.apm
+File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
 [Hasim Standard Controller]
