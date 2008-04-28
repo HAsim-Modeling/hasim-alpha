@@ -25,15 +25,9 @@ File=modules/system/single_chip_system/hasim_system.awb
 hasim_cpu=5-stage pipeline CPU
 hasim_memory=magic memory
 
-[5-stage pipeline CPU/Requires]
-hasim_pipe_mem=New 5-stage pipeline Mem
-hasim_pipe_writeback=New 5-stage pipeline Writeback
-hasim_pipe_execute=New 5-stage pipeline Execute
-hasim_pipe_decode=New 5-stage pipeline Decode
-hasim_pipe_fetch=New 5-stage pipeline Fetch
 
 [5-stage pipeline CPU]
-File=modules/cpu/mips/5stage_cpu.awb
+File=config/pm/hasim-mips/submodels/timing-models/5stage-pipeline.apm
 Packagehint=hasim-mips
 
 [Uniprocessor chip]
@@ -48,28 +42,11 @@ Packagehint=hasim-mips
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
 Packagehint=platforms
 
-[New 5-stage pipeline Mem]
-File=modules/cpu/mips/pipeline/mem/simple-newfuncp/mem_simple_newfuncp.awb
-Packagehint=hasim-mips
 
-[New 5-stage pipeline Execute]
-File=modules/cpu/mips/pipeline/execute/simple-newfuncp/execute_simple_newfuncp.awb
-Packagehint=hasim-mips
 
-[New 5-stage pipeline Decode]
-File=modules/cpu/mips/pipeline/decode/simple-newfuncp/decode_simpe_newfuncp.awb
-Packagehint=hasim-mips
 
-[New 5-stage pipeline Fetch]
-File=modules/cpu/mips/pipeline/fetch/simple-newfuncp/fetch_simple_newfuncp.awb
-Packagehint=hasim-mips
 
-[New 5-stage pipeline Fetch/Requires]
-hasim_branch_pred=Always not taken Branch Predictor V3
 
-[New 5-stage pipeline Writeback]
-File=modules/cpu/mips/pipeline/writeback/simple-newfuncp/writeback_simple_newfuncp.awb
-Packagehint=hasim-mips
 
 [New Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
@@ -79,9 +56,6 @@ Packagehint=hasim
 File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm
 Packagehint=hasim
 
-[Always not taken Branch Predictor V3]
-File=modules/cpu/mips/branch/predictor/notTaken/BranchPredV3.awb
-Packagehint=hasim-mips
 
 [HAsim Hybrid Model Foundation]
 File=modules/model/hasim_model.awb

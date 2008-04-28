@@ -398,3 +398,17 @@ Directory config/pm/hasim-alpha/submodels/funcp
  alpha_funcp_v3.apm        Locally Modified           20 
 
 Update for new common configuration.
+
+----------
+pellauer    Date: Mon Apr 28 14:03:36 EDT 2008  CSN: CSN-hasim-alpha-22
+                  Mon Apr 28 18:03:36 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-5stage
+ alpha_5stage_hybrid_sim.apm Locally Modified           21 
+
+
+Update model to reflect V3.
+
+Michael P.
+
