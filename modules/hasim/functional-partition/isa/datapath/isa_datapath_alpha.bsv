@@ -33,12 +33,8 @@ module [HASim_Module] mkISA_Datapath
 
     // Connection to the functional partition.
     
-    /*
     Connection_Server#(Tuple3#(ISA_INSTRUCTION, ISA_ADDRESS, ISA_SOURCE_VALUES), 
                        Tuple3#(ISA_EXECUTION_RESULT, ISA_ADDRESS, ISA_RESULT_VALUES)) link_fp <- mkConnection_Server("isa_datapath");
-    */
-    Connection_Server#(Tuple3#(ISA_INSTRUCTION, Bit#(32), ISA_SOURCE_VALUES), 
-                       Tuple3#(ISA_EXECUTION_RESULT, Bit#(32), ISA_RESULT_VALUES)) link_fp <- mkConnection_Server("isa_datapath");
 
     // ***** Debugging Log *****
     
@@ -87,15 +83,9 @@ module [HASim_Module] mkISA_Datapath
     rule datapathExec (True);
 
         // Get the request from the functional partition.
-        match {.inst, .addr_wrong, .srcs_wrong} = link_fp.getReq();
-
-        Vector#(ISA_MAX_SRCS, Bit#(64)) srcs = newVector();
-        for(Integer i = 0; i < valueOf(ISA_MAX_SRCS); i=i+1)
-            srcs[i] = zeroExtend(srcs_wrong[i]);
+        match {.inst, .addr, .srcs} = link_fp.getReq();
 
         link_fp.deq();
-
-        Bit#(64) addr = signExtend(addr_wrong);
 
         // Some convenient variables to return.
 
@@ -103,8 +93,7 @@ module [HASim_Module] mkISA_Datapath
         ISA_EXECUTION_RESULT timep_result = tagged RNop;
         
         // The effective address for Loads/Stores
-        ISA_ADDRESS effective_addr_wrong = 0;
-        Bit#(64) effective_addr = 0;
+        ISA_ADDRESS effective_addr = 0;
         
         // The writebacks which are sent to the register file.
         ISA_RESULT_VALUES writebacks_wrong = Vector::replicate(Invalid);
@@ -516,16 +505,8 @@ module [HASim_Module] mkISA_Datapath
             end
         endcase
 
-        effective_addr_wrong = truncate(effective_addr);
-        for(Integer i = 0; i < valueOf(ISA_MAX_DSTS); i=i+1)
-        begin
-            if(isValid(writebacks[i]))
-                writebacks_wrong[i] = tagged Valid truncate(validValue(writebacks[i]));
-            else
-                writebacks_wrong[i] = tagged Invalid;
-        end
         // Return the result to the functional partition.
-        link_fp.makeResp(tuple3(timep_result, effective_addr_wrong, writebacks_wrong));
+        link_fp.makeResp(tuple3(timep_result, effective_addr, writebacks));
 
     endrule
 

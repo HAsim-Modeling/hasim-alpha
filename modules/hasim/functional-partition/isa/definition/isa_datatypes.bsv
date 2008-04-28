@@ -8,7 +8,7 @@
 
 // An ISA-specific address.
 
-typedef Bit#(32) ISA_ADDRESS;
+typedef Bit#(64) ISA_ADDRESS;
 
 
 // ISA_VALUE
@@ -16,7 +16,7 @@ typedef Bit#(32) ISA_ADDRESS;
 // The value stored in registers.
 // TODO: Support: multiple value lengths for registers.
 
-typedef Bit#(32) ISA_VALUE;
+typedef Bit#(64) ISA_VALUE;
 
 // ISA_INSTRUCTION
 

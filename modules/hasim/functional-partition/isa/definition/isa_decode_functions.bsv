@@ -468,7 +468,7 @@ function Bool isaIsLoad(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l: return True;
+               ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l: return True;
                default: return False; 
            endcase;
 
@@ -513,7 +513,6 @@ function ISA_MEMOP_TYPE isaLoadType(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               lda, lda: return LOAD_64;
                ldbu: return LOAD_ZERO_8;
                ldl: return LOAD_SIGN_32;
                ldq: return LOAD_64;

@@ -36,7 +36,7 @@ endfunction
 function ISA_INSTRUCTION isaInstructionFromMemValue(MEM_VALUE v);
 
     // TODO: write this correctly
-    return unpack(v); // If you need more than this write it here.
+    return truncate(v); // If you need more than this write it here.
 
 endfunction
 
@@ -49,7 +49,7 @@ endfunction
 function MEM_VALUE isaInstructionToMemValue(ISA_INSTRUCTION i);
 
     // TODO: write this correctly
-    return unpack(i); // If you need more than this write it here.
+    return zeroExtend(i); // If you need more than this write it here.
 
 endfunction
 
