@@ -445,3 +445,21 @@ Directory modules/hasim/functional-partition/isa/datapath
   was always 0.  Switch to memDisp as a Bit#(64) so the sign extend is done
   once.
 - Add some more debugging output.
+
+----------
+mcadler     Date: Tue Apr 29 11:52:09 EDT 2008  CSN: CSN-hasim-alpha-25
+                  Tue Apr 29 15:52:09 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           24 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           23 
+
+- cmov instructions need to claim 3 inputs (not tested)
+- Improve popcnt instructions:
+  - Use 7 bit temp counter instead of 64 bits
+  - Old algorithm was hanging the compiler!  It was also obviously wrong.
+    Use a simpler algorithm.
+- Every implemented opcode now emits a debug message

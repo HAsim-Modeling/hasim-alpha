@@ -137,6 +137,21 @@ module [HASim_Module] mkISA_Datapath
             return overflow? 1: 0;
         endfunction
 
+        function Action debug_ALU (ISA_ADDRESS addr_d, OPCODE opcode_d, FUNCT funct_d, Maybe#(Bit#(64)) val_d, Bit#(64) src0_d, Bit#(64) src1_d);
+        action
+            Bit#(6) op = pack(opcode_d);
+            Bit#(7) fu = pack(funct_d);
+            if (val_d matches tagged Valid .alu_d)
+            begin
+                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d));
+            end
+            else
+            begin
+                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
+            end
+        endaction
+        endfunction
+
         case (opcode)
             opc01:
             begin
@@ -174,6 +189,7 @@ module [HASim_Module] mkISA_Datapath
                 effective_addr = src0 + memDisp;
                 writebacks[1] = tagged Valid 1;
                 writebacks[2] = tagged Valid effective_addr;
+                debug(2, $fdisplay(debug_log, "[0x%x] LD_L [0x%x]", addr, effective_addr));
             end
 
             stl_c, stq_c:
@@ -181,9 +197,20 @@ module [HASim_Module] mkISA_Datapath
                 effective_addr = src0 + memDisp;
                 writebacks[0] = tagged Valid src2;
                 writebacks[1] = tagged Valid 0;
+                debug(2, $fdisplay(debug_log, "[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
-            stb, stl, stq, stw: effective_addr = src0 + memDisp;
-            stq_u: effective_addr = ((src0 + memDisp) & ~7);
+
+            stb, stl, stq, stw:
+            begin
+                effective_addr = src0 + memDisp;
+                debug(2, $fdisplay(debug_log, "[0x%x] ST [0x%x] <- 0x%x", addr, effective_addr, src1));
+            end
+
+            stq_u:
+            begin
+                effective_addr = ((src0 + memDisp) & ~7);
+                debug(2, $fdisplay(debug_log, "[0x%x] STQ_U [0x%x] <- 0x%x", addr, effective_addr, src1));
+            end
 
             beq, bge, bgt, blbc, blbs, ble, blt, bne:
             begin
@@ -287,6 +314,8 @@ module [HASim_Module] mkISA_Datapath
                     cmplt: writebacks[0] = tagged Valid zeroExtend(pack(signedLT(src0, src1)));
                     cmple: writebacks[0] = tagged Valid zeroExtend(pack(signedLE(src0, src1)));
                 endcase
+
+                debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
 
             opc11:
@@ -309,6 +338,8 @@ module [HASim_Module] mkISA_Datapath
                     cmovgt: writebacks[0] = tagged Valid ((src0 > 0)? src1: src2);
                     implver: writebacks[0] = tagged Valid `IMPL_VER; // Implementation version (21064 -> 0, 21164 -> 1, 21264 -> 2)
                 endcase
+
+                debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
 
             opc12:
@@ -383,6 +414,8 @@ module [HASim_Module] mkISA_Datapath
                     sll: writebacks[0] = tagged Valid (src0 << src1[5:0]);
                     sra: writebacks[0] = tagged Valid signedShiftRight(src0, src1[5:0]);
                 endcase
+
+                debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
 
             opc13:
@@ -412,6 +445,8 @@ module [HASim_Module] mkISA_Datapath
                         writebacks[0] = tagged Valid mulRes[127:64];
                     end
                 endcase
+
+                debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
 
             opc1c:
@@ -422,13 +457,13 @@ module [HASim_Module] mkISA_Datapath
 
                     ctpop:
                     begin
-                        Bit#(64) temp = 0;
+                        Bit#(7) temp = 0;
                         for(Integer i = 0; i < 64; i = i + 1)
                         begin
                             if(src0[i] == 1)
                                 temp = temp + 1;
                         end
-                        writebacks[0] = tagged Valid temp;
+                        writebacks[0] = tagged Valid zeroExtend(temp);
                     end
 
                     perr:
@@ -448,36 +483,32 @@ module [HASim_Module] mkISA_Datapath
 
                     ctlz:
                     begin
-                        Bit#(64) temp = 0;
-                        Bool done = False;
-                        for(Integer i = 0; i < 64; i = i + 1)
-                        begin
-                            if(!done)
-                            begin
-                                if(src0[i] != 1)
-                                    temp = temp + 1;
-                                else
-                                    done = False;
-                            end
-                        end
-                        writebacks[0] = tagged Valid temp;
-                    end
-
-                    ctlz:
-                    begin
-                        Bit#(64) temp = 0;
-                        Bool done = False;
+                        Bit#(7) temp = 0;
+                        Bit#(1) allZero = 1;
                         for(Integer i = 63; i >= 0; i = i - 1)
                         begin
-                            if(!done)
+                            if (src0[i] == 1)
                             begin
-                                if(src0[i] != 1)
-                                    temp = temp + 1;
-                                else
-                                    done = False;
+                                allZero = 0;
                             end
+                            temp = temp + zeroExtend(allZero);
                         end
-                        writebacks[0] = tagged Valid temp;
+                        writebacks[0] = tagged Valid zeroExtend(temp);
+                    end
+
+                    cttz:
+                    begin
+                        Bit#(7) temp = 0;
+                        Bit#(1) allZero = 1;
+                        for(Integer i = 0; i < 64; i = i + 1)
+                        begin
+                            if (src0[i] == 1)
+                            begin
+                                allZero = 0;
+                            end
+                            temp = temp + zeroExtend(allZero);
+                        end
+                        writebacks[0] = tagged Valid zeroExtend(temp);
                     end
 
                     unpkbw:
@@ -502,7 +533,7 @@ module [HASim_Module] mkISA_Datapath
                     begin
                         Bit#(64) temp;
                         temp[7:0] = src0[7:0];
-                        temp [15:8] = src0[23:16];
+                        temp[15:8] = src0[23:16];
                         temp[23:16] = src0[39:32];
                         temp[31:24] = src0[55:48];
                         writebacks[0] = tagged Valid temp;
@@ -516,6 +547,8 @@ module [HASim_Module] mkISA_Datapath
                         writebacks[0] = tagged Valid temp;
                     end
                 endcase
+
+                debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
         endcase
 

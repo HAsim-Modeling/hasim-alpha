@@ -277,6 +277,15 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos(
         begin
             case (funct)
                 amask, implver: ret = tagged Invalid;
+                cmovlbs, cmovlbc, cmoveq, cmovne, cmovlt, cmovge, cmovle, cmovgt:
+                begin
+                    if(n == 0)
+                        ret = tagged Valid (tagged ArchReg ra);
+                    if(n == 1 && !useLit)
+                        ret = tagged Valid (tagged ArchReg rb);
+                    if(n == 2)
+                        ret = tagged Valid (tagged ArchReg rc);
+                end
                 default:
                 begin
                     if(n == 0)
