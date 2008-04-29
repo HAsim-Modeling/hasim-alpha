@@ -432,3 +432,16 @@ Directory modules/hasim/functional-partition/isa/definition
 
 - Got basic vmh benchmark working
 - Fixed a bug in lda, ldal ( was seen as load before )
+
+----------
+mcadler     Date: Mon Apr 28 22:39:15 EDT 2008  CSN: CSN-hasim-alpha-24
+                  Tue Apr 29 02:39:15 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           23 
+
+- LDAH was wrong because memDisp was a 16 bit type and left shift by 16
+  was always 0.  Switch to memDisp as a Bit#(64) so the sign extend is done
+  once.
+- Add some more debugging output.

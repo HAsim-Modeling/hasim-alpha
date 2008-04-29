@@ -102,7 +102,8 @@ module [HASim_Module] mkISA_Datapath
 
         OPCODE    opcode = inst[31:26];
         FUNCT      funct = inst[11:5];
-        MEM_FUNC memDisp = inst[15:0];
+        MEM_FUNC memFunc = inst[15:0];
+        Bit#(64) memDisp = signExtend(inst[15:0]);
         let          lit = inst[20:13];
         Bool      useLit = unpack(inst[12]);
         let    branchImm = inst[20:0];
@@ -139,37 +140,50 @@ module [HASim_Module] mkISA_Datapath
         case (opcode)
             opc01:
             begin
-                case (memDisp)
+                case (memFunc)
                     exit: timep_result = tagged RTerminate unpack(truncate(src0));
                 endcase
+                debug(2, $fdisplay(debug_log, "[0x%x] OPT01 src0 = 0x%x", addr, src0));
             end
 
             lda, ldah:
             begin
                 Bit#(64) disp = case(opcode)
-                                    lda: signExtend(memDisp);
-                                    ldah: signExtend(memDisp<<16);
+                                    lda: memDisp;
+                                    ldah: (memDisp<<16);
                                 endcase;
-                writebacks[0] = tagged Valid (src0 + disp);
+                let r = src0 + disp;
+                debug(2, $fdisplay(debug_log, "[0x%x] LDAx 0x%x <- 0x%x + 0x%x", addr, r, src0, disp));
+                writebacks[0] = tagged Valid (r);
             end
 
-            ldbu, ldl, ldq, ldwu: effective_addr = src0 + signExtend(memDisp);
-            ldq_u: effective_addr = ((src0 + signExtend(memDisp)) & ~7);
+            ldbu, ldl, ldq, ldwu:
+            begin
+                effective_addr = src0 + memDisp;
+                debug(2, $fdisplay(debug_log, "[0x%x] LD [0x%x]", addr, effective_addr));
+            end
+
+            ldq_u:
+            begin
+                effective_addr = ((src0 + memDisp) & ~7);
+                debug(2, $fdisplay(debug_log, "[0x%x] LDQ_U [0x%x]", addr, effective_addr));
+            end
+
             ldl_l, ldq_l:
             begin
-                effective_addr = src0 + signExtend(memDisp);
+                effective_addr = src0 + memDisp;
                 writebacks[1] = tagged Valid 1;
                 writebacks[2] = tagged Valid effective_addr;
             end
 
             stl_c, stq_c:
             begin
-                effective_addr = src0 + signExtend(memDisp);
+                effective_addr = src0 + memDisp;
                 writebacks[0] = tagged Valid src2;
                 writebacks[1] = tagged Valid 0;
             end
-            stb, stl, stq, stw: effective_addr = src0 + signExtend(memDisp);
-            stq_u: effective_addr = ((src0 + signExtend(memDisp)) & ~7);
+            stb, stl, stq, stw: effective_addr = src0 + memDisp;
+            stq_u: effective_addr = ((src0 + memDisp) & ~7);
 
             beq, bge, bgt, blbc, blbs, ble, blt, bne:
             begin
