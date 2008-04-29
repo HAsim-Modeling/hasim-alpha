@@ -73,6 +73,26 @@ typedef union tagged {
     void ControlReg;
     void LockReg;
     void LockAddrReg;
-} ISA_REG_INDEX deriving (Bits, Eq);
-//typedef Bit#(5) ISA_REG_INDEX;
+} ISA_REG_INDEX deriving (Eq);
 
+instance Bits#(ISA_REG_INDEX, 6);
+    function Bit#(6) pack(ISA_REG_INDEX x);
+        return case (x) matches
+                   tagged ArchReg .v : return {1'b1, v};
+                   tagged ControlReg : return {3'b000, 3'b0};
+                   tagged LockReg    : return {3'b001, 3'b0};
+                   tagged LockAddrReg: return {3'b010, 3'b0};
+               endcase;
+    endfunction
+
+    function ISA_REG_INDEX unpack(Bit#(6) x);
+        if(x[5] == 1)
+            return tagged ArchReg x[4:0];
+        else if(x[5:3] == 0)
+            return tagged ControlReg;
+        else if(x[5:3] == 1)
+            return tagged LockReg;
+        else
+            return tagged LockAddrReg;
+    endfunction
+endinstance

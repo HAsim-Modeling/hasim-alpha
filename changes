@@ -463,3 +463,14 @@ Directory modules/hasim/functional-partition/isa/definition
   - Old algorithm was hanging the compiler!  It was also obviously wrong.
     Use a simpler algorithm.
 - Every implemented opcode now emits a debug message
+
+----------
+vmurali     Date: Tue Apr 29 17:48:16 EDT 2008  CSN: CSN-hasim-alpha-26
+                  Tue Apr 29 21:48:16 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.bsv         Locally Modified           25 
+
+
+- Intermediate check-in: made arch reg index size 6 bits
