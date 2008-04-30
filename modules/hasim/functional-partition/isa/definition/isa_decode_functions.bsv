@@ -274,7 +274,6 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
         opc11:
         begin
             case (funct)
-                amask, implver: ret = tagged Invalid;
                 default:
                 begin
                     if(!useLit)
@@ -362,7 +361,10 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l, stl_c, stq_c, br, bsr, jmp:
+        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u,
+        ldl_l, ldq_l,
+        stl_c, stq_c,
+        br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
 
         opc10, opc11, opc12, opc13:
@@ -453,6 +455,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
                begin
                   return case (v) matches
                              tagged ArchReg 31: return tagged Invalid;
+                             default: return ret;
                          endcase;
                end
                default: return ret;

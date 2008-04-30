@@ -521,3 +521,14 @@ Directory modules/hasim/functional-partition/isa/datapath
 
 
 Checking back old awb file without the cpp and h files
+
+----------
+vmurali     Date: Wed Apr 30 16:29:50 EDT 2008  CSN: CSN-hasim-alpha-31
+                  Wed Apr 30 20:29:50 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           30 
+
+
+Took care of the bug in previous commit. Now the test passes
