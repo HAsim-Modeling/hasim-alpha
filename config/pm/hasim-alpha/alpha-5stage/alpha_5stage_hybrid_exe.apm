@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=5-Stage Alpha Model V3
-File=alpha_5stage_hybrid_sim
+File=alpha_5stage_hybrid_exe
 Version=2.1
 Name=5-Stage Alpha Model V3
 Type=HAsim
@@ -25,7 +25,6 @@ File=modules/system/single_chip_system/hasim_system.awb
 hasim_cpu=5-stage pipeline CPU
 hasim_memory=magic memory
 
-
 [5-stage pipeline CPU]
 File=config/pm/hasim-mips/submodels/timing-models/5stage-pipeline.apm
 Packagehint=hasim-mips
@@ -42,12 +41,6 @@ Packagehint=hasim-mips
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
 Packagehint=platforms
 
-
-
-
-
-
-
 [New Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
@@ -55,7 +48,6 @@ Packagehint=hasim
 [Hasim Standard Controller]
 File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm
 Packagehint=hasim
-
 
 [HAsim Hybrid Model Foundation]
 File=modules/model/hasim_model.awb
