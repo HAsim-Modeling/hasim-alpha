@@ -20,6 +20,7 @@ Packagehint=hasim
 funcp_memstate=Memory State for Functional Partition
 funcp_regstate=Register State for Functional Partition
 hasim_isa_semantics=Hybrid ISA Semantics
+funcp_base_types=Functional Partition Base Types
 
 [Null Cache for Functional Partition]
 File=modules/hasim/functional-partition/memory-state/cache/null/memstate_cache_null.awb
@@ -92,14 +93,21 @@ isa_emulator=Hybrid ISA Emulator
 hasim_isa_datapath=Alpha ISA Datapath
 
 [Hybrid Memory for Functional Partition/Params]
-MEMORY_ADDR_SIZE=64
 MEMORY_STORE_INFO_SIZE=128
-MEMORY_VALUE_SIZE=64
+
+
+
+
+
+
+[Functional Partition Base Types]
+File=modules/hasim/functional-partition/base-types/funcp-base-types.awb
+Packagehint=hasim
+
+[Functional Partition Base Types/Params]
+FUNCP_ISA_INT_REG_SIZE=64
+FUNCP_ISA_ADDR_SIZE=64
 
 [VMH hybrid memory]
 File=modules/hasim/functional-partition/memory-state/memory/hybrid/vmh/vmh-memory.awb
 Packagehint=hasim
-
-[Hybrid ISA Emulator/Params]
-MEMORY_ADDR_BYTES=8
-MEMORY_VALUE_BYTES=8
