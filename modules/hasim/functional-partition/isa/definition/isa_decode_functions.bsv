@@ -197,8 +197,7 @@ FUNCT maxsw4    = 'h3f;
 FUNCT ftoit     = 'h70;
 FUNCT ftois     = 'h78;
 
-function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
-
+function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
     OPCODE    opcode = i[31:26];
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
@@ -215,107 +214,71 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos(
         begin
             case (memFunc)
                 exit:
-                begin
-                    if(n == 0)
-                        ret = tagged Valid (tagged ArchReg ra);
-                end
+                    ret = tagged Valid (tagged ArchReg ra);
             endcase
         end
 
-        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg rb);
-        end
-
-        stl_c, stq_c, stb, stl, stq, stw, stq_u:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg rb);
-            if(n == 1)
-                ret = tagged Valid (tagged ArchReg ra);
-        end
-        stl_c, stq_c:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg rb);
-            if(n == 1)
-                ret = tagged Valid (tagged ArchReg ra);
-            if(n == 2)
-                ret = tagged Valid (tagged LockReg);
-        end
-
-        beq, bge, bgt, blbc, blbs, ble, blt, bne:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-        end
-
+        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l,
+        stl_c, stq_c, stb, stl, stq, stw, stq_u,
         jmp:
+            ret = tagged Valid (tagged ArchReg rb);
+
+        beq, bge, bgt, blbc, blbs, ble, blt, bne,
+        opc10, opc12, opc13:
+            ret = tagged Valid (tagged ArchReg ra);
+
+        opc11:
         begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg rb);
+            case (funct)
+                amask, implver: ret = tagged Invalid;
+                default: ret = tagged Valid (tagged ArchReg ra);
+            endcase
         end
 
-        opc10:
+        opc1c:
         begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-            if(n == 1 && !useLit)
-                ret = tagged Valid (tagged ArchReg rb);
-
             case (funct)
-                addlv, addqv, sublv, subqv:
-                begin
-                    if(n == 2)
-                        ret = tagged Valid (tagged ControlReg); // TODO must properly write this
-                end
+                perr:
+                    ret = tagged Valid (tagged ArchReg ra);
+                default:
+                    ret = tagged Valid (tagged ArchReg rb);
             endcase
+        end
+    endcase
+
+    return ret;
+endfunction
+
+function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
+    OPCODE    opcode = i[31:26];
+    Bool      useLit = unpack(i[12]);
+    FUNCT      funct = i[11:5];
+    MEM_FUNC memFunc = i[15:0];
+
+    let           ra = i[25:21];
+    let           rb = i[20:16];
+    let           rc = i[4:0];
+
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
+
+    case (opcode)
+        stl_c, stq_c, stb, stl, stq, stw, stq_u:
+            ret = tagged Valid (tagged ArchReg ra);
+
+        opc10, opc12, opc13:
+        begin
+            if(!useLit)
+                ret = tagged Valid (tagged ArchReg rb);
         end
 
         opc11:
         begin
             case (funct)
                 amask, implver: ret = tagged Invalid;
-                cmovlbs, cmovlbc, cmoveq, cmovne, cmovlt, cmovge, cmovle, cmovgt:
-                begin
-                    if(n == 0)
-                        ret = tagged Valid (tagged ArchReg ra);
-                    if(n == 1 && !useLit)
-                        ret = tagged Valid (tagged ArchReg rb);
-                    if(n == 2)
-                        ret = tagged Valid (tagged ArchReg rc);
-                end
                 default:
                 begin
-                    if(n == 0)
-                        ret = tagged Valid (tagged ArchReg ra);
-                    if(n == 1 && !useLit)
+                    if(!useLit)
                         ret = tagged Valid (tagged ArchReg rb);
-                end
-            endcase
-        end
-
-        opc12:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-            if(n == 1 && !useLit)
-                ret = tagged Valid (tagged ArchReg rb);
-        end
-
-        opc13:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-            if(n == 1 && !useLit)
-                ret = tagged Valid (tagged ArchReg rb);
-
-            case (funct)
-                mullv, mulqv:
-                begin
-                    if(n == 2)
-                        ret = tagged Valid (tagged ControlReg); // TODO must properly write this
                 end
             endcase
         end
@@ -324,34 +287,70 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n) provisos(
         begin
             case (funct)
                 perr:
-                begin
-                    if(n == 0)
-                        ret = tagged Valid (tagged ArchReg ra);
-                    if(n == 1)
-                        ret = tagged Valid (tagged ArchReg rb);
-                end
-
-                default:
-                begin
-                    if(n == 0)
-                        ret = tagged Valid (tagged ArchReg rb);
-                end
+                    ret = tagged Valid (tagged ArchReg rb);
             endcase
         end
     endcase
 
     return ret;
- 
 endfunction
 
+function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
+    OPCODE    opcode = i[31:26];
+    Bool      useLit = unpack(i[12]);
+    FUNCT      funct = i[11:5];
+    MEM_FUNC memFunc = i[15:0];
 
-// isaGetDst
+    let           ra = i[25:21];
+    let           rb = i[20:16];
+    let           rc = i[4:0];
 
-// Given an instruction, return the nth destination register.
-// Or return Invalid if there is no such destination for this instruction.
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
-function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos(Bits#(ISA_REG_INDEX, rname_SZ));
+    case (opcode)
+        stl_c, stq_c:
+            ret = tagged Valid (tagged LockReg);
 
+        opc10:
+        begin
+            case (funct)
+                addlv, addqv, sublv, subqv:
+                    ret = tagged Valid (tagged ControlReg); // TODO must properly write this
+            endcase
+        end
+
+        opc11:
+        begin
+            case (funct)
+                cmovlbs, cmovlbc, cmoveq, cmovne, cmovlt, cmovge, cmovle, cmovgt:
+                    ret = tagged Valid (tagged ArchReg rc);
+            endcase
+        end
+
+        opc13:
+        begin
+            case (funct)
+                mullv, mulqv:
+                   ret = tagged Valid (tagged ControlReg); // TODO must properly write this
+            endcase
+        end
+    endcase
+
+    return ret;
+endfunction
+
+function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n);
+
+    return case (n)
+               0: return isaGetSrc0(i);
+               1: return isaGetSrc1(i);
+               2: return isaGetSrc2(i);
+               default: return tagged Invalid; 
+           endcase;
+
+endfunction
+
+function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
     OPCODE    opcode = i[31:26];
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -363,62 +362,101 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n) provisos(
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-        end
+        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l, stl_c, stq_c, br, bsr, jmp:
+            ret = tagged Valid (tagged ArchReg ra);
 
+        opc10, opc11, opc12, opc13:
+            ret = tagged Valid (tagged ArchReg rc);
+    endcase
+
+    return ret;
+
+endfunction
+
+function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
+    OPCODE    opcode = i[31:26];
+    FUNCT      funct = i[11:5];
+    MEM_FUNC memFunc = i[15:0];
+
+    let           ra = i[25:21];
+    let           rb = i[20:16];
+    let           rc = i[4:0];
+
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
+
+    case (opcode)
         ldl_l, ldq_l:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-            if(n == 1)
-                ret = tagged Valid (tagged LockReg);
-            if(n == 2)
-                ret = tagged Valid (tagged LockAddrReg);
-        end
+            ret = tagged Valid (tagged LockReg);
 
         stl_c, stq_c:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-            if(n == 1)
-                ret = tagged Valid (tagged LockReg);
-        end       
-
-        br, bsr, jmp:
-        begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg ra);
-        end
+            ret = tagged Valid (tagged LockReg);
 
         opc10, opc11, opc12, opc13:
         begin
-            if(n == 0)
-                ret = tagged Valid (tagged ArchReg rc);
-            if(n == 1)
-            begin
-                case (opcode)
-                    opc10:
-                    begin
-                        case (funct)
-                            addlv, addqv, sublv, subqv: ret = tagged Valid (tagged ControlReg); // TODO correct this
-                        endcase
-                    end
+            case (opcode)
+                opc10:
+                begin
+                    case (funct)
+                        addlv, addqv, sublv, subqv: ret = tagged Valid (tagged ControlReg); // TODO correct this
+                    endcase
+                end
 
-                    opc13:
-                    begin
-                        case (funct)
-                            mullv, mulqv: ret = tagged Valid (tagged ControlReg);
-                        endcase
-                    end
-                endcase
-            end
+                opc13:
+                begin
+                    case (funct)
+                        mullv, mulqv: ret = tagged Valid (tagged ControlReg);
+                    endcase
+                end
+            endcase
         end
     endcase
 
     return ret;
+
+endfunction
+
+function Maybe#(ISA_REG_INDEX) isaGetDst2(ISA_INSTRUCTION i);
+    OPCODE    opcode = i[31:26];
+    FUNCT      funct = i[11:5];
+    MEM_FUNC memFunc = i[15:0];
+
+    let           ra = i[25:21];
+    let           rb = i[20:16];
+    let           rc = i[4:0];
+
+    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
+
+    case (opcode)
+        ldl_l, ldq_l:
+            ret = tagged Valid (tagged LockAddrReg);
+    endcase
+
+    return ret;
+
+endfunction
+// isaGetDst
+
+// Given an instruction, return the nth destination register.
+// Or return Invalid if there is no such destination for this instruction.
+
+function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
+
+    let ret = case (n)
+                   0: return isaGetDst0(i);
+                   1: return isaGetDst1(i);
+                   2: return isaGetDst2(i);
+                   default: return tagged Invalid; 
+              endcase;
+
+    return case (ret) matches
+               tagged Valid .v:
+               begin
+                  return case (v) matches
+                             tagged ArchReg 31: return tagged Invalid;
+                         endcase;
+               end
+               default: return ret;
+           endcase;
  
 endfunction
 

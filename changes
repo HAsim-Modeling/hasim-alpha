@@ -474,3 +474,18 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 - Intermediate check-in: made arch reg index size 6 bits
+
+----------
+vmurali     Date: Wed Apr 30 00:25:54 EDT 2008  CSN: CSN-hasim-alpha-27
+                  Wed Apr 30 04:25:54 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           25 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.awb    Locally Modified           25 
+
+
+Changed the decoder to return tagged Invalid for reg 31
+
