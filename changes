@@ -553,3 +553,16 @@ Directory modules/hasim/functional-partition/isa/definition
 
 - Add new ISA datatypes definition that must track the Bluespec version.
 - Add HTG versions of Alpha models.
+
+----------
+mcadler     Date: Thu May  1 17:53:16 EDT 2008  CSN: CSN-hasim-alpha-33
+                  Thu May  1 21:53:16 UTC 2008
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified           32 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.h           Locally Modified           32 
+
+Switch to m5 for functional simulation.

@@ -19,6 +19,9 @@
 // @author Michael Adler
 //
 
+#include "asim/syntax.h"
+#include "asim/mesg.h"
+
 typedef UINT64 ISA_ADDRESS;
 typedef UINT64 ISA_VALUE;
 typedef UINT32 ISA_INSTRUCTION;

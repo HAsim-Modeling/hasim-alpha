@@ -67,7 +67,7 @@ File=modules/hasim/functional-partition/memory-state/memory/hybrid/hybrid-funcp-
 Packagehint=hasim
 
 [Hybrid Memory for Functional Partition/Requires]
-funcp_simulated_memory=VMH hybrid memory
+funcp_simulated_memory=m5 Hybrid Memory
 
 [Register State for Functional Partition/Requires]
 funcp_regstate_manager=Register State Manager using Macro Ops
@@ -103,13 +103,28 @@ Packagehint=hasim
 FUNCP_ISA_INT_REG_SIZE=64
 FUNCP_ISA_ADDR_SIZE=64
 
-[VMH hybrid memory]
-File=modules/hasim/functional-partition/memory-state/memory/hybrid/vmh/vmh-memory.awb
-Packagehint=hasim
-
-[Null ISA Emulator Implementation]
-File=modules/hasim/functional-partition/isa-emulator/null/null-isa-emulator-impl.awb
-Packagehint=hasim
 
 [Hybrid ISA Emulator/Requires]
-isa_emulator_impl=Null ISA Emulator Implementation
+isa_emulator_impl=m5 ISA Emulator Implementation
+
+[m5 HAsim Base Class/Requires]
+m5_simulator=m5 Alpha User-Mode Simulator
+
+[m5 Hybrid Memory]
+File=modules/hasim/functional/memory/m5-memory.awb
+Packagehint=m5
+
+[m5 Alpha User-Mode Simulator]
+File=platform/m5/m5-alpha-se.awb
+Packagehint=hasim-alpha
+
+[m5 HAsim Base Class]
+File=modules/hasim/functional/hasim-base/m5-hasim-base.awb
+Packagehint=m5
+
+[m5 Hybrid Memory/Requires]
+m5_hasim_base=m5 HAsim Base Class
+
+[m5 ISA Emulator Implementation]
+File=modules/hasim/functional/isa-emulator/m5-isa-emulator-impl.awb
+Packagehint=m5
