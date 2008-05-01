@@ -95,11 +95,6 @@ hasim_isa_datapath=Alpha ISA Datapath
 [Hybrid Memory for Functional Partition/Params]
 MEMORY_STORE_INFO_SIZE=128
 
-
-
-
-
-
 [Functional Partition Base Types]
 File=modules/hasim/functional-partition/base-types/funcp-base-types.awb
 Packagehint=hasim
@@ -111,3 +106,10 @@ FUNCP_ISA_ADDR_SIZE=64
 [VMH hybrid memory]
 File=modules/hasim/functional-partition/memory-state/memory/hybrid/vmh/vmh-memory.awb
 Packagehint=hasim
+
+[Null ISA Emulator Implementation]
+File=modules/hasim/functional-partition/isa-emulator/null/null-isa-emulator-impl.awb
+Packagehint=hasim
+
+[Hybrid ISA Emulator/Requires]
+isa_emulator_impl=Null ISA Emulator Implementation
