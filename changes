@@ -583,3 +583,43 @@ Directory modules/hasim/functional-partition/isa/datapath
 - Byte zap had wrong sense
 - msk and ins shifts were wrong direction
 - Create new "tests" workload list.  Keep 6_375 benchmarks pure.
+
+----------
+jsemer      Date: Mon May  5 16:56:36 EDT 2008  CSN: CSN-hasim-alpha-35
+                  Mon May  5 20:56:36 UTC 2008
+
+
+Directory experiments
+ hasim-alpha/              Locally Added               0 
+
+Directory experiments/hasim-alpha
+ regression/               Locally Added               0 
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Added               0 
+ regression.benchmarks     Locally Added               0 
+
+Directory .
+ experiments/              Locally Added               0 
+
+Added initial regresion test for alpha. Model will build,
+but not run yet. To run regression type:
+
+% regression.launcher --package=hasim-asim --runcmds="--nobatch"
+
+or add the following to the end of your ~/.asim/asimrc file 
+
+---------------
+# This will run hasim regressions for both alpha and mips
+
+[regression.launcher]
+PACKAGES=hasim-alpha,hasim-mips
+
+[asim-run]
+USE_NETBATCH=0
+---------------
+
+and run:
+
+% regression.launcher
+
