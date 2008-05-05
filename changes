@@ -623,3 +623,14 @@ and run:
 
 % regression.launcher
 
+
+----------
+jsemer      Date: Mon May  5 17:30:10 EDT 2008  CSN: CSN-hasim-alpha-36
+                  Mon May  5 21:30:10 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified           35 
+ regression.benchmarks     Locally Modified           35 
+
+Regression test the unpipelined model...

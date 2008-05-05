@@ -1,9 +1,9 @@
 # ***************
 #
-# Alpha 5stage models
+# Alpha models
 #
 # ***************
 
-experiments = 5stage_alpha_exe
+experiments = unpipelined_alpha_exe
 #
 config/bm/alpha/tests.cfx/user_mode/hello.cfg

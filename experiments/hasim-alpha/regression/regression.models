@@ -1,1 +1,8 @@
-5stage_alpha_exe        config/pm/hasim-alpha/alpha-5stage/alpha_5stage_hybrid_exe.apm
+# ***************
+#
+# Alpha models
+#
+# ***************
+
+unpipelined_alpha_exe   config/pm/hasim-alpha/alpha-unpipelined/alpha_unpipelined_exe.apm
+#5stage_alpha_exe        config/pm/hasim-alpha/alpha-5stage/alpha_5stage_hybrid_exe.apm
