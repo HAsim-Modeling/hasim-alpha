@@ -14,6 +14,7 @@
 typedef Bit#(6) OPCODE;
 typedef Bit#(7) FUNCT;
 typedef Bit#(16) MEM_FUNC;
+typedef Bit#(11) FP_FUNC;
 
 OPCODE call_pal = 'h00;
 OPCODE opc01    = 'h01;
@@ -161,6 +162,7 @@ FUNCT mullv     = 'h40;
 FUNCT mulqv     = 'h60;
 
 // opc14 opc15 opc16 opc17 are floating point instructions. Not implemented yet.
+FP_FUNC cpys    = 'h020;        // opc17.cpys with f31 target is fnop
 
 // opc18
 MEM_FUNC trapb  = 'h0000;
@@ -684,6 +686,7 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
+    FP_FUNC   fpFunc = i[15:5];
 
     let           ra = i[25:21];
     let           rb = i[20:16];
@@ -698,7 +701,11 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
 
                // Floating point
                ldf, ldg, lds, ldt, stf, stg, sts, stt: return True;
-               opc14, opc15, opc16, opc17: return True;
+               opc14, opc15, opc16: return True;
+
+               // opc17.cpys to f31 is a fnop, otherwise emulate
+               opc17: return ((fpFunc != cpys) || (rc != 31));
+
                fbeq, fblt, fble, fbne, fbge, fbgt: return True;
 
                opc01: return (memFunc != exit);
