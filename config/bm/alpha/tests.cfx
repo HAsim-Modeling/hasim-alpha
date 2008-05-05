@@ -6,21 +6,17 @@ use Asim;
 use strict;
 
 ##
-## Generate cfg files for 6.375 tests and benchmarks.
+## Generate cfg files for Alpha tests
 ##
 
 my $gcfg = Asim::GenCFG->new();
 
-my @bmarks = ("median",
-              "multiply",
-	      "towers",
-	      "qsort",
-	      "vvadd");
+my @bmarks = ("hello");
 	      
 foreach my $bmark (@bmarks) {
     $gcfg->add(name => $bmark,
-               tree => [ "benchmarks" ],
-               setup => "tools/scripts/bmark/setup-bmark $bmark --group 6.375/$bmark --isa alpha",
+               tree => [ "user_mode" ],
+               setup => "tools/scripts/bmark/setup-bmark $bmark --group tests/$bmark --isa alpha",
                feeder => "m5",
                feedflags => "m5_configs/se.py --hasim-sim --cmd program/${bmark}.alpha.bin",
               );

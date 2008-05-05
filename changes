@@ -566,3 +566,20 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_datatypes.h           Locally Modified           32 
 
 Switch to m5 for functional simulation.
+
+----------
+mcadler     Date: Mon May  5 10:37:08 EDT 2008  CSN: CSN-hasim-alpha-34
+                  Mon May  5 14:37:08 UTC 2008
+
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Added               0 
+ 6_375.cfx                 Locally Modified           33 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           33 
+
+- Signed comparisons were being done unsigned
+- Byte zap had wrong sense
+- msk and ins shifts were wrong direction
+- Create new "tests" workload list.  Keep 6_375 benchmarks pure.

@@ -109,14 +109,14 @@ module [HASim_Module] mkISA_Datapath
         let    branchImm = inst[20:0];
 
         Bit#(64) src0 = srcs[0];
-        Bit#(64) src1 = useLit? signExtend(lit): srcs[1];
+        Bit#(64) src1 = srcs[1];
         Bit#(64) src2 = srcs[2];
 
         function Bit#(64) byteZap(Bit#(64) srcBits, Bit#(8) mask);
             Vector#(8, Bit#(8)) res = newVector();
             Vector#(8, Bit#(8)) src = unpack(srcBits);
             for(Integer i = 0; i < 8; i = i + 1)
-                res[i] = (mask[i] == 1)? src[i]: 0;
+                res[i] = (mask[i] == 0)? src[i]: 0;
             return pack(res);
         endfunction
 
@@ -144,6 +144,21 @@ module [HASim_Module] mkISA_Datapath
             if (val_d matches tagged Valid .alu_d)
             begin
                 debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d));
+            end
+            else
+            begin
+                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
+            end
+        endaction
+        endfunction
+
+        function Action debug_ALU3 (ISA_ADDRESS addr_d, OPCODE opcode_d, FUNCT funct_d, Maybe#(Bit#(64)) val_d, Bit#(64) src0_d, Bit#(64) src1_d, Bit#(64) src2_d);
+        action
+            Bit#(6) op = pack(opcode_d);
+            Bit#(7) fu = pack(funct_d);
+            if (val_d matches tagged Valid .alu_d)
+            begin
+                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x, src2 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d, src2_d));
             end
             else
             begin
@@ -203,12 +218,14 @@ module [HASim_Module] mkISA_Datapath
             stb, stl, stq, stw:
             begin
                 effective_addr = src0 + memDisp;
+                writebacks[0] = tagged Valid src1;
                 debug(2, $fdisplay(debug_log, "[0x%x] ST [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
             stq_u:
             begin
                 effective_addr = ((src0 + memDisp) & ~7);
+                writebacks[0] = tagged Valid src1;
                 debug(2, $fdisplay(debug_log, "[0x%x] STQ_U [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
@@ -217,15 +234,15 @@ module [HASim_Module] mkISA_Datapath
                 let newAddr = addr + 4 + (signExtend(branchImm) << 2);
                 Bool taken = case (opcode)
                                  beq : return src0 == 0;
-                                 bge : return src0 >= 0;
-                                 bgt : return src0 > 0;
+                                 bge : return signedGE(src0, 0);
+                                 bgt : return signedGT(src0, 0);
                                  blbc: return truncate(src0) == 1'b0;
                                  blbs: return truncate(src0) == 1'b1;
-                                 ble : return src0 <= 0;
-                                 blt : return src0 < 0;
+                                 ble : return signedLE(src0, 0);
+                                 blt : return signedLT(src0, 0);
                                  bne : return src0 != 0;
                              endcase;
-                debug(2, $fdisplay(debug_log, "[0x%x] Bxx to 0x%x, %staken", addr, newAddr, taken? "": "not "));
+                debug(2, $fdisplay(debug_log, "[0x%x] Bxx to 0x%x, src0=0x%x, %staken", addr, newAddr, src0, taken? "": "not "));
                 timep_result = taken? tagged RBranchTaken truncate(newAddr): tagged RBranchNotTaken truncate(addr + 4);
             end
 
@@ -247,6 +264,7 @@ module [HASim_Module] mkISA_Datapath
 
             opc10:
             begin
+                src1 = useLit? signExtend(lit): src1;
                 case (funct)
                     addl, addlv:
                     begin
@@ -320,30 +338,47 @@ module [HASim_Module] mkISA_Datapath
 
             opc11:
             begin
+                src1 = useLit? signExtend(lit): src1;
                 case (funct)
-                    andOp: writebacks[0] = tagged Valid (src0 & src1);
-                    bic: writebacks[0] = tagged Valid (src0 & ~src1);
-                    cmovlbs: writebacks[0] = tagged Valid ((truncate(src0) == 1'b1)? src1: src2);
-                    cmovlbc: writebacks[0] = tagged Valid ((truncate(src0) == 1'b0)? src1: src2);
-                    bis: writebacks[0] = tagged Valid (src0 | src1);
-                    cmoveq: writebacks[0] = tagged Valid ((src0 == 0)? src1: src2);
-                    cmovne: writebacks[0] = tagged Valid ((src0 != 0)? src1: src2);
-                    ornot: writebacks[0] = tagged Valid (src0 | ~src1);
-                    xorOp: writebacks[0] = tagged Valid (src0 ^ src1);
-                    cmovlt: writebacks[0] = tagged Valid ((src0 < 0)? src1: src2);
-                    cmovge: writebacks[0] = tagged Valid ((src0 >= 0)? src1: src2);
-                    eqv: writebacks[0] = tagged Valid (src0 ^ ~src1);
-                    amask: writebacks[0] = tagged Valid (src0 & ~(`CPU_FEATURE_MASK)); // Implemetation specific. Looks like all alphas simply move the source to dest
-                    cmovle: writebacks[0] = tagged Valid ((src0 <= 0)? src1: src2);
-                    cmovgt: writebacks[0] = tagged Valid ((src0 > 0)? src1: src2);
-                    implver: writebacks[0] = tagged Valid `IMPL_VER; // Implementation version (21064 -> 0, 21164 -> 1, 21264 -> 2)
+                    cmovlbs, cmovlbc, cmoveq, cmovne, cmovlt, cmovge, cmovle, cmovgt:
+                    begin
+                        case (funct)
+                            cmovlbs: writebacks[0] = tagged Valid ((truncate(src0) == 1'b1)? src1: src2);
+                            cmovlbc: writebacks[0] = tagged Valid ((truncate(src0) == 1'b0)? src1: src2);
+                            cmoveq: writebacks[0] = tagged Valid ((src0 == 0)? src1: src2);
+                            cmovne: writebacks[0] = tagged Valid ((src0 != 0)? src1: src2);
+                            cmovlt: writebacks[0] = tagged Valid (signedLT(src0, 0)? src1: src2);
+                            cmovge: writebacks[0] = tagged Valid (signedGE(src0, 0)? src1: src2);
+                            cmovle: writebacks[0] = tagged Valid (signedLE(src0, 0)? src1: src2);
+                            cmovgt: writebacks[0] = tagged Valid (signedGT(src0, 0)? src1: src2);
+                        endcase
+
+                    debug_ALU3(addr, opcode, funct, writebacks[0], src0, src1, src2);
+                    end
+
+                    default:
+                    begin
+                        case (funct)
+                            andOp: writebacks[0] = tagged Valid (src0 & src1);
+                            bic: writebacks[0] = tagged Valid (src0 & ~src1);
+                            bis: writebacks[0] = tagged Valid (src0 | src1);
+                            ornot: writebacks[0] = tagged Valid (src0 | ~src1);
+                            xorOp: writebacks[0] = tagged Valid (src0 ^ src1);
+                            eqv: writebacks[0] = tagged Valid (src0 ^ ~src1);
+                            amask: writebacks[0] = tagged Valid (src0 & ~(`CPU_FEATURE_MASK)); // Implemetation specific. Looks like all alphas simply move the source to dest
+                            implver: writebacks[0] = tagged Valid `IMPL_VER; // Implementation version (21064 -> 0, 21164 -> 1, 21264 -> 2)
+                        endcase
+
+                    debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
+                    end
+
                 endcase
 
-                debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
 
             opc12:
             begin
+                src1 = useLit? signExtend(lit): src1;
                 case (funct)
                     mskbl, mskwl, mskll, mskql, mskwh, msklh, mskqh:
                     begin
@@ -353,7 +388,7 @@ module [HASim_Module] mkISA_Datapath
                                                 mskll, msklh: 'b1111;
                                                 mskql, mskqh: 'b11111111;
                                             endcase;
-                        Bit#(16) shiftedMask = byteMask << src1[2:0];
+                        byteMask = byteMask << src1[2:0];
                         case (funct)
                             mskbl, mskwl, mskll, mskql: writebacks[0] = tagged Valid byteZap(src0, byteMask[7:0]);
                             mskwh, msklh, mskqh: writebacks[0] = tagged Valid byteZap(src0, byteMask[15:8]);
@@ -391,17 +426,17 @@ module [HASim_Module] mkISA_Datapath
                                                 insll, inslh: 'b1111;
                                                 insql, insqh: 'b11111111;
                                             endcase;
-                        Bit#(16) shiftedMask = byteMask << src1[2:0];
+                        byteMask = byteMask << src1[2:0];
                         case (funct)
                             insbl, inswl, insll, insql:
                             begin
-                                let temp = src0 >> ({src1[2:0], 3'b0})[5:0];
+                                let temp = src0 << ({src1[2:0], 3'b0})[5:0];
                                 writebacks[0] = tagged Valid byteZap(temp, ~byteMask[7:0]);
                             end
                             inswh, inslh, insqh:
                             begin
                                 Bit#(7) shift = 64 - signExtend({src1[2:0], 3'b0});
-                                let temp = src0 << shift[5:0];
+                                let temp = src0 >> shift[5:0];
                                 writebacks[0] = tagged Valid byteZap(temp, ~byteMask[15:8]);
                             end
                         endcase
@@ -420,6 +455,7 @@ module [HASim_Module] mkISA_Datapath
 
             opc13:
             begin
+                src1 = useLit? signExtend(lit): src1;
                 case (funct)
                     mull, mullv:
                     begin
@@ -451,6 +487,7 @@ module [HASim_Module] mkISA_Datapath
 
             opc1c:
             begin
+                src1 = useLit? signExtend(lit): src1;
                 case (funct)
                     sextb: writebacks[0] = tagged Valid signExtend(src0[7:0]);
                     sextw: writebacks[0] = tagged Valid signExtend(src0[15:0]);
