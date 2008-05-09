@@ -4,6 +4,6 @@
 #
 # ***************
 
-experiments = unpipelined_alpha_exe
+experiments = alpha_unpipelined_exe
 #
 config/bm/alpha/tests.cfx/user_mode/hello.cfg

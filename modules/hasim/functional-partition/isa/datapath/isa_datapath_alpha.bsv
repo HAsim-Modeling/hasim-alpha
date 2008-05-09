@@ -264,7 +264,7 @@ module [HASim_Module] mkISA_Datapath
 
             opc10:
             begin
-                src1 = useLit? signExtend(lit): src1;
+                src1 = useLit? zeroExtend(lit): src1;
                 case (funct)
                     addl, addlv:
                     begin
@@ -338,7 +338,7 @@ module [HASim_Module] mkISA_Datapath
 
             opc11:
             begin
-                src1 = useLit? signExtend(lit): src1;
+                src1 = useLit? zeroExtend(lit): src1;
                 case (funct)
                     cmovlbs, cmovlbc, cmoveq, cmovne, cmovlt, cmovge, cmovle, cmovgt:
                     begin
@@ -378,7 +378,7 @@ module [HASim_Module] mkISA_Datapath
 
             opc12:
             begin
-                src1 = useLit? signExtend(lit): src1;
+                src1 = useLit? zeroExtend(lit): src1;
                 case (funct)
                     mskbl, mskwl, mskll, mskql, mskwh, msklh, mskqh:
                     begin
@@ -453,9 +453,10 @@ module [HASim_Module] mkISA_Datapath
                 debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
 
+`ifdef HW_MULTIPLY
             opc13:
             begin
-                src1 = useLit? signExtend(lit): src1;
+                src1 = useLit? zeroExtend(lit): src1;
                 case (funct)
                     mull, mullv:
                     begin
@@ -484,10 +485,11 @@ module [HASim_Module] mkISA_Datapath
 
                 debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
+`endif
 
             opc1c:
             begin
-                src1 = useLit? signExtend(lit): src1;
+                src1 = useLit? zeroExtend(lit): src1;
                 case (funct)
                     sextb: writebacks[0] = tagged Valid signExtend(src0[7:0]);
                     sextw: writebacks[0] = tagged Valid signExtend(src0[15:0]);

@@ -11,12 +11,17 @@ use strict;
 
 my $gcfg = Asim::GenCFG->new();
 
-my @bmarks = ("hello");
+my @bmarks = ("hello/hello",
+              "memory_tests/memory_tests_aligned",
+              "memory_tests/memory_tests_unaligned",
+             );
 	      
-foreach my $bmark (@bmarks) {
+foreach my $bm (@bmarks) {
+    my ($dir, $bmark) = split('/', $bm);
+
     $gcfg->add(name => $bmark,
                tree => [ "user_mode" ],
-               setup => "tools/scripts/bmark/setup-bmark $bmark --group tests/$bmark --isa alpha",
+               setup => "tools/scripts/bmark/setup-bmark $bmark --group tests/$dir --isa alpha",
                feeder => "m5",
                feedflags => "m5_configs/se.py --hasim-sim --cmd program/${bmark}.alpha.bin",
               );

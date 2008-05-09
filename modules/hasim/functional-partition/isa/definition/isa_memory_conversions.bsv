@@ -63,16 +63,11 @@ endfunction
 
 function ISA_VALUE isaValueFromMemValue(MEM_VALUE val, ISA_MEMOP_TYPE memtype, ISA_ADDRESS addr);
 
-    // TODO: get rid of the following line, support unaligned
-    ISA_VALUE v = signExtend(val);
-
-    return  case (memtype) matches
-               LOAD_ZERO_8: return zeroExtend(v[7:0]);
-               LOAD_ZERO_16: return zeroExtend(v[15:0]);
-               LOAD_SIGN_32: return signExtend(v[31:0]);
-               LOAD_64: return v;
-               LOAD_UNALIGNED_64: return v;
-               default: return v;
+    return  case (memtype)
+               LOAD_ZERO_8: return zeroExtend(val[7:0]);
+               LOAD_ZERO_16: return zeroExtend(val[15:0]);
+               LOAD_SIGN_32: return signExtend(val[31:0]);
+               default: return val;
            endcase;
 
 endfunction
@@ -86,12 +81,8 @@ endfunction
 
 function Bool isaMemOpRequiresReadModifyWrite(ISA_MEMOP_TYPE memtype);
 
-    return case (memtype) matches
-               STORE_8: return True;
-               STORE_16: return True;
-               STORE_32: return True;
+    return case (memtype)
                STORE_64: return False;
-               STORE_UNALIGNED_64: return True;
                default: return True;
            endcase;
 

@@ -4,5 +4,5 @@
 #
 # ***************
 
-unpipelined_alpha_exe   config/pm/hasim-alpha/alpha-unpipelined/alpha_unpipelined_exe.apm
-#5stage_alpha_exe        config/pm/hasim-alpha/alpha-5stage/alpha_5stage_hybrid_exe.apm
+alpha_unpipelined_exe   config/pm/hasim-alpha/alpha-unpipelined/alpha_unpipelined_exe.apm
+#alpha_5stage_exe        config/pm/hasim-alpha/alpha-5stage/alpha_5stage_hybrid_exe.apm

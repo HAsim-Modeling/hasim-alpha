@@ -713,6 +713,10 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
                // TODO implement the rest ( except floating point )
                opc1c: return (funct >= 'h38);
 
+`ifndef HW_MULTIPLY
+               opc13: return True;
+`endif
+
                default: return False;
            endcase;
 

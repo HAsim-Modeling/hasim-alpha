@@ -644,3 +644,30 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_decode_functions.bsv  Locally Modified           36 
 
 Don't need ISA emulation for fnop (cpys <>,<>,f31).
+
+----------
+mcadler     Date: Fri May  9 09:31:16 EDT 2008  CSN: CSN-hasim-alpha-38
+                  Fri May  9 13:31:16 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified           37 
+ regression.benchmarks     Locally Modified           37 
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified           37 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           37 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           37 
+ isa_datatypes.bsv         Locally Modified           37 
+ isa_memory_conversions.bsv Locally Modified           37 
+
+- Immediate in operate instructions is zero extended, not sign.
+- Simplify memory size case statements
+- Drop integer multiply support for now.  Implementation is too slow and
+  big for hardware.
+- Add memory test
+- Rename regression model to be consistent with APM naming.

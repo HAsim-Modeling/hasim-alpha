@@ -60,7 +60,7 @@ typedef enum
     LOAD_UNALIGNED_64
 }
   ISA_MEMOP_TYPE
-     deriving (Eq, Bits);
+     deriving (Eq, Bits, Bounded);
 
 // ISA_REG_INDEX
 
