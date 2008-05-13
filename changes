@@ -671,3 +671,13 @@ Directory modules/hasim/functional-partition/isa/definition
   big for hardware.
 - Add memory test
 - Rename regression model to be consistent with APM naming.
+
+----------
+mcadler     Date: Mon May 12 23:05:09 EDT 2008  CSN: CSN-hasim-alpha-39
+                  Tue May 13 03:05:09 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           38 
+
+Multiply instructions shouldn't have a destination when mul is emulated.

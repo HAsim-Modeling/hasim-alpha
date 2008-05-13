@@ -369,8 +369,13 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
         br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
 
-        opc10, opc11, opc12, opc13:
+        opc10, opc11, opc12:
             ret = tagged Valid (tagged ArchReg rc);
+
+`ifdef HW_MULTIPLY
+        opc13:
+            ret = tagged Valid (tagged ArchReg rc);
+`endif
     endcase
 
     return ret;
