@@ -22,9 +22,6 @@ funcp_regstate=Register State for Functional Partition
 hasim_isa_semantics=Hybrid ISA Semantics
 funcp_base_types=Functional Partition Base Types
 
-[Null Cache for Functional Partition]
-File=modules/hasim/functional-partition/memory-state/cache/null/memstate_cache_null.awb
-Packagehint=hasim
 
 [Scoreboard with One-Hot Encoding]
 File=modules/hasim/functional-partition/register-state/scoreboard/onehot/regstate_scoreboard_onehot.awb
@@ -40,7 +37,7 @@ Packagehint=hasim
 
 [Manager using Macro Ops for Mem State/Requires]
 funcp_memstate_storebuffer=Store Buffer using Bucket Hash
-funcp_memstate_cache=Null Cache for Functional Partition
+funcp_memstate_cache=Direct-Mapped Write-Through Cache
 
 [Register State Manager using Macro Ops/Requires]
 funcp_regstate_freelist=Freelist in BRAM
@@ -103,7 +100,6 @@ Packagehint=hasim
 FUNCP_ISA_INT_REG_SIZE=64
 FUNCP_ISA_ADDR_SIZE=64
 
-
 [Hybrid ISA Emulator/Requires]
 isa_emulator_impl=m5 ISA Emulator Implementation
 
@@ -128,3 +124,7 @@ m5_hasim_base=m5 HAsim Base Class
 [m5 ISA Emulator Implementation]
 File=modules/hasim/functional/isa-emulator/m5-isa-emulator-impl.awb
 Packagehint=m5
+
+[Direct-Mapped Write-Through Cache]
+File=modules/hasim/functional-partition/memory-state/cache/direct-mapped/write-through/memstate_cache_direct_writethrough.awb
+Packagehint=hasim

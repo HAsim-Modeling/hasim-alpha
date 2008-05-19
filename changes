@@ -681,3 +681,17 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_decode_functions.bsv  Locally Modified           38 
 
 Multiply instructions shouldn't have a destination when mul is emulated.
+
+----------
+pellauer    Date: Mon May 19 09:38:12 EDT 2008  CSN: CSN-hasim-alpha-40
+                  Mon May 19 13:38:12 UTC 2008
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified           39 
+
+
+Use the cache in the functional partition.
+
+Michael
+
