@@ -710,3 +710,20 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 
+
+----------
+jsemer      Date: Fri May 23 08:12:58 EDT 2008  CSN: CSN-hasim-alpha-42
+                  Fri May 23 12:12:58 UTC 2008
+
+
+Directory admin/packages
+ hasim-alpha               Locally Modified           41 
+
+Readded package dependencies on m5, platforms and hasim, since asim-shell
+should now be tolerant of checkins even a dependent package is not
+available. 
+
+To checkin without checking dependencies use:
+
+   % asim-shell -- commit package <package> --nodependent
+
