@@ -727,3 +727,13 @@ To checkin without checking dependencies use:
 
    % asim-shell -- commit package <package> --nodependent
 
+
+----------
+mcadler     Date: Tue May 27 16:49:23 EDT 2008  CSN: CSN-hasim-alpha-43
+                  Tue May 27 20:49:23 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           42 
+
+opc1c has 1 destination (not 0).
