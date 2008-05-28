@@ -368,13 +368,18 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
         br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
 
-        opc10, opc11, opc12, opc1c:
+        opc10, opc11, opc12:
             ret = tagged Valid (tagged ArchReg rc);
 
 `ifdef HW_MULTIPLY
         opc13:
             ret = tagged Valid (tagged ArchReg rc);
 `endif
+
+        opc1c:
+        begin
+            if (funct < 'h38) ret = tagged Valid (tagged ArchReg rc);
+        end
     endcase
 
     return ret;
@@ -507,7 +512,7 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
                        default: return 1;
                    endcase
                end
-               opc1c: return 1;
+               opc1c: return (funct >= 'h38) ? 0 : 1;
                default: return 0;
            endcase;
 endfunction

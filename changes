@@ -751,3 +751,19 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 -Fixed the bug to make load and store conditionals working. Basically the problem was a bug in handling 3 destinations ( similar to the one Michael A spotted before ). I sequentialized the code, but there are a couple of other places where this bug is present I think
+
+----------
+mcadler     Date: Tue May 27 22:58:21 EDT 2008  CSN: CSN-hasim-alpha-45
+                  Wed May 28 02:58:21 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           44 
+
+Half of opc1c functions are supposed to be emulated.  My last check-in broke
+the emulated instructions by claiming the emulated instructions have
+destinations.  This sometimes breaks because the emulation code only updates
+registers when they change value.  It should probably be fixed to force
+updates on true destination registers, but for now simply claiming no
+destinations in the decoder works, too.
+

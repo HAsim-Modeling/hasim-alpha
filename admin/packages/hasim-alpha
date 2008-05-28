@@ -6,5 +6,5 @@ Lock=asim-hasim-alpha
 Description=Description of hasim-alpha
 Name=hasim-alpha
 Tag=HEAD
-CSN=CSN-hasim-alpha-44
+CSN=CSN-hasim-alpha-45
 Dependencies=m5/HEAD platforms/HEAD hasim/HEAD
