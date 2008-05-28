@@ -767,3 +767,16 @@ registers when they change value.  It should probably be fixed to force
 updates on true destination registers, but for now simply claiming no
 destinations in the decoder works, too.
 
+
+----------
+mcadler     Date: Wed May 28 11:53:36 EDT 2008  CSN: CSN-hasim-alpha-46
+                  Wed May 28 15:53:36 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.benchmarks     Locally Modified           45 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           45 
+
+Integer multiply is emulated but claimed it had a destination register.

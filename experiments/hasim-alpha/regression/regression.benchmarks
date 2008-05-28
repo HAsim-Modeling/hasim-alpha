@@ -6,4 +6,4 @@
 
 experiments = alpha_unpipelined_exe
 #
-config/bm/alpha/tests.cfx/user_mode/hello.cfg
+config/bm/alpha/tests.cfx/user_mode/memory_tests_aligned.cfg

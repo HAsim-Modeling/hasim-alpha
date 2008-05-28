@@ -414,12 +414,14 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
                     endcase
                 end
 
+`ifdef HW_MULTIPLY
                 opc13:
                 begin
                     case (funct)
                         mullv, mulqv: ret = tagged Valid (tagged ControlReg);
                     endcase
                 end
+`endif
             endcase
         end
     endcase
@@ -505,6 +507,8 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
                end
                opc11: return 1;
                opc12: return 1;
+
+`ifdef HW_MULTIPLY
                opc13:
                begin
                    case (funct)
@@ -512,6 +516,8 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
                        default: return 1;
                    endcase
                end
+`endif
+
                opc1c: return (funct >= 'h38) ? 0 : 1;
                default: return 0;
            endcase;
