@@ -365,7 +365,6 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
     case (opcode)
         lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u,
         ldl_l, ldq_l,
-        stl_c, stq_c,
         br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
 
@@ -398,7 +397,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
             ret = tagged Valid (tagged LockReg);
 
         stl_c, stq_c:
-            ret = tagged Valid (tagged LockReg);
+            ret = tagged Valid (tagged ArchReg ra);
 
         opc10, opc11, opc12, opc13:
         begin
@@ -438,6 +437,9 @@ function Maybe#(ISA_REG_INDEX) isaGetDst2(ISA_INSTRUCTION i);
     case (opcode)
         ldl_l, ldq_l:
             ret = tagged Valid (tagged LockAddrReg);
+
+        stl_c, stq_c:
+            ret = tagged Valid (tagged LockReg);
     endcase
 
     return ret;
@@ -487,7 +489,7 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
     return case (opcode)
                lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u: return 1;
                ldl_l, ldq_l: return 3;
-               stl_c, stq_c: return 2;
+               stl_c, stq_c: return 3;
                br, bsr, jmp: return 1;
                opc10:
                begin

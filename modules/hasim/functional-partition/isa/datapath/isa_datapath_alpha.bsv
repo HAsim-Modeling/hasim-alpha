@@ -210,8 +210,9 @@ module [HASim_Module] mkISA_Datapath
             stl_c, stq_c:
             begin
                 effective_addr = src0 + memDisp;
-                writebacks[0] = tagged Valid src2;
-                writebacks[1] = tagged Valid 0;
+                writebacks[0] = tagged Valid src1;
+                writebacks[1] = tagged Valid src2;
+                writebacks[2] = tagged Valid 0;
                 debug(2, $fdisplay(debug_log, "[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 

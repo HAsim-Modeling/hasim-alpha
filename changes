@@ -737,3 +737,17 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_decode_functions.bsv  Locally Modified           42 
 
 opc1c has 1 destination (not 0).
+
+----------
+vmurali     Date: Tue May 27 21:29:52 EDT 2008  CSN: CSN-hasim-alpha-44
+                  Wed May 28 01:29:52 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           43 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           43 
+
+
+-Fixed the bug to make load and store conditionals working. Basically the problem was a bug in handling 3 destinations ( similar to the one Michael A spotted before ). I sequentialized the code, but there are a couple of other places where this bug is present I think
