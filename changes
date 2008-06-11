@@ -780,3 +780,20 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_decode_functions.bsv  Locally Modified           45 
 
 Integer multiply is emulated but claimed it had a destination register.
+
+----------
+vmurali     Date: Wed Jun 11 02:10:07 EDT 2008  CSN: CSN-hasim-alpha-47
+                  Wed Jun 11 06:10:07 UTC 2008
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified           46 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           46 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_derived_types.bsv     Locally Modified           46 
+
+
+- No major changes here

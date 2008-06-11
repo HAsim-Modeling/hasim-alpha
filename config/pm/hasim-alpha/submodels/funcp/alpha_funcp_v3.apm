@@ -22,7 +22,6 @@ funcp_regstate=Register State for Functional Partition
 hasim_isa_semantics=Hybrid ISA Semantics
 funcp_base_types=Functional Partition Base Types
 
-
 [Scoreboard with One-Hot Encoding]
 File=modules/hasim/functional-partition/register-state/scoreboard/onehot/regstate_scoreboard_onehot.awb
 Packagehint=hasim
@@ -42,6 +41,7 @@ funcp_memstate_cache=Direct-Mapped Write-Through Cache
 [Register State Manager using Macro Ops/Requires]
 funcp_regstate_freelist=Freelist in BRAM
 funcp_regstate_scoreboard=Scoreboard with One-Hot Encoding
+funcp_regstate_snapshot=Snapshot in BRAM
 
 [Freelist in BRAM]
 File=modules/hasim/functional-partition/register-state/freelist/bram/funcp_freelist_bram.awb
@@ -127,4 +127,8 @@ Packagehint=m5
 
 [Direct-Mapped Write-Through Cache]
 File=modules/hasim/functional-partition/memory-state/cache/direct-mapped/write-through/memstate_cache_direct_writethrough.awb
+Packagehint=hasim
+
+[Snapshot in BRAM]
+File=modules/hasim/functional-partition/register-state/snapshot/bram/funcp_snapshot_bram.awb
 Packagehint=hasim

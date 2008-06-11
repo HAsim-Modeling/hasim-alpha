@@ -96,8 +96,7 @@ module [HASim_Module] mkISA_Datapath
         ISA_ADDRESS effective_addr = 0;
         
         // The writebacks which are sent to the register file.
-        ISA_RESULT_VALUES writebacks_wrong = Vector::replicate(Invalid);
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(Invalid);
+        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
 
 
         OPCODE    opcode = inst[31:26];

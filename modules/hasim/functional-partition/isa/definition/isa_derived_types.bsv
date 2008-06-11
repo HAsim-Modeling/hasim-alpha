@@ -33,7 +33,6 @@ typedef TExp#(7) FUNCP_PHYSICAL_REGS;
 
 typedef Tuple2#(ISA_REG_INDEX, FUNCP_PHYSICAL_REG_INDEX) ISA_REG_MAPPING;
 
-
 // ISA_EXECUTION_RESULT
 
 // A struct of possible execution results that the timing model should know about.
