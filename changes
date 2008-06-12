@@ -797,3 +797,13 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 - No major changes here
+
+----------
+mcadler     Date: Thu Jun 12 16:27:38 EDT 2008  CSN: CSN-hasim-alpha-48
+                  Thu Jun 12 20:27:38 UTC 2008
+
+
+Directory config/bm/alpha
+ SPEC.cfx                  Locally Added               0 
+
+Add SPEC CPU2000 and CPU2006 user-mode benchmarks.

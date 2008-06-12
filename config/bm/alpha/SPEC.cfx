@@ -1,0 +1,161 @@
+: # -*-Perl-*-
+eval 'exec perl -w "$0" ${1+"$@"}'
+   if 0;
+
+use Asim;
+use strict;
+
+## SPEC programs defined here...
+use Benchmarks::CPU2000_data;
+use Benchmarks::CPU2006_data;
+
+sub m5_cmd($$$$$);
+
+my $bmdir;
+$bmdir = `awb-resolver -config=benchmarkdir`;
+chomp($bmdir);
+$bmdir .= '/hasim/alpha/spec';
+
+my $gcfg = Asim::GenCFG->new();
+
+##
+## SPEC CPU2000
+##
+
+#
+# Workloads matching the following regular expressions are skipped and not
+# listed as options in awb.
+#
+my @spec2k_skip = (
+    '175.vpr',                  # Undiagnosed m5 failure
+    '178.galgel',               # Out of memory even at 2GB.  Something wrong.
+    '187.facerec',              # Out of memory even at 2GB.  Something wrong.
+    'test_253.perlbmk',         # no fork() syscall in m5 user mode
+);
+
+foreach my $size (sort keys %{CPU2000_data::spec2k}) {
+    my %group = %{${CPU2000_data::spec2k}{$size}};
+    foreach my $name (sort keys %group) {
+        my %bm = %{$group{$name}};
+
+        my $bmark = "cpu2000_${size}_${name}";
+
+        # Is this benchmark on the skip list?
+        my $skipMe = 0;
+        foreach my $skip (@spec2k_skip) {
+            if ($bmark =~ $skip) {
+                $skipMe = 1;
+                last;
+            }
+        }
+        next if ($skipMe);
+
+        my $data = $name;
+        $data =~ s/_.*//;
+        $data = "${bmdir}/cpu2000.1.3/data/${data}.tar.gz";
+
+        my $setup = "tools/scripts/bmark/setup-bmark $bmark --group spec/cpu2000.1.3 --binary bin-static/$bm{program} --data ${data} --linkto data/all/input/:data/${size}/input/ --isa alpha";
+        my $cmp = join(':', @{$bm{compare}});
+        if ($cmp ne '') {
+            $setup .= " --compare=\"${cmp}\"";
+        }
+
+        $gcfg->add(name => $bmark,
+                   tree => [ "cpu2000", $size, ${CPU2000_data::isFP}{$name} ? "FP" : "INT" ],
+                   setup => $setup,
+                   feeder => "m5",
+                   feedflags => m5_cmd("program/$bm{program}", $bm{args}, $bm{input}, $bm{output}, $bm{errout}),
+                  );
+    }
+}
+
+
+##
+## SPEC CPU2006
+##
+
+#
+# Workloads matching the following regular expressions are skipped and not
+# listed as options in awb.
+#
+my @spec2006_skip = (
+    '400.perlbench_test',       # Needs fork() syscall
+    '403.gcc',                  # Broken for unknown reason
+    '447.dealII',               # Writes forever to solution-1.gmv, fills disk (binary ok on real hw)
+    '433.milc',                 # Claims out of memory, even with 2GB
+    '450.soplex',               # Broken for unknown reason
+    '459.GemsFDTD',             # Claims out of memory, even with 2GB
+    '465.tonto',                # Claims out of memory, even with 2GB
+    '481.wrf',                  # Fails to open input files
+    '482.sphinx3',              # getrlimit syscall: unimplemented resource 2
+);
+
+foreach my $size (sort keys %{CPU2006_data::spec2006}) {
+    my %group = %{${CPU2006_data::spec2006}{$size}};
+    foreach my $name (sort keys %group) {
+        my %bm = %{$group{$name}};
+
+        my $bmark = "cpu2006_${size}_${name}";
+
+        # Is this benchmark on the skip list?
+        my $skipMe = 0;
+        foreach my $skip (@spec2006_skip) {
+            if ($bmark =~ $skip) {
+                $skipMe = 1;
+                last;
+            }
+        }
+        next if ($skipMe);
+
+        my $data = $name;
+        $data =~ s/_.*//;
+        $data = "${bmdir}/cpu2006.1.0/data/${data}.tar.gz";
+
+        my $setup = "tools/scripts/bmark/setup-bmark $bmark --group spec/cpu2006.1.0 --binary bin-static/$bm{program} --data ${data} --linkto data/all/input/:data/${size}/input/ --isa alpha";
+        my $cmp = join(':', @{$bm{compare}});
+        if ($cmp ne '') {
+            $setup .= " --compare=\"${cmp}\"";
+        }
+
+        my $m5cmd = m5_cmd("program/$bm{program}", $bm{args}, $bm{input}, $bm{output}, $bm{errout});
+        $m5cmd .= " --physmem=2GB";
+
+        $gcfg->add(name => $bmark,
+                   tree => [ "cpu2006", $size, ${CPU2006_data::isFP}{$name} ? "FP" : "INT" ],
+                   setup => $setup,
+                   feeder => "m5",
+                   feedflags => $m5cmd,
+                  );
+    }
+}
+
+
+$gcfg->action(@ARGV);
+
+
+##
+## m5_cmd(program, args, input, output, error) --
+##
+##  Construct an m5 command line.
+##
+sub m5_cmd($$$$$) {
+    my $program = shift;
+    my $args = shift;
+    my $input = shift;
+    my $output = shift;
+    my $errout = shift;
+
+    my $cmd = "m5_configs/se.py --hasim-sim";
+    $cmd .= " --cmd=${program}";
+    $cmd .= " \\\"--options=${args}\\\"" if ($args ne '');
+    $cmd .= " --input=${input}" if ($input ne '');
+    $cmd .= " --output=${output}" if ($output ne '');
+    if ($errout ne '') {
+        $cmd .= " --errout=${errout}";
+    }
+    elsif ($output ne '') {
+        $cmd .= " --errout=${output}";
+    }
+
+    return $cmd;
+}
