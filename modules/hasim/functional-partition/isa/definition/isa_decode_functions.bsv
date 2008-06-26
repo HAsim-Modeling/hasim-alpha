@@ -658,16 +658,7 @@ endfunction
 
 function Bool isaDrainBefore(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
-    Bool      useLit = unpack(i[12]);
-    FUNCT      funct = i[11:5];
-    MEM_FUNC memFunc = i[15:0];
-
-    let           ra = i[25:21];
-    let           rb = i[20:16];
-    let           rc = i[4:0];
-
-    return False; // You should write this.
+    return isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
 
 endfunction
 
@@ -681,16 +672,7 @@ endfunction
 
 function Bool isaDrainAfter(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
-    Bool      useLit = unpack(i[12]);
-    FUNCT      funct = i[11:5];
-    MEM_FUNC memFunc = i[15:0];
-
-    let           ra = i[25:21];
-    let           rb = i[20:16];
-    let           rc = i[4:0];
-
-    return False; // You should write this.
+    return isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
 
 endfunction
 

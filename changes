@@ -807,3 +807,18 @@ Directory config/bm/alpha
  SPEC.cfx                  Locally Added               0 
 
 Add SPEC CPU2000 and CPU2006 user-mode benchmarks.
+
+----------
+mpellaue    Date: Thu Jun 26 12:36:36 EDT 2008  CSN: CSN-hasim-alpha-49
+                  Thu Jun 26 16:36:36 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           48 
+
+
+* Drain before and Drain after for emulated instructions.
+* A temporary solution before Nikhil's real implementation.
+
+
+Michael P.
