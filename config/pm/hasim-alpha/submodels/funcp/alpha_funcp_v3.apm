@@ -36,7 +36,7 @@ Packagehint=hasim
 
 [Manager using Macro Ops for Mem State/Requires]
 funcp_memstate_storebuffer=Store Buffer using Bucket Hash
-funcp_memstate_cache=Direct-Mapped Write-Through Cache
+funcp_memstate_cache=Set-Associative Writeback Cache
 
 [Register State Manager using Macro Ops/Requires]
 funcp_regstate_freelist=Freelist in BRAM
@@ -125,10 +125,10 @@ m5_hasim_base=m5 HAsim Base Class
 File=modules/hasim/functional/isa-emulator/m5-isa-emulator-impl.awb
 Packagehint=m5
 
-[Direct-Mapped Write-Through Cache]
-File=modules/hasim/functional-partition/memory-state/cache/direct-mapped/write-through/memstate_cache_direct_writethrough.awb
-Packagehint=hasim
-
 [Snapshot in BRAM]
 File=modules/hasim/functional-partition/register-state/snapshot/bram/funcp_snapshot_bram.awb
+Packagehint=hasim
+
+[Set-Associative Writeback Cache]
+File=modules/hasim/functional-partition/memory-state/cache/set-associative/memstate-cache-set-assoc.awb
 Packagehint=hasim
