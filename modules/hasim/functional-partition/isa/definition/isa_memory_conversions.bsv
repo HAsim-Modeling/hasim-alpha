@@ -1,12 +1,13 @@
 
 `include "funcp_memory.bsh"
 
-// isaAddressToMemAddress
+// isaAlignAddress
 
-// This function takes an isa-specific address and turns it into
-// an address the memory virtual device understands.
+// This function takes an arbitrary address and aligns it to the standard
+// memory reference size for the ISA.  The result will typically be passed
+// to the TLB.
 
-function MEM_ADDRESS isaAddressToMemAddress(ISA_ADDRESS a);
+function ISA_ADDRESS isaAlignAddress(ISA_ADDRESS a);
 
     return {a[63:3], 3'b0};
 

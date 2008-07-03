@@ -65,6 +65,7 @@ Packagehint=hasim
 
 [Hybrid Memory for Functional Partition/Requires]
 funcp_simulated_memory=m5 Hybrid Memory
+funcp_memory_tlb=Standard Hybrid TLB
 
 [Register State for Functional Partition/Requires]
 funcp_regstate_manager=Register State Manager using Macro Ops
@@ -132,4 +133,9 @@ Packagehint=hasim
 
 [Set-Associative Writeback Cache]
 File=modules/hasim/functional-partition/memory-state/cache/set-associative/memstate-cache-set-assoc.awb
+Packagehint=hasim
+
+
+[Standard Hybrid TLB]
+File=modules/hasim/functional-partition/memory-state/tlb/hybrid/std/funcp-tlb-std.awb
 Packagehint=hasim
