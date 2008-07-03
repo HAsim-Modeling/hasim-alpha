@@ -855,3 +855,13 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_memory_conversions.bsv Locally Modified           51 
 
 Use the hybrid TLB
+
+----------
+mcadler     Date: Thu Jul  3 16:33:48 EDT 2008  CSN: CSN-hasim-alpha-53
+                  Thu Jul  3 20:33:48 UTC 2008
+
+
+Directory admin/packages
+ hasim-alpha               Locally Modified           52 
+
+Depend on hasim-models
