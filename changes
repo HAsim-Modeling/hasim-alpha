@@ -899,3 +899,14 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_decode_functions.bsv  Locally Modified           55 
 
 Made ldq_u an emulated inst
+
+----------
+abhattac    Date: Wed Jul  9 15:56:35 EDT 2008  CSN: CSN-hasim-alpha-57
+                  Wed Jul  9 19:56:35 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ inorder_alpha_exe.apm     Locally Modified           56 
+ inorder_alpha_htg.apm     Locally Modified           56 
+
+Modified inorder APM files to access new path for ICache AWB files.
