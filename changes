@@ -879,3 +879,13 @@ Directory config/pm/hasim-alpha/alpha-inorder
  inorder_alpha_htg.apm     Locally Added               0 
 
 moved apms for inorder from hasim-models repository to the hasim-{alpha,smips} repos.
+
+----------
+mcadler     Date: Wed Jul  9 07:20:48 EDT 2008  CSN: CSN-hasim-alpha-55
+                  Wed Jul  9 11:20:48 UTC 2008
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified           54 
+
+Set MEMORY_INVAL_CACHELINE_INFO_SIZE.

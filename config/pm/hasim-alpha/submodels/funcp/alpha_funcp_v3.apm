@@ -93,6 +93,7 @@ hasim_isa_datapath=Alpha ISA Datapath
 [Hybrid Memory for Functional Partition/Params]
 MEMORY_STORE_INFO_SIZE=128
 MEMORY_STORE_CACHELINE_INFO_SIZE=320
+MEMORY_INVAL_CACHELINE_INFO_SIZE=96
 
 [Functional Partition Base Types]
 File=modules/hasim/functional-partition/base-types/funcp-base-types.awb
@@ -134,7 +135,6 @@ Packagehint=hasim
 [Set-Associative Writeback Cache]
 File=modules/hasim/functional-partition/memory-state/cache/set-associative/memstate-cache-set-assoc.awb
 Packagehint=hasim
-
 
 [Standard Hybrid TLB]
 File=modules/hasim/functional-partition/memory-state/tlb/hybrid/std/funcp-tlb-std.awb
