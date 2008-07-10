@@ -221,7 +221,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
         end
 
         lda, ldah, ldbu, ldl, ldq, ldwu, /*ldq_u, */ldl_l, ldq_l,
-        stl_c, stq_c, stb, stl, stq, stw, stq_u,
+        stl_c, stq_c, stb, stl, stq, stw, /*stq_u,*/
         jmp:
             ret = tagged Valid (tagged ArchReg rb);
 
@@ -264,7 +264,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        stl_c, stq_c, stb, stl, stq, stw, stq_u:
+        stl_c, stq_c, stb, stl, stq, stw/*, stq_u*/:
             ret = tagged Valid (tagged ArchReg ra);
 
         opc10, opc12, opc13:
@@ -561,7 +561,7 @@ function Bool isaIsStore(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               stl_c, stq_c, stb, stl, stq, stw, stq_u: return True;
+               stl_c, stq_c, stb, stl, stq, stw/*, stq_u*/: return True;
                default: return False;
            endcase;
 
@@ -701,7 +701,7 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
                pal19, pal1d, pal1e, pal1f: return True;
 
                // Floating point
-               ldq_u, ldf, ldg, lds, ldt, stf, stg, sts, stt: return True;
+               ldq_u, ldf, ldg, lds, ldt, stq_u, stf, stg, sts, stt: return True;
                opc14, opc15, opc16: return True;
 
                // opc17.cpys to f31 is a fnop, otherwise emulate
