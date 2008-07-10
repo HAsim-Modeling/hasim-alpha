@@ -92,8 +92,6 @@ hasim_isa_datapath=Alpha ISA Datapath
 
 [Hybrid Memory for Functional Partition/Params]
 MEMORY_STORE_INFO_SIZE=128
-MEMORY_STORE_CACHELINE_INFO_SIZE=320
-MEMORY_INVAL_CACHELINE_INFO_SIZE=96
 
 [Functional Partition Base Types]
 File=modules/hasim/functional-partition/base-types/funcp-base-types.awb
@@ -101,7 +99,8 @@ Packagehint=hasim
 
 [Functional Partition Base Types/Params]
 FUNCP_ISA_INT_REG_SIZE=64
-FUNCP_ISA_ADDR_SIZE=64
+FUNCP_ISA_P_ADDR_SIZE=34
+FUNCP_ISA_V_ADDR_SIZE=64
 
 [Hybrid ISA Emulator/Requires]
 isa_emulator_impl=m5 ISA Emulator Implementation

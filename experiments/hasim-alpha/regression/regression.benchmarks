@@ -4,6 +4,11 @@
 #
 # ***************
 
-experiments = alpha_unpipelined_exe alpha_inorder_exe
+experiments = alpha_unpipelined_exe
 #
 config/bm/alpha/tests.cfx/user_mode/memory_tests_aligned.cfg
+
+
+experiments = alpha_inorder_exe
+#
+config/bm/alpha/6_375.cfx/benchmarks/qsort.cfg

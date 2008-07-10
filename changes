@@ -920,3 +920,17 @@ Directory experiments/hasim-alpha/regression
  regression.benchmarks     Locally Modified           57 
 
 added regression: memory_tests_aligned on inorder_alpha_exe
+
+----------
+mcadler     Date: Thu Jul 10 15:53:00 EDT 2008  CSN: CSN-hasim-alpha-59
+                  Thu Jul 10 19:53:00 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.benchmarks     Locally Modified           58 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified           58 
+
+- Separate virtual and physical address sizes.
+- alpha_inorder_exe regression now runs qsort
