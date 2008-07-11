@@ -4,6 +4,6 @@
 #
 # ***************
 
-alpha_unpipelined_exe   config/pm/hasim-alpha/alpha-unpipelined/alpha_unpipelined_exe.apm
-alpha_inorder_exe       config/pm/hasim-alpha/alpha-inorder/inorder_alpha_exe.apm
-#alpha_5stage_exe        config/pm/hasim-alpha/alpha-5stage/alpha_5stage_hybrid_exe.apm
+alpha_unpipelined_exe   config/pm/hasim-alpha/alpha-unpipelined/alpha_unpipelined_exe.apm      --bluesim="-m 10000000"
+alpha_inorder_exe       config/pm/hasim-alpha/alpha-inorder/inorder_alpha_exe.apm              --bluesim="-m 10000000"
+alpha_5stage_exe        config/pm/hasim-alpha/alpha-5stage/alpha_5stage_hybrid_exe.apm         --bluesim="-m 10000000"

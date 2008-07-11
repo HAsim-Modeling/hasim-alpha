@@ -944,3 +944,14 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_decode_functions.bsv  Locally Modified           59 
 
 made stq_u as emulated inst
+
+----------
+mcadler     Date: Fri Jul 11 09:12:02 EDT 2008  CSN: CSN-hasim-alpha-61
+                  Fri Jul 11 13:12:02 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified           60 
+ regression.benchmarks     Locally Modified           60 
+
+Add alpha_5stage_exe to regressions.
