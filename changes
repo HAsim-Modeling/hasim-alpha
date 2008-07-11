@@ -955,3 +955,21 @@ Directory experiments/hasim-alpha/regression
  regression.benchmarks     Locally Modified           60 
 
 Add alpha_5stage_exe to regressions.
+
+----------
+jsemer      Date: Fri Jul 11 14:35:12 EDT 2008  CSN: CSN-hasim-alpha-62
+                  Fri Jul 11 18:35:12 UTC 2008
+
+
+Directory experiments/hasim-alpha
+ nightly/                  Locally Added               0 
+
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Added               0 
+ nightly.benchmarks        Locally Added               0 
+
+Added nightly regressions with the 'nightly' experiment name. Checkin 
+regressions still exist under the 'regression' experiment name. 
+
+The 5stage and inorder models now run all the 6.375 benchmarks for the
+'nightly' regressions.

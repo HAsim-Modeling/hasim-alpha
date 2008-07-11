@@ -1,0 +1,19 @@
+# ***************
+#
+# Alpha models
+#
+# ***************
+
+experiments = alpha_unpipelined_exe
+#
+config/bm/alpha/tests.cfx/user_mode/memory_tests_aligned.cfg
+
+
+experiments = alpha_inorder_exe alpha_5stage_exe
+#
+config/bm/alpha/6_375.cfx/benchmarks/median.cfg
+config/bm/alpha/6_375.cfx/benchmarks/multiply.cfg
+config/bm/alpha/6_375.cfx/benchmarks/qsort.cfg
+config/bm/alpha/6_375.cfx/benchmarks/towers.cfg
+config/bm/alpha/6_375.cfx/benchmarks/vvadd.cfg
+
