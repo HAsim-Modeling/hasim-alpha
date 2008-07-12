@@ -973,3 +973,14 @@ regressions still exist under the 'regression' experiment name.
 
 The 5stage and inorder models now run all the 6.375 benchmarks for the
 'nightly' regressions.
+
+----------
+abhattac    Date: Sat Jul 12 01:42:40 EDT 2008  CSN: CSN-hasim-alpha-63
+                  Sat Jul 12 05:42:40 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ inorder_alpha_exe.apm     Locally Modified           62 
+ inorder_alpha_htg.apm     Locally Modified           62 
+
+Modified apm files to access ICacheTypes.bsv
