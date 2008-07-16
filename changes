@@ -984,3 +984,12 @@ Directory config/pm/hasim-alpha/alpha-inorder
  inorder_alpha_htg.apm     Locally Modified           62 
 
 Modified apm files to access ICacheTypes.bsv
+----------
+mcadler     Date: Wed Jul 16 18:23:26 EDT 2008  CSN: CSN-hasim-alpha-64
+                  Wed Jul 16 22:23:26 UTC 2008
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified           63 
+
+Add functional partition interface.

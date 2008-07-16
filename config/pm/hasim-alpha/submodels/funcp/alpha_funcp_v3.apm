@@ -21,6 +21,7 @@ funcp_memstate=Memory State for Functional Partition
 funcp_regstate=Register State for Functional Partition
 hasim_isa_semantics=Hybrid ISA Semantics
 funcp_base_types=Functional Partition Base Types
+funcp_interface=Functional Partition Interface
 
 [Scoreboard with One-Hot Encoding]
 File=modules/hasim/functional-partition/register-state/scoreboard/onehot/regstate_scoreboard_onehot.awb
@@ -137,4 +138,8 @@ Packagehint=hasim
 
 [Standard Hybrid TLB]
 File=modules/hasim/functional-partition/memory-state/tlb/hybrid/std/funcp-tlb-std.awb
+Packagehint=hasim
+
+[Functional Partition Interface]
+File=modules/hasim/functional-partition/interface/funcp-interface.awb
 Packagehint=hasim
