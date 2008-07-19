@@ -67,14 +67,9 @@ Packagehint=hasim-alpha
 File=modules/hasim/timing-models/inorder/inorder.awb
 Packagehint=hasim-models
 
-[Cache hierarchy]
-File=modules/hasim/timing-models/memory/memory.awb
-Packagehint=hasim-models
 
 [Inorder CPU/Requires]
 hasim_icache=Set-associative instruction cache
-
-
 
 [Set-associative instruction cache]
 File=modules/hasim/timing-models/caches/set-associative-icache/set_associative_icache.awb
@@ -87,8 +82,12 @@ Packagehint=hasim-models
 [Set-associative instruction cache/Requires]
 hasim_icache_types=ICache Types
 hasim_cache_replacement_algorithm=LRU
-hasim_cache_memory=Cache hierarchy
+hasim_icache_memory=Dummy ICache Memory
 
 [ICache Types]
 File=modules/hasim/timing-models/caches/cache-types/icache_types.awb
+Packagehint=hasim-models
+
+[Dummy ICache Memory]
+File=modules/hasim/timing-models/memory/icachememory.awb
 Packagehint=hasim-models
