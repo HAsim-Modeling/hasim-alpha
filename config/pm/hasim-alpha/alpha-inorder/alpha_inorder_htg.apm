@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=Inorder Alpha HTG-v5-PCIe
-File=inorder_alpha_htg
+File=alpha_inorder_htg
 Version=2.1
 Name=Inorder Alpha HTG-v5-PCIe
 Type=HAsim

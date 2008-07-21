@@ -1005,3 +1005,26 @@ Directory config/pm/hasim-alpha/alpha-inorder
 
 Separated dummy memory for ICache and DCache due to AWB clash. Added
 this separate module to the in-order APM file.
+----------
+mcadler     Date: Mon Jul 21 16:35:27 EDT 2008  CSN: CSN-hasim-alpha-66
+                  Mon Jul 21 20:35:27 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified           65 
+
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Modified           65 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ inorder_alpha_exe.apm     Locally Removed            65 
+ alpha_inorder_exe.apm     Locally Added               - 
+ inorder_alpha_htg.apm     Locally Removed            65 
+ alpha_inorder_htg.apm     Locally Added               - 
+
+Directory config/pm/hasim-alpha/alpha-5stage
+ alpha_5stage_hybrid_exe.apm Locally Modified           65 
+ alpha_5stage_hybrid_htg.apm Locally Modified           65 
+
+- Rename inorder_alpha to alpha_inorder to conform to other model names.
+- 5 stage model now uses model in hasim-models.
