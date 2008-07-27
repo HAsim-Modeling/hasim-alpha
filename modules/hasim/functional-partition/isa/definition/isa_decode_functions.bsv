@@ -220,8 +220,8 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
             endcase
         end
 
-        lda, ldah, ldbu, ldl, ldq, ldwu, /*ldq_u, */ldl_l, ldq_l,
-        stl_c, stq_c, stb, stl, stq, stw, /*stq_u,*/
+        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l,
+        stl_c, stq_c, stb, stl, stq, stw, stq_u,
         jmp:
             ret = tagged Valid (tagged ArchReg rb);
 
@@ -264,7 +264,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        stl_c, stq_c, stb, stl, stq, stw/*, stq_u*/:
+        stl_c, stq_c, stb, stl, stq, stw, stq_u:
             ret = tagged Valid (tagged ArchReg ra);
 
         opc10, opc12, opc13:
@@ -363,7 +363,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        lda, ldah, ldbu, ldl, ldq, ldwu, /*ldq_u, */
+        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u,
         ldl_l, ldq_l,
         br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
@@ -494,7 +494,7 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               lda, ldah, ldbu, ldl, ldq, ldwu/*, ldq_u*/: return 1;
+               lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u: return 1;
                ldl_l, ldq_l: return 3;
                stl_c, stq_c: return 3;
                br, bsr, jmp: return 1;
@@ -539,7 +539,7 @@ function Bool isaIsLoad(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               ldbu, ldl, ldq, ldwu, /*ldq_u,*/ ldl_l, ldq_l: return True;
+               ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l: return True;
                default: return False; 
            endcase;
 
@@ -561,7 +561,7 @@ function Bool isaIsStore(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               stl_c, stq_c, stb, stl, stq, stw/*, stq_u*/: return True;
+               stl_c, stq_c, stb, stl, stq, stw, stq_u: return True;
                default: return False;
            endcase;
 
@@ -701,7 +701,7 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
                pal19, pal1d, pal1e, pal1f: return True;
 
                // Floating point
-               ldq_u, ldf, ldg, lds, ldt, stq_u, stf, stg, sts, stt: return True;
+               ldf, ldg, lds, ldt, stf, stg, sts, stt: return True;
                opc14, opc15, opc16: return True;
 
                // opc17.cpys to f31 is a fnop, otherwise emulate
