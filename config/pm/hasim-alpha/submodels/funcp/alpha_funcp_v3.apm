@@ -27,16 +27,12 @@ funcp_interface=Functional Partition Interface
 File=modules/hasim/functional-partition/register-state/scoreboard/onehot/regstate_scoreboard_onehot.awb
 Packagehint=hasim
 
-[Store Buffer using Bucket Hash]
-File=modules/hasim/functional-partition/memory-state/store-buffer/bucket-hash/memstate_storebuffer_bucket_hash.awb
-Packagehint=hasim
-
 [Functional Partition Version 3]
 File=modules/hasim/functional-partition/functional_partition_default.awb
 Packagehint=hasim
 
 [Manager using Macro Ops for Mem State/Requires]
-funcp_memstate_storebuffer=Store Buffer using Bucket Hash
+funcp_memstate_storebuffer=Store Buffer with sequential lookup
 funcp_memstate_cache=Set-Associative Writeback Cache
 
 [Register State Manager using Macro Ops/Requires]
@@ -142,4 +138,8 @@ Packagehint=hasim
 
 [Functional Partition Interface]
 File=modules/hasim/functional-partition/interface/funcp-interface.awb
+Packagehint=hasim
+
+[Store Buffer with sequential lookup]
+File=modules/hasim/functional-partition/memory-state/store-buffer/sequential/memstate_storebuffer_sequential.awb
 Packagehint=hasim
