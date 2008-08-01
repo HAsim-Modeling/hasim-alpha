@@ -36,7 +36,7 @@ typedef 3 ISA_MAX_SRCS;
 
 // The maximum number of destination registers an instruction can write.
 
-typedef 3 ISA_MAX_DSTS;
+typedef 2 ISA_MAX_DSTS;
 
 
 // ISA_MEMOP_TYPE

@@ -33,8 +33,7 @@ module [HASim_Module] mkISA_Datapath
 
     // Connection to the functional partition.
     
-    Connection_Server#(Tuple3#(ISA_INSTRUCTION, ISA_ADDRESS, ISA_SOURCE_VALUES), 
-                       Tuple3#(ISA_EXECUTION_RESULT, ISA_ADDRESS, ISA_RESULT_VALUES)) link_fp <- mkConnection_Server("isa_datapath");
+    Connection_Server#(ISA_DATAPATH_REQ, ISA_DATAPATH_RSP) link_fp <- mkConnection_Server("isa_datapath");
 
     // ***** Debugging Log *****
     
@@ -83,7 +82,11 @@ module [HASim_Module] mkISA_Datapath
     rule datapathExec (True);
 
         // Get the request from the functional partition.
-        match {.inst, .addr, .srcs} = link_fp.getReq();
+        let req  = link_fp.getReq();
+        let inst = req.instruction;
+        let addr = req.instAddress;
+        let srcs = req.srcValues;
+        
 
         link_fp.deq();
 
@@ -106,6 +109,7 @@ module [HASim_Module] mkISA_Datapath
         let          lit = inst[20:13];
         Bool      useLit = unpack(inst[12]);
         let    branchImm = inst[20:0];
+        Bool    is_store = False;
 
         Bit#(64) src0 = srcs[0];
         Bit#(64) src1 = srcs[1];
@@ -197,7 +201,9 @@ module [HASim_Module] mkISA_Datapath
                 effective_addr = ((src0 + memDisp) & ~7);
                 debug(2, $fdisplay(debug_log, "[0x%x] LDQ_U [0x%x]", addr, effective_addr));
             end
+// Emulate these for now in order to save a destination.
 
+/* 
             ldl_l, ldq_l:
             begin
                 effective_addr = src0 + memDisp;
@@ -214,11 +220,12 @@ module [HASim_Module] mkISA_Datapath
                 writebacks[2] = tagged Valid 0;
                 debug(2, $fdisplay(debug_log, "[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
-
+*/
             stb, stl, stq, stw:
             begin
                 effective_addr = src0 + memDisp;
                 writebacks[0] = tagged Valid src1;
+                is_store = True;
                 debug(2, $fdisplay(debug_log, "[0x%x] ST [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
@@ -226,6 +233,7 @@ module [HASim_Module] mkISA_Datapath
             begin
                 effective_addr = ((src0 + memDisp) & ~7);
                 writebacks[0] = tagged Valid src1;
+                is_store = True;
                 debug(2, $fdisplay(debug_log, "[0x%x] STQ_U [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
@@ -592,7 +600,7 @@ module [HASim_Module] mkISA_Datapath
         endcase
 
         // Return the result to the functional partition.
-        link_fp.makeResp(tuple3(timep_result, effective_addr, writebacks));
+        link_fp.makeResp(initISADatapathRsp(timep_result, effective_addr, is_store, writebacks));
 
     endrule
 

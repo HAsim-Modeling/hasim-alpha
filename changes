@@ -1079,3 +1079,22 @@ Directory config/pm/hasim-alpha/submodels/funcp
 FpgaDebugFile added to hasim_common ( in sync with Nikhil's debug methodology )
 
 funcp changed to use new store buffer
+
+----------
+mpellaue    Date: Fri Aug  1 19:51:58 EDT 2008  CSN: CSN-hasim-alpha-70
+                  Fri Aug  1 23:51:58 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           69 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           69 
+ isa_datatypes.bsv         Locally Modified           69 
+ isa_memory_conversions.bsv Locally Modified           69 
+ isa_derived_types.bsv     Locally Modified           69 
+
+
+* ISA now handles unaligned accesses.
+
+Michael P.
