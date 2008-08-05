@@ -91,3 +91,4 @@ Packagehint=hasim-models
 
 [ICache Types/Params]
 ICACHE_IDX_BITS=11
+ICACHE_MISS_PENALTY=100

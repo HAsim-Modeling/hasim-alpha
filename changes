@@ -1111,3 +1111,12 @@ Directory config/pm/hasim-alpha/alpha-inorder
 Fixed inorder apm file so that model will build. Added .dic files to
 house statistics for the direct-mapped and set-associative
 ICache.Fixed a couple of bugs in the ICache source files.
+----------
+abhattac    Date: Tue Aug  5 13:29:14 EDT 2008  CSN: CSN-hasim-alpha-72
+                  Tue Aug  5 17:29:14 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified           71 
+
+Updated inorder model file.
