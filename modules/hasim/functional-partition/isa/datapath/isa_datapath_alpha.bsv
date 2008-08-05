@@ -193,12 +193,14 @@ module [HASim_Module] mkISA_Datapath
             ldbu, ldl, ldq, ldwu:
             begin
                 effective_addr = src0 + memDisp;
+                timep_result = REffectiveAddr (effective_addr);
                 debug(2, $fdisplay(debug_log, "[0x%x] LD [0x%x]", addr, effective_addr));
             end
 
             ldq_u:
             begin
                 effective_addr = ((src0 + memDisp) & ~7);
+                timep_result = REffectiveAddr (effective_addr);
                 debug(2, $fdisplay(debug_log, "[0x%x] LDQ_U [0x%x]", addr, effective_addr));
             end
 // Emulate these for now in order to save a destination.
@@ -209,6 +211,7 @@ module [HASim_Module] mkISA_Datapath
                 effective_addr = src0 + memDisp;
                 writebacks[1] = tagged Valid 1;
                 writebacks[2] = tagged Valid effective_addr;
+                timep_result = REffectiveAddr (effective_addr);
                 debug(2, $fdisplay(debug_log, "[0x%x] LD_L [0x%x]", addr, effective_addr));
             end
 
@@ -218,6 +221,7 @@ module [HASim_Module] mkISA_Datapath
                 writebacks[0] = tagged Valid src1;
                 writebacks[1] = tagged Valid src2;
                 writebacks[2] = tagged Valid 0;
+                timep_result = REffectiveAddr (effective_addr);
                 debug(2, $fdisplay(debug_log, "[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 */
@@ -225,6 +229,7 @@ module [HASim_Module] mkISA_Datapath
             begin
                 effective_addr = src0 + memDisp;
                 writebacks[0] = tagged Valid src1;
+                timep_result = REffectiveAddr (effective_addr);
                 is_store = True;
                 debug(2, $fdisplay(debug_log, "[0x%x] ST [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
@@ -233,6 +238,7 @@ module [HASim_Module] mkISA_Datapath
             begin
                 effective_addr = ((src0 + memDisp) & ~7);
                 writebacks[0] = tagged Valid src1;
+                timep_result = REffectiveAddr (effective_addr);
                 is_store = True;
                 debug(2, $fdisplay(debug_log, "[0x%x] STQ_U [0x%x] <- 0x%x", addr, effective_addr, src1));
             end

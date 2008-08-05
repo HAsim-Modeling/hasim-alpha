@@ -1120,3 +1120,18 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_htg.apm     Locally Modified           71 
 
 Updated inorder model file.
+----------
+nikhil      Date: Tue Aug  5 15:00:05 CDT 2008  CSN: CSN-hasim-alpha-73
+                  Tue Aug  5 20:00:05 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified           72 
+ alpha_inorder_htg.apm     Locally Modified           72 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           72 
+
+- bugfix in alpha datapath; getResults never returned REffectiveAddr.
+- changes to alpha_inorder apms to have a direct mapped icache, and a
+  set-associative write-back dcache.

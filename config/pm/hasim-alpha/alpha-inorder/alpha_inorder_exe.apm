@@ -65,6 +65,7 @@ Packagehint=hasim-models
 
 [Inorder CPU/Requires]
 hasim_icache=Direct mapped instruction cache
+hasim_dcache=Set associative writeback data cache
 
 [ICache Types]
 File=modules/hasim/timing-models/caches/cache-types/icache_types.awb
@@ -85,3 +86,24 @@ Packagehint=hasim-models
 [Direct mapped instruction cache/Requires]
 hasim_icache_types=ICache Types
 hasim_icache_memory=Dummy ICache Memory
+
+[DCache Types]
+File=modules/hasim/timing-models/caches/cache-types/dcache_types.awb
+Packagehint=hasim-models
+
+[Set associative writeback data cache/Requires]
+hasim_dcache_replacement_algorithm=DCacheLRU
+hasim_dcache_types=DCache Types
+hasim_dcache_memory=Dummy memory for DCache
+
+[DCacheLRU]
+File=modules/hasim/timing-models/replacement-algorithms/dcache/dcache_lru.awb
+Packagehint=hasim-models
+
+[Dummy memory for DCache]
+File=modules/hasim/timing-models/memory/dcachememory.awb
+Packagehint=hasim-models
+
+[Set associative writeback data cache]
+File=modules/hasim/timing-models/caches/set-associative-dcache/set-associative-writeback-dcache/set_associative_write_back_dcache.awb
+Packagehint=hasim-models
