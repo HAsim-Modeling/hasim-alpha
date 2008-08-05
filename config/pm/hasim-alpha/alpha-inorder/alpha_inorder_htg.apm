@@ -85,7 +85,9 @@ Packagehint=hasim-models
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-
 [Dummy ICache Memory]
 File=modules/hasim/timing-models/memory/icachememory.awb
 Packagehint=hasim-models
+
+[ICache Types/Params]
+ICACHE_IDX_BITS=11
