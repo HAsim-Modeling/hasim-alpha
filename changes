@@ -1135,3 +1135,13 @@ Directory modules/hasim/functional-partition/isa/datapath
 - bugfix in alpha datapath; getResults never returned REffectiveAddr.
 - changes to alpha_inorder apms to have a direct mapped icache, and a
   set-associative write-back dcache.
+
+----------
+mcadler     Date: Wed Aug  6 11:04:33 EDT 2008  CSN: CSN-hasim-alpha-74
+                  Wed Aug  6 15:04:33 UTC 2008
+
+
+Directory config/bm/alpha
+ SPEC.cfx                  Locally Modified           73 
+
+Disable a few more SPEC 2006 workloads that fail in m5.

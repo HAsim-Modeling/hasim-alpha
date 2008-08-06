@@ -80,10 +80,15 @@ foreach my $size (sort keys %{CPU2000_data::spec2k}) {
 #
 my @spec2006_skip = (
     '400.perlbench_test',       # Needs fork() syscall
+    'ref_400.perlbench_split',  # Claims out of memory, even with 2GB
     '403.gcc',                  # Broken for unknown reason
+    'ref_410.bwaves',           # Claims out of memory, even with 2GB
+    'ref_436.cactusADM',        # Claims out of memory, even with 2GB
+    'ref_437.leslie3d',         # Claims out of memory, even with 2GB
     '447.dealII',               # Writes forever to solution-1.gmv, fills disk (binary ok on real hw)
     '433.milc',                 # Claims out of memory, even with 2GB
     '450.soplex',               # Broken for unknown reason
+    '454.calculix',             # Claims out of memory, even with 2GB
     '459.GemsFDTD',             # Claims out of memory, even with 2GB
     '465.tonto',                # Claims out of memory, even with 2GB
     '481.wrf',                  # Fails to open input files
