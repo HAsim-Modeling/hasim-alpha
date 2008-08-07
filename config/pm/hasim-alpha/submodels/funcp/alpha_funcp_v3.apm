@@ -140,7 +140,9 @@ Packagehint=hasim
 File=modules/hasim/functional-partition/interface/funcp-interface.awb
 Packagehint=hasim
 
-
 [Fast Hashed Store Buffer]
 File=modules/hasim/functional-partition/memory-state/store-buffer/fast-hashed/memstate_storebuffer_fast_hashed.awb
 Packagehint=hasim
+
+[Snapshot in BRAM/Params]
+REGSTATE_NUM_SNAPSHOTS=32

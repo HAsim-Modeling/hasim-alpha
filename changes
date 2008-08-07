@@ -1155,3 +1155,13 @@ Directory config/pm/hasim-alpha/submodels/funcp
  alpha_funcp_v3.apm        Locally Modified           74 
 
 Uses the new store buffer
+
+----------
+mvijayar    Date: Wed Aug  6 22:03:27 EDT 2008  CSN: CSN-hasim-alpha-76
+                  Thu Aug  7 02:03:27 UTC 2008
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified           75 
+
+Increasing the snapshot size from 8 to 32
