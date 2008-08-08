@@ -68,7 +68,7 @@ MAKE_ALL_TARGET=bit
 
 [Inorder CPU/Requires]
 hasim_icache=Direct mapped instruction cache
-hasim_dcache=Set associative writeback data cache
+hasim_dcache=Null DCache
 
 [Direct mapped instruction cache]
 File=modules/hasim/timing-models/caches/direct-mapped-icache/direct_mapped_icache.awb
@@ -92,25 +92,12 @@ Packagehint=hasim-models
 
 [ICache Types/Params]
 ICACHE_IDX_BITS=11
-ICACHE_MISS_PENALTY=100
 
-[DCache Types]
-File=modules/hasim/timing-models/caches/cache-types/dcache_types.awb
-Packagehint=hasim-models
 
-[Set associative writeback data cache/Requires]
-hasim_dcache_replacement_algorithm=DCacheLRU
-hasim_dcache_types=DCache Types
-hasim_dcache_memory=Dummy memory for DCache
 
-[DCacheLRU]
-File=modules/hasim/timing-models/replacement-algorithms/dcache/dcache_lru.awb
-Packagehint=hasim-models
 
-[Dummy memory for DCache]
-File=modules/hasim/timing-models/memory/dcachememory.awb
-Packagehint=hasim-models
 
-[Set associative writeback data cache]
-File=modules/hasim/timing-models/caches/set-associative-dcache/set-associative-writeback-dcache/set_associative_write_back_dcache.awb
+
+[Null DCache]
+File=modules/hasim/timing-models/caches/null-caches/null_dcache.awb
 Packagehint=hasim-models
