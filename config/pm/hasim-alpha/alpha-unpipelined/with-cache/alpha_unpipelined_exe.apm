@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Unpipelined Alpha  Model - Exe
+Description=Unpipelined Alpha with Cache 
 File=alpha_unpipelined_exe
 Version=2.1
-Name=Unpipelined Alpha Model - Exe
+Name=Simulation Unpipelined Alpha with Cache 
 Type=HAsim
 Class=Asim::Model
 
@@ -14,7 +14,7 @@ hasim_chip=Uniprocessor chip
 hasim_isa=Alpha ISA Definition
 
 [Model]
-DefaultAttributes=unpipelined alpha hybrid exe hasim
+DefaultAttributes=hasim unpipelined cache alpha simulation
 model=HAsim Hybrid Model Foundation
 
 [Hasim - Hardware (fpga) based system]
@@ -22,12 +22,8 @@ Packagehint=hasim
 File=modules/system/single_chip_system/hasim_system.awb
 
 [Uniprocessor chip/Requires]
-hasim_cpu=Hasim Unpipelined CPU
+hasim_cpu=Hasim Unpipelined CPU With Cache
 hasim_memory=magic memory
-
-[Hasim Unpipelined CPU]
-File=modules/cpu/mips/unpipelined_cpu.awb
-Packagehint=hasim-mips
 
 [Uniprocessor chip]
 File=modules/chip/mips/uniprocessor/uniprocessor.awb
@@ -46,7 +42,7 @@ File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm
 Packagehint=hasim
 
 [HAsim Hybrid Model Foundation/Requires]
-hasim_common=New Hasim Common Library
+hasim_common=Hasim Common Library
 hasim_system=Hasim - Hardware (fpga) based system
 hasim_controller=Hasim Standard Controller
 fpgaenv=FPGA Environment
@@ -63,6 +59,17 @@ Packagehint=hasim-alpha
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-[New Hasim Common Library]
+[Hasim Unpipelined CPU With Cache]
+File=config/pm/hasim-models/pipeline/unpipelined/with-cache/unpipelined.apm
+Packagehint=hasim-models
+
+
+[Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
+
+
+
+
+
+
