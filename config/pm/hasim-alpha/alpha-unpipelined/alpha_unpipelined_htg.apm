@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Unpipelined Alpha  Model - Exe
-File=alpha_unpipelined_exe
+Description=Unpipelined Alpha Model - HTG Virtex 5 PCIe
+File=alpha_unpipelined_htg
 Version=2.1
-Name=Unpipelined Alpha Model - Exe
+Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 Type=HAsim
 Class=Asim::Model
 
@@ -14,7 +14,7 @@ hasim_chip=Uniprocessor chip
 hasim_isa=Alpha ISA Definition
 
 [Model]
-DefaultAttributes=unpipelined alpha hybrid exe hasim
+DefaultAttributes=unpipelined alpha hybrid hasim
 model=HAsim Hybrid Model Foundation
 
 [Hasim - Hardware (fpga) based system]
@@ -26,8 +26,8 @@ hasim_cpu=Hasim Unpipelined CPU
 hasim_memory=magic memory
 
 [Hasim Unpipelined CPU]
-File=config/pm/hasim-models/pipeline/unpipelined/no-cache/unpipelined.apm
-Packagehint=hasim-models
+File=modules/cpu/mips/unpipelined_cpu.awb
+Packagehint=hasim-mips
 
 [Uniprocessor chip]
 File=modules/chip/mips/uniprocessor/uniprocessor.awb
@@ -38,7 +38,7 @@ File=modules/memory/magic_memory.awb
 Packagehint=hasim-mips
 
 [FPGA Environment]
-File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
+File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-htg-v5-pcie.apm
 Packagehint=platforms
 
 [Hasim Standard Controller]
@@ -46,7 +46,7 @@ File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm
 Packagehint=hasim
 
 [HAsim Hybrid Model Foundation/Requires]
-hasim_common=Hasim Common Library
+hasim_common=New Hasim Common Library
 hasim_system=Hasim - Hardware (fpga) based system
 hasim_controller=Hasim Standard Controller
 fpgaenv=FPGA Environment
@@ -63,6 +63,9 @@ Packagehint=hasim-alpha
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-[Hasim Common Library]
+[New Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
+
+[HAsim Hybrid Model Foundation/Params]
+MAKE_ALL_TARGET=bit

@@ -25,6 +25,10 @@ File=modules/system/single_chip_system/hasim_system.awb
 hasim_cpu=5-stage pipeline CPU
 hasim_memory=magic memory
 
+[5-stage pipeline CPU]
+File=config/pm/hasim-models/5stage/5stage-simple.apm
+Packagehint=hasim-models
+
 [Uniprocessor chip]
 File=modules/chip/mips/uniprocessor/uniprocessor.awb
 Packagehint=hasim-mips
@@ -63,6 +67,3 @@ Packagehint=hasim-alpha
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[5-stage pipeline CPU]
-File=config/pm/hasim-models/pipeline/5stage/5stage.apm
-Packagehint=hasim-models
