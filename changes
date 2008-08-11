@@ -1176,3 +1176,16 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_htg.apm     Locally Modified           76 
 
 Updating model inoder model file.
+----------
+jsemer      Date: Mon Aug 11 15:10:31 EDT 2008  CSN: CSN-hasim-alpha-80
+                  Mon Aug 11 19:10:31 UTC 2008
+
+
+Directory experiments/hasim-alpha
+ nightly-fpga/             Locally Added               0 
+
+Directory experiments/hasim-alpha/nightly-fpga
+ nightly-fpga.benchmarks   Locally Added               0 
+ nightly-fpga.models       Locally Added               0 
+
+Added a regression to build bitfiles for some models.

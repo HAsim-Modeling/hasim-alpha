@@ -1,0 +1,8 @@
+# ***************
+#
+# Alpha models
+#
+# ***************
+
+alpha_unpipelined_htg   config/pm/hasim-alpha/alpha-unpipelined/alpha_unpipelined_htg.apm
+alpha_inorder_htg       config/pm/hasim-alpha/alpha-inorder/alpha_inorder_htg.apm
