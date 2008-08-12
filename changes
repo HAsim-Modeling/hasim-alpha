@@ -1177,26 +1177,61 @@ Directory config/pm/hasim-alpha/alpha-inorder
 
 Updating model inoder model file.
 ----------
-jsemer      Date: Mon Aug 11 15:10:31 EDT 2008  CSN: CSN-hasim-alpha-80
-                  Mon Aug 11 19:10:31 UTC 2008
+mvijayar    Date: Tue Aug 12 18:37:09 EDT 2008  CSN: CSN-hasim-alpha-82
+                  Tue Aug 12 22:37:09 UTC 2008
 
 
-Directory experiments/hasim-alpha
- nightly-fpga/             Locally Added               0 
+Directory admin
+ mytags                    Locally Modified           81 
+
+Directory admin/packages
+ hasim-alpha               Locally Modified           81 
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified           81 
+ regression.benchmarks     Locally Modified           81 
 
 Directory experiments/hasim-alpha/nightly-fpga
- nightly-fpga.benchmarks   Locally Added               0 
- nightly-fpga.models       Locally Added               0 
+ nightly-fpga.models       Locally Modified           81 
 
-Added a regression to build bitfiles for some models.
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Modified           81 
+ nightly.benchmarks        Locally Modified           81 
 
-----------
-nikhil      Date: Tue Aug 12 13:39:37 CDT 2008  CSN: CSN-hasim-alpha-81
-                  Tue Aug 12 18:39:37 UTC 2008
+Directory config/pm/hasim-alpha/alpha-unpipelined
+ with-cache/               Locally Added               0 
 
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_exe.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined
+ no-cache/                 Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Added               0 
+ alpha_unpipelined_no_cache_htg.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha
+ alpha-superscalar-ooo/    Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-superscalar-ooo
+ alpha_superscalar_ooo_exe.apm Locally Added               0 
+ alpha_superscalar_ooo_htg.apm Locally Added               0 
 
 Directory config/pm/hasim-alpha/alpha-inorder
- alpha_inorder_htg.apm     Locally Modified           80 
+ alpha_inorder_exe.apm     Locally Modified           81 
+ alpha_inorder_htg.apm     Locally Modified           81 
 
-make alpha_inorder_htg.apm have the same configuration as
-alpha_inorder_exe.apm (other than the fpgaenv)
+Directory config/pm/hasim-alpha/alpha-5stage
+ alpha_5stage_exe.apm      Locally Added               - 
+ alpha_5stage_hybrid_exe.apm Locally Removed            81 
+ alpha_5stage_htg.apm      Locally Added               - 
+ alpha_5stage_hybrid_htg.apm Locally Removed            81 
+
+Directory .
+ changes                   Locally Modified           81 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           81 
+
+Added the superscalar apm, renamed the apms to match each other

@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Alpha Simulation
-File=alpha_inorder_exe
+Description=Unpipelined Alpha  Model - Exe
+File=alpha_unpipelined_exe
 Version=2.1
-Name=Inorder Alpha Simulation
+Name=Unpipelined Alpha Model - Exe
 Type=HAsim
 Class=Asim::Model
 
@@ -15,12 +15,16 @@ hasim_isa=Alpha ISA Definition
 hasim_memory=Memory
 
 [Model]
-DefaultAttributes=hasim inorder alpha simulation
+DefaultAttributes=unpipelined alpha hybrid exe hasim
 model=HAsim Hybrid Model Foundation
 
 [Hasim - Hardware (fpga) based system]
 Packagehint=hasim
 File=modules/system/cpu_system/hasim_system.awb
+
+[Hasim Unpipelined CPU]
+File=config/pm/hasim-models/pipeline/unpipelined/no-cache/unpipelined.apm
+Packagehint=hasim-models
 
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
@@ -52,35 +56,25 @@ Packagehint=hasim-alpha
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[Inorder pipeline]
-File=config/pm/hasim-models/pipeline/inorder/inorder.apm
-Packagehint=hasim-models
+[Single core chip/Requires]
+hasim_shared_cache=Shared cache
+hasim_core=Cacheless Core
 
 [Shared cache]
 File=modules/hasim/timing-models/caches/l2-cache/hasim_shared_cache.awb
 Packagehint=hasim-models
 
-[Core/Requires]
-hasim_pipeline=Inorder pipeline
-hasim_l1_caches=L1 caches
-
-[Core]
-File=modules/hasim/timing-models/core/hasim_core.awb
+[Cacheless Core]
+File=modules/hasim/timing-models/core/cacheless-core/hasim_core.awb
 Packagehint=hasim-models
 
-[Single core chip/Requires]
-hasim_shared_cache=Shared cache
-hasim_core=Core
+[Cacheless Core/Requires]
+hasim_pipeline=Hasim Unpipelined CPU
 
 [Single core chip]
 File=modules/hasim/timing-models/chip/hasim_chip.awb
 Packagehint=hasim-models
 
-[L1 caches]
-File=config/pm/hasim-models/l1-caches/l1_caches.apm
-Packagehint=hasim-models
-
 [Memory]
 File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
-

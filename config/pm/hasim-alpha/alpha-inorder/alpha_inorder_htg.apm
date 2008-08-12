@@ -10,8 +10,9 @@ Class=Asim::Model
 
 [Hasim - Hardware (fpga) based system/Requires]
 hasim_funcp=Functional Partition Version 3
-hasim_chip=Uniprocessor chip
+hasim_chip=Single core chip
 hasim_isa=Alpha ISA Definition
+hasim_memory=Memory
 
 [Model]
 DefaultAttributes=hasim inorder alpha htg
@@ -19,19 +20,10 @@ model=HAsim Hybrid Model Foundation
 
 [Hasim - Hardware (fpga) based system]
 Packagehint=hasim
-File=modules/system/single_chip_system/hasim_system.awb
+File=modules/system/cpu_system/hasim_system.awb
 
-[Uniprocessor chip/Requires]
-hasim_cpu=Inorder CPU
-hasim_memory=magic memory
 
-[Uniprocessor chip]
-File=modules/chip/mips/uniprocessor/uniprocessor.awb
-Packagehint=hasim-mips
 
-[magic memory]
-File=modules/memory/magic_memory.awb
-Packagehint=hasim-mips
 
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-htg-v5-pcie.apm
@@ -59,51 +51,43 @@ Packagehint=hasim-alpha
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-[Inorder CPU]
-File=modules/hasim/timing-models/inorder/inorder.awb
-Packagehint=hasim-models
 
 [HAsim Hybrid Model Foundation/Params]
 MAKE_ALL_TARGET=bit
-
-[Inorder CPU/Requires]
-hasim_icache=Direct mapped instruction cache
-hasim_dcache=Direct mapped write through data cache
-
-[ICache Types]
-File=modules/hasim/timing-models/caches/cache-types/icache_types.awb
-Packagehint=hasim-models
 
 [Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[Dummy ICache Memory]
-File=modules/hasim/timing-models/memory/icachememory.awb
+
+[Inorder pipeline]
+File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
 
-[Direct mapped instruction cache]
-File=modules/hasim/timing-models/caches/direct-mapped-icache/direct_mapped_icache.awb
+[Single core chip/Requires]
+hasim_shared_cache=Shared cache
+hasim_core=Core
+
+[Shared cache]
+File=modules/hasim/timing-models/caches/l2-cache/hasim_shared_cache.awb
 Packagehint=hasim-models
 
-[Direct mapped instruction cache/Requires]
-hasim_icache_types=ICache Types
-hasim_icache_memory=Dummy ICache Memory
+[Core/Requires]
+hasim_pipeline=Inorder pipeline
+hasim_l1_caches=L1 caches
 
-[DCache Types]
-File=modules/hasim/timing-models/caches/cache-types/dcache_types.awb
+[Single core chip]
+File=modules/hasim/timing-models/chip/hasim_chip.awb
 Packagehint=hasim-models
 
-[Dummy memory for DCache]
-File=modules/hasim/timing-models/memory/dcachememory.awb
+[L1 caches]
+File=config/pm/hasim-models/l1-caches/l1_caches.apm
 Packagehint=hasim-models
 
-
-
-[Direct mapped write through data cache]
-File=modules/hasim/timing-models/caches/direct-mapped-dcache/direct-mapped-writethrough-dcache/direct_mapped_write_through_dcache.awb
+[Memory]
+File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
 
-[Direct mapped write through data cache/Requires]
-hasim_dcache_types=DCache Types
-hasim_dcache_memory=Dummy memory for DCache
+[Core]
+File=modules/hasim/timing-models/core/hasim_core.awb
+Packagehint=hasim-models
