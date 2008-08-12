@@ -1189,3 +1189,14 @@ Directory experiments/hasim-alpha/nightly-fpga
  nightly-fpga.models       Locally Added               0 
 
 Added a regression to build bitfiles for some models.
+
+----------
+nikhil      Date: Tue Aug 12 13:39:37 CDT 2008  CSN: CSN-hasim-alpha-81
+                  Tue Aug 12 18:39:37 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified           80 
+
+make alpha_inorder_htg.apm have the same configuration as
+alpha_inorder_exe.apm (other than the fpgaenv)
