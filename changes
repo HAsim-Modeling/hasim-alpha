@@ -1256,3 +1256,19 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
 
 Unpipelined with cache uses submodel instead of an awb file for hasim_pipeline
 *Model broken, doesn't have the new funcp interface*
+
+----------
+mvijayar    Date: Thu Aug 14 14:34:16 EDT 2008  CSN: CSN-hasim-alpha-86
+                  Thu Aug 14 18:34:16 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified           84 
+
+Directory experiments/hasim-alpha/nightly-fpga
+ nightly-fpga.models       Locally Modified           84 
+
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Modified           84 
+
+bug-fix removed hybrid word from the names of models
