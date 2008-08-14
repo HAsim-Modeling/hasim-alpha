@@ -1235,3 +1235,13 @@ Directory modules/hasim/functional-partition/isa/datapath
  isa_datapath_alpha.bsv    Locally Modified           81 
 
 Added the superscalar apm, renamed the apms to match each other
+
+----------
+mvijayar    Date: Wed Aug 13 20:39:36 EDT 2008  CSN: CSN-hasim-alpha-83
+                  Thu Aug 14 00:39:36 UTC 2008
+
+
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Modified           82 
+
+bug-fix - removed duplicate names for 2 models
