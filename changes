@@ -1272,3 +1272,13 @@ Directory experiments/hasim-alpha/nightly
  nightly.models            Locally Modified           84 
 
 bug-fix removed hybrid word from the names of models
+
+----------
+mvijayar    Date: Thu Aug 14 14:37:37 EDT 2008  CSN: CSN-hasim-alpha-87
+                  Thu Aug 14 18:37:37 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-superscalar-ooo
+ alpha_superscalar_ooo_htg.apm Locally Modified           85 
+
+Made supercalar model param as "bit"
