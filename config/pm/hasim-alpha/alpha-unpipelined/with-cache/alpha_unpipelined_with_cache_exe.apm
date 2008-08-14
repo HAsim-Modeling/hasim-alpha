@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=Unpipelined Alpha with Cache 
-File=alpha_unpipelined_exe
+File=alpha_unpipelined_with_cache_exe
 Version=2.1
 Name=Simulation Unpipelined Alpha with Cache 
 Type=HAsim
@@ -21,9 +21,6 @@ model=HAsim Hybrid Model Foundation
 [Hasim - Hardware (fpga) based system]
 Packagehint=hasim
 File=modules/system/cpu_system/hasim_system.awb
-
-
-
 
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
@@ -52,13 +49,12 @@ File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
 [Hasim Unpipelined CPU With Cache]
-File=modules/hasim/timing-models/pipeline/unpipelined/with-cache/unpipelined_cpu.awb
+File=config/pm/hasim-models/pipeline/unpipelined/with-cache/unpipelined.apm
 Packagehint=hasim-models
 
 [Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
-
 
 [Single core chip/Requires]
 hasim_shared_cache=Shared cache

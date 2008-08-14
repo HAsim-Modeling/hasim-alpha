@@ -1245,3 +1245,14 @@ Directory experiments/hasim-alpha/nightly
  nightly.models            Locally Modified           82 
 
 bug-fix - removed duplicate names for 2 models
+
+----------
+mvijayar    Date: Thu Aug 14 01:53:58 EDT 2008  CSN: CSN-hasim-alpha-85
+                  Thu Aug 14 05:53:58 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_exe.apm Locally Modified           82 
+
+Unpipelined with cache uses submodel instead of an awb file for hasim_pipeline
+*Model broken, doesn't have the new funcp interface*
