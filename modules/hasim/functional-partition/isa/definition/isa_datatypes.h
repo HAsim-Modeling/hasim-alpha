@@ -42,22 +42,22 @@ class ISA_REG_INDEX_CLASS
     ISA_REG_INDEX_CLASS& operator=(UINT32 idx) { SetMasked(idx); }
 
     // Assignments by type
-    void SetArchReg(UINT32 r) { regIdx = (r & 0x1f) | 0x20; }
-    void SetControlReg() { regIdx = 0; }
-    void SetLockreg() { regIdx = 0x8; }
-    void SetLockAddrReg() { regIdx = 0x10; }
+    void SetArchReg(UINT32 r) { regIdx = (r & 0x1f); }
+    void SetControlReg() { regIdx = 0x20; }
+    void SetLockreg() { regIdx = 0x21; }
+    void SetLockAddrReg() { regIdx = 0x22; }
 
     // Queries
-    bool IsArchReg() const { return ((regIdx & 0x20) != 0); }
+    bool IsArchReg() const { return ((regIdx & 0x20) == 0); }
     UINT32 ArchRegNum() const
     {
         ASSERTX(IsArchReg());
         return regIdx & 0x1f;
     };
 
-    bool IsControlReg() const { return (regIdx == 0); }
-    bool IsLockReg() const { return ((regIdx & 0x38) == 0x8); }
-    bool IsLockAddrReg() const { return ((regIdx & 0x38) == 0x10); }
+    bool IsControlReg() const { return (regIdx == 0x20); }
+    bool IsLockReg() const { return (regIdx == 0x22); }
+    bool IsLockAddrReg() const { return (regIdx == 0x23); }
 
     bool IsIllegalReg() const
     {

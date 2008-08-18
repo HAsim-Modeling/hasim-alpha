@@ -68,6 +68,8 @@ typedef enum
 // encapsulating every addressable register in the system. This should pack into an efficient
 // number of bits, so you may want to define a custom instance of bits.
 
+typedef 35 ISA_NUM_REGS;
+
 typedef union tagged {
     Bit#(5) ArchReg;
     void ControlReg;
@@ -78,21 +80,93 @@ typedef union tagged {
 instance Bits#(ISA_REG_INDEX, 6);
     function Bit#(6) pack(ISA_REG_INDEX x);
         return case (x) matches
-                   tagged ArchReg .v : return {1'b1, v};
-                   tagged ControlReg : return {3'b000, 3'b0};
-                   tagged LockReg    : return {3'b001, 3'b0};
-                   tagged LockAddrReg: return {3'b010, 3'b0};
+                   tagged ArchReg .v : return {1'b0, v};
+                   tagged ControlReg : return {6'b100000};
+                   tagged LockReg    : return {6'b100001};
+                   tagged LockAddrReg: return {6'b100010};
                endcase;
     endfunction
 
     function ISA_REG_INDEX unpack(Bit#(6) x);
-        if(x[5] == 1)
+        if(x[5] == 0)
             return tagged ArchReg x[4:0];
-        else if(x[5:3] == 0)
+        else if(x[4:0] == 0)
             return tagged ControlReg;
-        else if(x[5:3] == 1)
+        else if(x[4:0] == 1)
             return tagged LockReg;
         else
             return tagged LockAddrReg;
     endfunction
+endinstance
+
+instance Bounded#(ISA_REG_INDEX);
+
+    function ISA_REG_INDEX minBound() = tagged ArchReg 0;
+    function ISA_REG_INDEX maxBound() = tagged LockAddrReg;
+
+endinstance
+
+instance Literal#(ISA_REG_INDEX);
+
+    function ISA_REG_INDEX fromInteger(Integer x);
+    
+        if (x < 32)
+            return tagged ArchReg fromInteger(x);
+        else if (x == 32)
+            return tagged ControlReg;
+        else if (x == 33)
+            return tagged LockReg;
+        else if (x == 34)
+            return tagged LockAddrReg;
+        else 
+            return error("ISA_REG_INDEX: Literal out of bounds: " + integerToString(x));
+        
+    endfunction
+    
+    function Bool inLiteralRange(ISA_REG_INDEX x, Integer y);
+    
+        return (y < valueof(ISA_NUM_REGS));
+    
+    endfunction
+
+endinstance
+
+instance Arith#(ISA_REG_INDEX);
+
+    function ISA_REG_INDEX \+ (ISA_REG_INDEX a, ISA_REG_INDEX b);
+    
+        return unpack(pack(a) + pack(b));
+    
+    endfunction
+
+    function ISA_REG_INDEX \- (ISA_REG_INDEX a, ISA_REG_INDEX b);
+    
+        return unpack(pack(a) - pack(b));
+    
+    endfunction
+    
+    function ISA_REG_INDEX \* (ISA_REG_INDEX a, ISA_REG_INDEX b);
+    
+        return unpack(pack(a) * pack(b));
+    
+    endfunction
+
+    function ISA_REG_INDEX \/ (ISA_REG_INDEX a, ISA_REG_INDEX b);
+    
+        return unpack(pack(a) / pack(b));
+    
+    endfunction
+
+    function ISA_REG_INDEX \% (ISA_REG_INDEX a, ISA_REG_INDEX b);
+    
+        return unpack(pack(a) % pack(b));
+    
+    endfunction
+    
+    function ISA_REG_INDEX negate(ISA_REG_INDEX a);
+
+        return unpack(negate(pack(a)));
+    
+    endfunction
+
 endinstance

@@ -1282,3 +1282,31 @@ Directory config/pm/hasim-alpha/alpha-superscalar-ooo
  alpha_superscalar_ooo_htg.apm Locally Modified           85 
 
 Made supercalar model param as "bit"
+
+----------
+mpellaue    Date: Mon Aug 18 19:39:55 EDT 2008  CSN: CSN-hasim-alpha-89
+                  Mon Aug 18 23:39:55 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_htg.apm Locally Modified           88 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified           88 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           88 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.h           Locally Modified           88 
+ isa_datatypes.bsv         Locally Modified           88 
+ isa_derived_types.bsv     Locally Modified           88 
+
+
+* Updated ISA with new typedefs to replace provisos
+
+* Now support a dense packing of ISA_REG_INDEX to shrink maptable.
+
+* ISA datapath now uses DEBUG_FILE.
+
+Michael P.

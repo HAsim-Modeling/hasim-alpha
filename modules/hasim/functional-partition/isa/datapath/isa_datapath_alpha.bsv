@@ -40,30 +40,10 @@ module [HASIM_MODULE] mkISA_Datapath
     // This logfile is available for debugging during Bluesim simulation.
     // It has no affect on the FPGA.
     
-    let debug_log <- mkReg(InvalidFile);
+    DEBUG_FILE debugLog <- mkDebugFile(`HASIM_ISA_DP_LOGFILE);
 
 
     // ***** Rules ******
-
-    
-    // openLog
-    
-    // Opens the logfile for writing. The filename is an AWB parameter.
-
-    rule open_log (debug_log == InvalidFile);
-
-        let fd <- $fopen(`HASIM_ISA_DP_LOGFILE, "w");
-
-        if (fd == InvalidFile)
-        begin
-          $display("ERROR: ISA: Datapath: Could not create logfile %s", `HASIM_ISA_DP_LOGFILE);
-          $finish(1);
-        end
-
-        debug_log <= fd;
-
-    endrule
-
 
     // datapathExec
 
@@ -146,11 +126,11 @@ module [HASIM_MODULE] mkISA_Datapath
             Bit#(7) fu = pack(funct_d);
             if (val_d matches tagged Valid .alu_d)
             begin
-                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d));
+                debugLog.record($format("[0x%x] ALU (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d));
             end
             else
             begin
-                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
+                debugLog.record($format("[0x%x] ALU (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
             end
         endaction
         endfunction
@@ -161,11 +141,11 @@ module [HASIM_MODULE] mkISA_Datapath
             Bit#(7) fu = pack(funct_d);
             if (val_d matches tagged Valid .alu_d)
             begin
-                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x, src2 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d, src2_d));
+                debugLog.record($format("[0x%x] ALU (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x, src2 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d, src2_d));
             end
             else
             begin
-                debug(2, $fdisplay(debug_log, "[0x%x] ALU (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
+                debugLog.record($format("[0x%x] ALU (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
             end
         endaction
         endfunction
@@ -176,7 +156,7 @@ module [HASIM_MODULE] mkISA_Datapath
                 case (memFunc)
                     exit: timep_result = tagged RTerminate unpack(truncate(src0));
                 endcase
-                debug(2, $fdisplay(debug_log, "[0x%x] OPT01 src0 = 0x%x", addr, src0));
+                debugLog.record($format("[0x%x] OPT01 src0 = 0x%x", addr, src0));
             end
 
             lda, ldah:
@@ -186,7 +166,7 @@ module [HASIM_MODULE] mkISA_Datapath
                                     ldah: (memDisp<<16);
                                 endcase;
                 let r = src0 + disp;
-                debug(2, $fdisplay(debug_log, "[0x%x] LDAx 0x%x <- 0x%x + 0x%x", addr, r, src0, disp));
+                debugLog.record($format("[0x%x] LDAx 0x%x <- 0x%x + 0x%x", addr, r, src0, disp));
                 writebacks[0] = tagged Valid (r);
             end
 
@@ -194,14 +174,14 @@ module [HASIM_MODULE] mkISA_Datapath
             begin
                 effective_addr = src0 + memDisp;
                 timep_result = REffectiveAddr (effective_addr);
-                debug(2, $fdisplay(debug_log, "[0x%x] LD [0x%x]", addr, effective_addr));
+                debugLog.record($format("[0x%x] LD [0x%x]", addr, effective_addr));
             end
 
             ldq_u:
             begin
                 effective_addr = ((src0 + memDisp) & ~7);
                 timep_result = REffectiveAddr (effective_addr);
-                debug(2, $fdisplay(debug_log, "[0x%x] LDQ_U [0x%x]", addr, effective_addr));
+                debugLog.record($format("[0x%x] LDQ_U [0x%x]", addr, effective_addr));
             end
 // Emulate these for now in order to save a destination.
 
@@ -212,7 +192,7 @@ module [HASIM_MODULE] mkISA_Datapath
                 writebacks[1] = tagged Valid 1;
                 writebacks[2] = tagged Valid effective_addr;
                 timep_result = REffectiveAddr (effective_addr);
-                debug(2, $fdisplay(debug_log, "[0x%x] LD_L [0x%x]", addr, effective_addr));
+                debugLog.record($format("[0x%x] LD_L [0x%x]", addr, effective_addr));
             end
 
             stl_c, stq_c:
@@ -222,7 +202,7 @@ module [HASIM_MODULE] mkISA_Datapath
                 writebacks[1] = tagged Valid src2;
                 writebacks[2] = tagged Valid 0;
                 timep_result = REffectiveAddr (effective_addr);
-                debug(2, $fdisplay(debug_log, "[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
+                debugLog.record($format("[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 */
             stb, stl, stq, stw:
@@ -231,7 +211,7 @@ module [HASIM_MODULE] mkISA_Datapath
                 writebacks[0] = tagged Valid src1;
                 timep_result = REffectiveAddr (effective_addr);
                 is_store = True;
-                debug(2, $fdisplay(debug_log, "[0x%x] ST [0x%x] <- 0x%x", addr, effective_addr, src1));
+                debugLog.record($format("[0x%x] ST [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
             stq_u:
@@ -240,7 +220,7 @@ module [HASIM_MODULE] mkISA_Datapath
                 writebacks[0] = tagged Valid src1;
                 timep_result = REffectiveAddr (effective_addr);
                 is_store = True;
-                debug(2, $fdisplay(debug_log, "[0x%x] STQ_U [0x%x] <- 0x%x", addr, effective_addr, src1));
+                debugLog.record($format("[0x%x] STQ_U [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
             beq, bge, bgt, blbc, blbs, ble, blt, bne:
@@ -256,7 +236,7 @@ module [HASIM_MODULE] mkISA_Datapath
                                  blt : return signedLT(src0, 0);
                                  bne : return src0 != 0;
                              endcase;
-                debug(2, $fdisplay(debug_log, "[0x%x] Bxx to 0x%x, src0=0x%x, %staken", addr, newAddr, src0, taken? "": "not "));
+                debugLog.record($format("[0x%x] Bxx to 0x%x, src0=0x%x, %staken", addr, newAddr, src0, taken? "": "not "));
                 timep_result = taken? tagged RBranchTaken truncate(newAddr): tagged RBranchNotTaken truncate(addr + 4);
             end
 
@@ -264,7 +244,7 @@ module [HASIM_MODULE] mkISA_Datapath
             begin
                 writebacks[0] = tagged Valid (addr + 4);
                 let newAddr = addr + 4 + (signExtend(branchImm) << 2);
-                debug(2, $fdisplay(debug_log, "[0x%x] BxR to 0x%x", addr, newAddr));
+                debugLog.record($format("[0x%x] BxR to 0x%x", addr, newAddr));
                 timep_result = tagged RBranchTaken truncate(newAddr);
             end
 
@@ -272,7 +252,7 @@ module [HASIM_MODULE] mkISA_Datapath
             begin
                 let newAddr = src0 & ~3;
                 writebacks[0] = tagged Valid (addr + 4);
-                debug(2, $fdisplay(debug_log, "[0x%x] JMP to 0x%x", addr, newAddr));
+                debugLog.record($format("[0x%x] JMP to 0x%x", addr, newAddr));
                 timep_result = tagged RBranchTaken truncate(newAddr);
             end
 

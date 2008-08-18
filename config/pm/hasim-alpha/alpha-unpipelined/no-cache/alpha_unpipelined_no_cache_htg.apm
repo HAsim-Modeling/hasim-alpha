@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=Unpipelined Alpha Model - HTG Virtex 5 PCIe
-File=alpha_unpipelined_htg
+File=alpha_unpipelined_no_cache_htg
 Version=2.1
 Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 Type=HAsim
@@ -57,32 +57,31 @@ Packagehint=hasim
 
 [Single core chip/Requires]
 hasim_shared_cache=Shared cache
-hasim_core=Core
+hasim_core=Cacheless Core
 
 [Shared cache]
 File=modules/hasim/timing-models/caches/l2-cache/hasim_shared_cache.awb
 Packagehint=hasim-models
 
-[Core/Requires]
-hasim_pipeline=Hasim Unpipelined CPU With Cache
-hasim_l1_caches=L1 caches
 
 [Single core chip]
 File=modules/hasim/timing-models/chip/hasim_chip.awb
 Packagehint=hasim-models
 
-[L1 caches]
-File=config/pm/hasim-models/l1-caches/l1_caches.apm
-Packagehint=hasim-models
 
-[Hasim Unpipelined CPU With Cache]
-File=config/pm/hasim-models/pipeline/unpipelined/with-cache/unpipelined.apm
-Packagehint=hasim-models
 
 [Memory]
 File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
 
-[Core]
-File=modules/hasim/timing-models/core/hasim_core.awb
+
+[Cacheless Core]
+File=modules/hasim/timing-models/core/cacheless-core/hasim_core.awb
+Packagehint=hasim-models
+
+[Cacheless Core/Requires]
+hasim_pipeline=Hasim Unpipelined CPU
+
+[Hasim Unpipelined CPU]
+File=config/pm/hasim-models/pipeline/unpipelined/no-cache/unpipelined.apm
 Packagehint=hasim-models
