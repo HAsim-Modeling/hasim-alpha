@@ -52,17 +52,13 @@ Packagehint=hasim-alpha
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[Inorder pipeline]
-File=config/pm/hasim-models/pipeline/inorder/inorder.apm
-Packagehint=hasim-models
-
 [Shared cache]
 File=modules/hasim/timing-models/caches/l2-cache/hasim_shared_cache.awb
 Packagehint=hasim-models
 
 [Core/Requires]
-hasim_pipeline=Inorder pipeline
 hasim_l1_caches=L1 caches
+hasim_pipeline=Inorder pipeline
 
 [Core]
 File=modules/hasim/timing-models/core/hasim_core.awb
@@ -84,3 +80,7 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
 
+
+[Inorder pipeline]
+File=config/pm/hasim-models/pipeline/inorder/inorder.apm
+Packagehint=hasim-models
