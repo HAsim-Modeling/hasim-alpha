@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder SMIPS Simulation
+Description=Superscalar ooo
 File=alpha_superscalar_ooo_htg
 Version=2.1
-Name=Inorder SMIPS Simulation
+Name=Superscalar ooo
 Type=HAsim
 Class=Asim::Model
 
@@ -15,7 +15,7 @@ hasim_isa=Alpha ISA Definition
 hasim_memory=Memory
 
 [Model]
-DefaultAttributes=hasim inorder smips simulation
+DefaultAttributes=hasim superscalar ooo alpha
 model=HAsim Hybrid Model Foundation
 
 [Hasim - Hardware (fpga) based system]
@@ -23,7 +23,7 @@ Packagehint=hasim
 File=modules/system/cpu_system/hasim_system.awb
 
 [FPGA Environment]
-File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-hybrid-sim.apm
+File=config/pm/hasim/submodels/fpgaenv/hasim-fpgaenv-htg-v5-pcie.apm
 Packagehint=platforms
 
 [Hasim Standard Controller]
@@ -74,9 +74,6 @@ Packagehint=hasim-models
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
-
-[HAsim Hybrid Model Foundation/Params]
-MAKE_ALL_TARGET=bit
 
 [Hasim superscalar out-of-order CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-out-of-order.apm
