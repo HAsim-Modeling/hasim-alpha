@@ -1310,3 +1310,14 @@ Directory modules/hasim/functional-partition/isa/definition
 * ISA datapath now uses DEBUG_FILE.
 
 Michael P.
+
+----------
+mcadler     Date: Mon Aug 25 14:00:06 EDT 2008  CSN: CSN-hasim-alpha-93
+                  Mon Aug 25 18:00:06 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.h           Locally Modified           92 
+
+Correct a few constants for LockReg and LockAddrReg register ids.  Caused
+errors in tracing but probably no run-time errors.

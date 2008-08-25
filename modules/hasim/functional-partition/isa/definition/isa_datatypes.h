@@ -56,8 +56,8 @@ class ISA_REG_INDEX_CLASS
     };
 
     bool IsControlReg() const { return (regIdx == 0x20); }
-    bool IsLockReg() const { return (regIdx == 0x22); }
-    bool IsLockAddrReg() const { return (regIdx == 0x23); }
+    bool IsLockReg() const { return (regIdx == 0x21); }
+    bool IsLockAddrReg() const { return (regIdx == 0x22); }
 
     bool IsIllegalReg() const
     {
