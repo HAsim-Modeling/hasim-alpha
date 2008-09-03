@@ -1321,3 +1321,15 @@ Directory modules/hasim/functional-partition/isa/definition
 
 Correct a few constants for LockReg and LockAddrReg register ids.  Caused
 errors in tracing but probably no run-time errors.
+
+----------
+mcadler     Date: Wed Sep  3 15:49:51 EDT 2008  CSN: CSN-hasim-alpha-94
+                  Wed Sep  3 19:49:51 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-superscalar-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified           93 
+ alpha_superscalar_ooo_htg.apm Locally Modified           93 
+
+Increase token index bits to 9 for now.  Hopefully we can lower it later after
+the model gets a branch predictor.

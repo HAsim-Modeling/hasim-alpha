@@ -78,3 +78,6 @@ Packagehint=hasim-alpha
 [Hasim superscalar out-of-order CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-out-of-order.apm
 Packagehint=hasim-models
+
+[Hasim Common Library/Params]
+TOKEN_INDEX_BITS=9

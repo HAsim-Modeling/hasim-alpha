@@ -81,3 +81,6 @@ Packagehint=hasim-models
 
 [HAsim Hybrid Model Foundation/Params]
 MAKE_ALL_TARGET=bit
+
+[Hasim Common Library/Params]
+TOKEN_INDEX_BITS=9
