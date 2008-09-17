@@ -1333,3 +1333,20 @@ Directory config/pm/hasim-alpha/alpha-superscalar-ooo
 
 Increase token index bits to 9 for now.  Hopefully we can lower it later after
 the model gets a branch predictor.
+
+----------
+pellauer    Date: Wed Sep 17 12:47:49 EDT 2008  CSN: CSN-hasim-alpha-95
+                  Wed Sep 17 16:47:49 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           94 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified           94 
+ isa_datatypes.bsv         Locally Modified           94 
+
+
+Load-locked and store-conditional are no longer emulated.
+
+Michael P.

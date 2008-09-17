@@ -183,9 +183,7 @@ module [HASIM_MODULE] mkISA_Datapath
                 timep_result = REffectiveAddr (effective_addr);
                 debugLog.record($format("[0x%x] LDQ_U [0x%x]", addr, effective_addr));
             end
-// Emulate these for now in order to save a destination.
 
-/* 
             ldl_l, ldq_l:
             begin
                 effective_addr = src0 + memDisp;
@@ -202,9 +200,10 @@ module [HASIM_MODULE] mkISA_Datapath
                 writebacks[1] = tagged Valid src2;
                 writebacks[2] = tagged Valid 0;
                 timep_result = REffectiveAddr (effective_addr);
+                is_store = True;
                 debugLog.record($format("[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
-*/
+
             stb, stl, stq, stw:
             begin
                 effective_addr = src0 + memDisp;

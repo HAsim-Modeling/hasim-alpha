@@ -219,8 +219,8 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
                     ret = tagged Valid (tagged ArchReg ra);
             endcase
         end
-        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, /*ldl_l, ldq_l,*/
-        /* stl_c, stq_c, */stb, stl, stq, stw, stq_u,
+        lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l,
+        stl_c, stq_c, stb, stl, stq, stw, stq_u,
         jmp:
             ret = tagged Valid (tagged ArchReg rb);
 
@@ -263,7 +263,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        /*stl_c, stq_c,*/ stb, stl, stq, stw, stq_u:
+        stl_c, stq_c, stb, stl, stq, stw, stq_u:
             ret = tagged Valid (tagged ArchReg ra);
 
         opc10, opc12, opc13:
@@ -308,8 +308,8 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        /* stl_c, stq_c:
-            ret = tagged Valid (tagged LockReg); */
+        stl_c, stq_c:
+            ret = tagged Valid (tagged LockReg);
 
         opc10:
         begin
@@ -363,7 +363,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
 
     case (opcode)
         lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u,
-        /*ldl_l, ldq_l,*/
+        ldl_l, ldq_l,
         br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
 
@@ -397,11 +397,11 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        /*ldl_l, ldq_l:
-            ret = tagged Valid (tagged LockReg); */
+        ldl_l, ldq_l:
+            ret = tagged Valid (tagged LockReg);
 
-        /* stl_c, stq_c:
-            ret = tagged Valid (tagged ArchReg ra); */
+        stl_c, stq_c:
+            ret = tagged Valid (tagged ArchReg ra);
 
         opc10, opc11, opc12, opc13:
         begin
@@ -429,7 +429,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
 
 endfunction
 
-/*
+
 
 function Maybe#(ISA_REG_INDEX) isaGetDst2(ISA_INSTRUCTION i);
     OPCODE    opcode = i[31:26];
@@ -454,7 +454,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst2(ISA_INSTRUCTION i);
 
 endfunction
 
-*/
+
 
 // isaGetDst
 
@@ -467,7 +467,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
     let ret = case (n)
                    0: return isaGetDst0(i);
                    1: return isaGetDst1(i);
-                   // 2: return isaGetDst2(i);
+                   2: return isaGetDst2(i);
                    default: return tagged Invalid; 
               endcase;
 
@@ -500,8 +500,8 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
 
     return case (opcode)
                lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u: return 1;
-               /* ldl_l, ldq_l: return 3; */
-               /* stl_c, stq_c: return 3; */
+               ldl_l, ldq_l: return 3;
+               stl_c, stq_c: return 3;
                br, bsr, jmp: return 1;
                opc10:
                begin
@@ -544,7 +544,7 @@ function Bool isaIsLoad(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               ldbu, ldl, ldq, ldwu, ldq_u/*, ldl_l, ldq_l*/: return True;
+               ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l: return True;
                default: return False; 
            endcase;
 
@@ -566,7 +566,7 @@ function Bool isaIsStore(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               /*stl_c, stq_c,*/ stb, stl, stq, stw, stq_u: return True;
+               stl_c, stq_c, stb, stl, stq, stw, stq_u: return True;
                default: return False;
            endcase;
 
@@ -594,8 +594,8 @@ function ISA_MEMOP_TYPE isaLoadType(ISA_INSTRUCTION i);
                ldq: return LOAD_64;
                ldwu: return LOAD_ZERO_16;
                ldq_u: return LOAD_UNALIGNED_64;
-               /* ldl_l: return LOAD_SIGN_32; */
-               /* ldq_l: return LOAD_64; */
+               ldl_l: return LOAD_SIGN_32;
+               ldq_l: return LOAD_64;
                default: return LOAD_64;
            endcase;
 
@@ -619,8 +619,8 @@ function ISA_MEMOP_TYPE isaStoreType(ISA_INSTRUCTION i);
     let           rc = i[4:0];
 
     return case (opcode)
-               /* stl_c: return STORE_32; */
-               /* stq_c: return STORE_64; */
+               stl_c: return STORE_32;
+               stq_c: return STORE_64;
                stb: return STORE_8;
                stl: return STORE_32;
                stq: return STORE_64;
@@ -707,7 +707,7 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
 
                // Expensive to implement
                // ldq_u, stq_u: return True;
-               ldl_l, ldq_l, stl_c, stq_c: return True;
+               // ldl_l, ldq_l, stl_c, stq_c: return True;
 
                // Floating point
                ldf, ldg, lds, ldt, stf, stg, sts, stt: return True;
