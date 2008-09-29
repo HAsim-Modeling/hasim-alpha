@@ -377,7 +377,8 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
 
         opc1c:
         begin
-            if (funct < 'h38) ret = tagged Valid (tagged ArchReg rc);
+            if (funct >= 'h30 && funct < 'h38 || funct == 'h00 || funct == 'h01)
+                ret = tagged Valid (tagged ArchReg rc);
         end
     endcase
 
