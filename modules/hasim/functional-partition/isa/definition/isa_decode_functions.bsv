@@ -731,3 +731,25 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
            endcase;
 
 endfunction
+
+function Bool isBranchImm(ISA_INSTRUCTION inst);
+    let opcode = inst[31:26];
+    return opcode == beq || opcode == bge || opcode == bgt || opcode == blbc || opcode == blbs || opcode == ble || opcode == blt || opcode == bne;
+endfunction
+
+function ISA_ADDRESS predPcBranchImm(ISA_ADDRESS addr, ISA_INSTRUCTION inst);
+    let    opcode = inst[31:26];
+    let branchImm = inst[20:0];
+    return addr + 4 + (signExtend(branchImm) << 2);
+endfunction
+
+function Bool isJumpImm(ISA_INSTRUCTION inst);
+    let opcode = inst[31:26];
+    return opcode == br || opcode == bsr;
+endfunction
+
+function ISA_ADDRESS predPcJumpImm(ISA_ADDRESS addr, ISA_INSTRUCTION inst);
+    let    opcode = inst[31:26];
+    let branchImm = inst[20:0];
+    return addr + 4 + (signExtend(branchImm) << 2);
+endfunction
