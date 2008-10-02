@@ -1365,3 +1365,13 @@ Directory modules/hasim/functional-partition/isa/definition
 - Move data path definitions to common files in functional partition
 - Return illegal instruction exception and return valid values on illegal
   instructions.  This prevents deadlocks on bad path.
+
+----------
+mcadler     Date: Thu Oct  2 18:11:22 EDT 2008  CSN: CSN-hasim-alpha-99
+                  Thu Oct  2 22:11:22 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           98 
+
+FNOP was being marked as an illegal instruction.

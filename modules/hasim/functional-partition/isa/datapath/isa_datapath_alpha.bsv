@@ -106,6 +106,7 @@ module [HASIM_MODULE] mkISA_Datapath
         OPCODE    opcode = inst[31:26];
         FUNCT      funct = inst[11:5];
         MEM_FUNC memFunc = inst[15:0];
+        FP_FUNC   fpFunc = inst[15:5];
         Bit#(64) memDisp = signExtend(inst[15:0]);
         let          lit = inst[20:13];
         Bool      useLit = unpack(inst[12]);
@@ -525,6 +526,22 @@ module [HASIM_MODULE] mkISA_Datapath
                 debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
             end
 `endif
+
+            opc17:
+            begin
+                case (fpFunc)
+                    // fnop (dst other than r31 is emulated and doesn't get here)
+                    cpys:
+                    begin
+                        debugLog.record($format("[0x%x] FNOP", addr));
+                    end
+
+                    default:
+                    begin
+                        except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+                    end
+                endcase
+            end
 
             opc1c:
             begin
