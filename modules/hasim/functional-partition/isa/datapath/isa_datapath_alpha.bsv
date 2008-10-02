@@ -1,3 +1,20 @@
+//
+// Copyright (C) 2008 Intel Corporation
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+//
 
 // isa_datapath_template
 
@@ -11,10 +28,13 @@
 
 import Vector::*;
 
-import hasim_common::*;
-import soft_connections::*;
+// Project foundation includes.
 
-import hasim_isa::*;
+`include "asim/provides/hasim_common.bsh"
+`include "asim/provides/soft_connections.bsh"
+
+`include "asim/provides/hasim_isa.bsh"
+`include "asim/provides/funcp_interface.bsh"
 
 `define CPU_FEATURE_MASK 0
 `define IMPL_VER 0
@@ -33,7 +53,7 @@ module [HASIM_MODULE] mkISA_Datapath
 
     // Connection to the functional partition.
     
-    Connection_Server#(ISA_DATAPATH_REQ, ISA_DATAPATH_RSP) link_fp <- mkConnection_Server("isa_datapath");
+    Connection_Server#(FUNCP_ISA_DATAPATH_REQ, FUNCP_ISA_DATAPATH_RSP) link_fp <- mkConnection_Server("isa_datapath");
 
     // ***** Debugging Log *****
     
@@ -73,7 +93,7 @@ module [HASIM_MODULE] mkISA_Datapath
         // Some convenient variables to return.
 
         // The result for the timing partition.
-        ISA_EXECUTION_RESULT timep_result = tagged RNop;
+        FUNCP_ISA_EXECUTION_RESULT timep_result = tagged RNop;
         
         // The effective address for Loads/Stores
         ISA_ADDRESS effective_addr = 0;
@@ -81,6 +101,7 @@ module [HASIM_MODULE] mkISA_Datapath
         // The writebacks which are sent to the register file.
         Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
 
+        FUNCP_ISA_DATAPATH_EXCEPTIONS except = FUNCP_ISA_EXCEPT_NONE;
 
         OPCODE    opcode = inst[31:26];
         FUNCT      funct = inst[11:5];
@@ -324,6 +345,11 @@ module [HASIM_MODULE] mkISA_Datapath
                     cmpule: writebacks[0] = tagged Valid zeroExtend(pack(src0 <= src1));
                     cmplt: writebacks[0] = tagged Valid zeroExtend(pack(signedLT(src0, src1)));
                     cmple: writebacks[0] = tagged Valid zeroExtend(pack(signedLE(src0, src1)));
+
+                    default:
+                    begin
+                        except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+                    end
                 endcase
 
                 debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
@@ -344,6 +370,11 @@ module [HASIM_MODULE] mkISA_Datapath
                             cmovge: writebacks[0] = tagged Valid (signedGE(src0, 0)? src1: src2);
                             cmovle: writebacks[0] = tagged Valid (signedLE(src0, 0)? src1: src2);
                             cmovgt: writebacks[0] = tagged Valid (signedGT(src0, 0)? src1: src2);
+
+                            default:
+                            begin
+                                except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+                            end
                         endcase
 
                     debug_ALU3(addr, opcode, funct, writebacks[0], src0, src1, src2);
@@ -360,6 +391,11 @@ module [HASIM_MODULE] mkISA_Datapath
                             eqv: writebacks[0] = tagged Valid (src0 ^ ~src1);
                             amask: writebacks[0] = tagged Valid (src0 & ~(`CPU_FEATURE_MASK)); // Implemetation specific. Looks like all alphas simply move the source to dest
                             implver: writebacks[0] = tagged Valid `IMPL_VER; // Implementation version (21064 -> 0, 21164 -> 1, 21264 -> 2)
+
+                            default:
+                            begin
+                                except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+                            end
                         endcase
 
                     debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
@@ -441,6 +477,11 @@ module [HASIM_MODULE] mkISA_Datapath
                     srl: writebacks[0] = tagged Valid (src0 >> src1[5:0]);
                     sll: writebacks[0] = tagged Valid (src0 << src1[5:0]);
                     sra: writebacks[0] = tagged Valid signedShiftRight(src0, src1[5:0]);
+
+                    default:
+                    begin
+                        except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+                    end
                 endcase
 
                 debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
@@ -473,6 +514,11 @@ module [HASIM_MODULE] mkISA_Datapath
                     begin
                         Bit#(128) mulRes = zeroExtend(src0) * zeroExtend(src1);
                         writebacks[0] = tagged Valid mulRes[127:64];
+                    end
+
+                    default:
+                    begin
+                        except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
                     end
                 endcase
 
@@ -578,14 +624,34 @@ module [HASIM_MODULE] mkISA_Datapath
                         temp[15:8] = src0[39:32];
                         writebacks[0] = tagged Valid temp;
                     end
+
+                    default:
+                    begin
+                        except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+                    end
                 endcase
 
                 debug_ALU(addr, opcode, funct, writebacks[0], src0, src1);
+                
             end
+
+            default:
+            begin
+                except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+            end
+
         endcase
 
+        if (except == FUNCP_ISA_EXCEPT_ILLEGAL_INSTR)
+        begin
+            // Just return something.  Won't commit so doesn't matter.  Failure
+            // to return valid may cause deadlock for downstream instructions.
+            writebacks = replicate(tagged Valid 0);
+            debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
+        end
+
         // Return the result to the functional partition.
-        link_fp.makeResp(initISADatapathRsp(timep_result, effective_addr, is_store, writebacks));
+        link_fp.makeResp(initISADatapathRsp(except, timep_result, effective_addr, is_store, writebacks));
 
     endrule
 

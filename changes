@@ -1350,3 +1350,18 @@ Directory modules/hasim/functional-partition/isa/definition
 Load-locked and store-conditional are no longer emulated.
 
 Michael P.
+
+----------
+mcadler     Date: Thu Oct  2 17:09:22 EDT 2008  CSN: CSN-hasim-alpha-98
+                  Thu Oct  2 21:09:22 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified           97 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_derived_types.bsv     Locally Modified           97 
+
+- Move data path definitions to common files in functional partition
+- Return illegal instruction exception and return valid values on illegal
+  instructions.  This prevents deadlocks on bad path.
