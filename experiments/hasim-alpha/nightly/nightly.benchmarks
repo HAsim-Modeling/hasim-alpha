@@ -9,7 +9,7 @@ experiments = alpha_unpipelined_no_cache_exe
 config/bm/alpha/tests.cfx/user_mode/memory_tests_aligned.cfg
 
 
-experiments = alpha_inorder_exe alpha_5stage_exe alpha_superscalar_ooo_exe
+experiments = alpha_inorder_exe alpha_5stage_exe alpha_single_issue_ooo_exe alpha_superscalar_ooo_exe
 #
 config/bm/alpha/6_375.cfx/benchmarks/median.cfg
 config/bm/alpha/6_375.cfx/benchmarks/multiply.cfg

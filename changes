@@ -1375,3 +1375,32 @@ Directory modules/hasim/functional-partition/isa/datapath
  isa_datapath_alpha.bsv    Locally Modified           98 
 
 FNOP was being marked as an illegal instruction.
+
+----------
+mcadler     Date: Mon Oct  6 18:33:54 EDT 2008  CSN: CSN-hasim-alpha-101
+                  Mon Oct  6 22:33:54 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified          100 
+
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Modified          100 
+ nightly.benchmarks        Locally Modified          100 
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_single_issue_ooo_exe.apm Locally Added               0 
+ alpha_single_issue_ooo_htg.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha
+ alpha-superscalar-ooo/    Locally Removed           100 
+
+Directory config/pm/hasim-alpha/alpha-superscalar-ooo
+ alpha_superscalar_ooo_exe.apm Locally Removed           100 
+ alpha_superscalar_ooo_htg.apm Locally Removed           100 
+ alpha_superscalar_inorder_exe.apm Locally Removed           100 
+ alpha_superscalar_inorder_htg.apm Locally Removed           100 
+
+- Rename alpha-superscalar-ooo just alpha-ooo
+- Add single-issue OOO models.  They are the same sources as superscalar with
+  FETCH=1 and ALU=1.
