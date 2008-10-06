@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=Superscalar ooo
-File=alpha_superscalar_ooo_htg
+File=alpha_superscalar_inorder_htg
 Version=2.1
 Name=Superscalar ooo
 Type=HAsim
@@ -83,5 +83,5 @@ MAKE_ALL_TARGET=bit
 TOKEN_INDEX_BITS=9
 
 [Hasim 6-stage CPU]
-File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-out-of-order.apm
+File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-in-order.apm
 Packagehint=hasim-models

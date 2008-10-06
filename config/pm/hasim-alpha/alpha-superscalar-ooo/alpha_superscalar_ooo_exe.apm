@@ -60,9 +60,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/core/cacheless-core/hasim_core.awb
 Packagehint=hasim-models
 
-[Cacheless Core/Requires]
-hasim_pipeline=Hasim superscalar out-of-order CPU
-
 [Single core chip]
 File=modules/hasim/timing-models/chip/hasim_chip.awb
 Packagehint=hasim-models
@@ -75,9 +72,12 @@ Packagehint=hasim-models
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-[Hasim superscalar out-of-order CPU]
+[Hasim Common Library/Params]
+TOKEN_INDEX_BITS=9
+
+[Hasim 6-stage CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-out-of-order.apm
 Packagehint=hasim-models
 
-[Hasim Common Library/Params]
-TOKEN_INDEX_BITS=9
+[Cacheless Core/Requires]
+hasim_pipeline=Hasim 6-stage CPU
