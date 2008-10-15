@@ -84,3 +84,6 @@ TOKEN_INDEX_BITS=9
 [Hasim 6-stage CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/single-issue-out-of-order.apm
 Packagehint=hasim-models
+
+[Functional Partition Version 3/Params]
+MEMSTATE_SBUFFER_OOO_MEM=1

@@ -1404,3 +1404,33 @@ Directory config/pm/hasim-alpha/alpha-superscalar-ooo
 - Rename alpha-superscalar-ooo just alpha-ooo
 - Add single-issue OOO models.  They are the same sources as superscalar with
   FETCH=1 and ALU=1.
+
+----------
+mcadler     Date: Wed Oct 15 19:24:12 EDT 2008  CSN: CSN-hasim-alpha-102
+                  Wed Oct 15 23:24:12 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.benchmarks     Locally Modified          101 
+
+Directory experiments/hasim-alpha/nightly
+ nightly.benchmarks        Locally Modified          101 
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          101 
+ alpha_superscalar_ooo_htg.apm Locally Modified          101 
+ alpha_single_issue_ooo_exe.apm Locally Modified          101 
+ alpha_single_issue_ooo_htg.apm Locally Modified          101 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified          101 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_memory_conversions.bsv Locally Modified          101 
+
+- Fix unaligned load/store handling.  memory_tests_unaligned now passes.  Old
+  load/store code ignored the low bits of the address.
+- Cleaned up formal parameter ordering of load/store helper methods.  Parameter
+  order was inconsistent between methods.
+- memory_tests_unaligned replaces memory_tests_aligned in regressions.
+- Enable OOO memory handling in store buffer for OOO models.

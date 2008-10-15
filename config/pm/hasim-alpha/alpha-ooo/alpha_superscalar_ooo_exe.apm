@@ -81,3 +81,6 @@ Packagehint=hasim-models
 
 [Cacheless Core/Requires]
 hasim_pipeline=Hasim 6-stage CPU
+
+[Functional Partition Version 3/Params]
+MEMSTATE_SBUFFER_OOO_MEM=1
