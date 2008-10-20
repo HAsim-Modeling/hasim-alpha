@@ -80,7 +80,7 @@ function MEM_VALUE isaStoreValueToMemValueRMW(MEM_VALUE existing_value,
                                               MEM_OFFSET offset,
                                               ISA_MEMOP_TYPE memtype);
 
-    match { .r, .dummy } = isaStoreValueToSpanningMemValues(existing_value, 0, store_val, offset, memtype);
+    match { .r, .dummy } = isaStoreValueToSpanningMemValues(existing_value, ?, store_val, offset, memtype);
     return r;
 
 endfunction
@@ -122,7 +122,7 @@ endfunction
 
 function ISA_VALUE isaLoadValueFromMemValue(MEM_VALUE val, MEM_OFFSET offset, ISA_MEMOP_TYPE memtype);
 
-    return isaLoadValueFromSpanningMemValues(val, 0, offset, memtype);
+    return isaLoadValueFromSpanningMemValues(val, ?, offset, memtype);
 
 endfunction
 

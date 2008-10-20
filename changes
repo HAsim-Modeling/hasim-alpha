@@ -1434,3 +1434,18 @@ Directory modules/hasim/functional-partition/isa/definition
   order was inconsistent between methods.
 - memory_tests_unaligned replaces memory_tests_aligned in regressions.
 - Enable OOO memory handling in store buffer for OOO models.
+
+----------
+mcadler     Date: Sun Oct 19 23:03:48 EDT 2008  CSN: CSN-hasim-alpha-103
+                  Mon Oct 20 03:03:48 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_memory_conversions.bsv Locally Modified          102 
+
+Mark the high word inputs to word-sized loads and stores don't cares.  Probably
+doesn't make a difference.
+
+Also tried getting rid of the long shift chains in the the load/store
+handling code using size-based case statements.  Source code was much more
+complicated and, somewhat surprisingly, synthesized logic was bigger too.
