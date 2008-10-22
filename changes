@@ -1449,3 +1449,19 @@ doesn't make a difference.
 Also tried getting rid of the long shift chains in the the load/store
 handling code using size-based case statements.  Source code was much more
 complicated and, somewhat surprisingly, synthesized logic was bigger too.
+
+----------
+mcadler     Date: Wed Oct 22 18:45:39 EDT 2008  CSN: CSN-hasim-alpha-104
+                  Wed Oct 22 22:45:39 UTC 2008
+
+
+Directory experiments/hasim-alpha/regression
+ regression.models         Locally Modified          102 
+ regression.benchmarks     Locally Modified          102 
+
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Modified          102 
+ nightly.benchmarks        Locally Modified          102 
+
+Drop alpha_5stage_inorder model due to uncorrectable bugs.  Use alpha_inorder
+isntead.
