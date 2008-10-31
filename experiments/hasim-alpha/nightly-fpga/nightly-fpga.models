@@ -6,4 +6,4 @@
 
 alpha_unpipelined_no_cache_htg  config/pm/hasim-alpha/alpha-unpipelined/no-cache/alpha_unpipelined_no_cache_htg.apm
 alpha_inorder_htg               config/pm/hasim-alpha/alpha-inorder/alpha_inorder_htg.apm
-alpha_superscalar_ooo_htg       config/pm/hasim-alpha/alpha-superscalar-ooo/alpha_superscalar_ooo_htg.apm
+alpha_superscalar_ooo_htg       config/pm/hasim-alpha/alpha-ooo/alpha_superscalar_ooo_htg.apm
