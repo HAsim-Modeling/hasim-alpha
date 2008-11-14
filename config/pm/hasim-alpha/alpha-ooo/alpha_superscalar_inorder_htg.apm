@@ -75,7 +75,6 @@ Packagehint=hasim-models
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-
 [HAsim Hybrid Model Foundation/Params]
 MAKE_ALL_TARGET=bit
 

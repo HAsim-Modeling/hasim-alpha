@@ -50,6 +50,8 @@ Packagehint=hasim-alpha
 
 [HAsim Hybrid Model Foundation/Params]
 MAKE_ALL_TARGET=bit
+MODEL_CLOCK_DIVIDER=5
+MODEL_CLOCK_MULTIPLIER=6
 
 [Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
@@ -63,17 +65,13 @@ hasim_core=Cacheless Core
 File=modules/hasim/timing-models/caches/l2-cache/hasim_shared_cache.awb
 Packagehint=hasim-models
 
-
 [Single core chip]
 File=modules/hasim/timing-models/chip/hasim_chip.awb
 Packagehint=hasim-models
 
-
-
 [Memory]
 File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
-
 
 [Cacheless Core]
 File=modules/hasim/timing-models/core/cacheless-core/hasim_core.awb

@@ -1475,3 +1475,22 @@ Directory experiments/hasim-alpha/nightly-fpga
  nightly-fpga.models       Locally Modified          104 
 
 File name of OOO model changed.
+
+----------
+mcadler     Date: Fri Nov 14 00:12:20 EST 2008  CSN: CSN-hasim-alpha-106
+                  Fri Nov 14 05:12:20 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          105 
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_inorder_htg.apm Locally Modified          105 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified          105 
+
+Set conservative model clock speeds for now:
+  - Unpipelined: 60 MHz
+  - In-order: 55 MHz
+  - OOO: 50 MHz
