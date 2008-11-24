@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=Unpipelined Alpha  Model - Exe
-File=alpha_unpipelined_exe
+File=alpha_unpipelined_no_cache_exe
 Version=2.1
 Name=Unpipelined Alpha Model - Exe
 Type=HAsim
@@ -78,3 +78,6 @@ Packagehint=hasim-models
 [Memory]
 File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
+
+[Hasim Common Library/Params]
+TOKEN_INDEX_BITS=3
