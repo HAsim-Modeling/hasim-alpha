@@ -12,6 +12,7 @@ use strict;
 my $gcfg = Asim::GenCFG->new();
 
 my @bmarks = ("hello/hello",
+              "bitops_tests/bitops_tests",
               "memory_tests/memory_tests_aligned",
               "memory_tests/memory_tests_unaligned",
              );

@@ -1540,3 +1540,29 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
 - Add ISA_SRC/DST_COUNTER type that is one bit bigger than ISA_SRC/DST_INDEX.
   Useful for counting registers.
 - Reduce token index size in unpipelined model to 3 bits.
+
+----------
+mcadler     Date: Fri Dec  5 07:35:22 EST 2008  CSN: CSN-hasim-alpha-111
+                  Fri Dec  5 12:35:22 UTC 2008
+
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified          110 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.awb    Locally Modified          110 
+ isa_datapath_alpha.bsv    Locally Modified          110 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified          110 
+
+Break the Alpha ISA data path into multiple pipelines.  The first cycle decodes
+the instruction.  (Note: the register data doesn't arrive until a cycle later
+due to requirements in the register state getResults pipeline.  There would be no
+gain from earlier decoding.)
+
+- Added integer multiply using Xilinx DSP logic.
+- Refactored many pipelines so values flow to a single adder, bit manipulator, etc.
+- Some pipelines are now multi-cycle to save area (e.g. population count).
+- Refactoring removes about 150 adders from the synthesized result.  Down from
+  over 400 before.

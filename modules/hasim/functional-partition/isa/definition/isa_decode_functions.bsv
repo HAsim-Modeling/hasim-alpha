@@ -199,8 +199,42 @@ FUNCT maxsw4    = 'h3f;
 FUNCT ftoit     = 'h70;
 FUNCT ftois     = 'h78;
 
+
+
+function OPCODE isaGetOpcode(ISA_INSTRUCTION i);
+    return i[31:26];
+endfunction
+
+function FUNCT isaGetFunct(ISA_INSTRUCTION i);
+    return i[11:5];
+endfunction
+
+function FP_FUNC isaGetFPFunc(ISA_INSTRUCTION i);
+    return i[15:5];
+endfunction
+
+function MEM_FUNC isaGetMemFunc(ISA_INSTRUCTION i);
+    return signExtend(i[15:0]);
+endfunction
+
+function Bit#(64) isaGetMemDisp(ISA_INSTRUCTION i);
+    return signExtend(i[15:0]);
+endfunction
+
+function Bit#(64) isaGetBranchImmediate(ISA_INSTRUCTION i);
+    return signExtend(i[20:0]);
+endfunction
+
+function Maybe#(Bit#(64)) isaGetLiteral(ISA_INSTRUCTION i);
+    Bool use_lit = unpack(i[12]);
+    if (use_lit)
+        return tagged Valid (zeroExtend(i[20:13]));
+    else
+        return tagged Invalid;
+endfunction
+
 function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -251,7 +285,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
 endfunction
 
 function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -296,7 +330,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
 endfunction
 
 function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -315,7 +349,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
         begin
             case (funct)
                 addlv, addqv, sublv, subqv:
-                    ret = tagged Valid (tagged ControlReg); // TODO must properly write this
+                    ret = tagged Valid (tagged ControlReg);
             endcase
         end
 
@@ -331,7 +365,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
         begin
             case (funct)
                 mullv, mulqv:
-                   ret = tagged Valid (tagged ControlReg); // TODO must properly write this
+                   ret = tagged Valid (tagged ControlReg);
             endcase
         end
     endcase
@@ -351,7 +385,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc(ISA_INSTRUCTION i, Integer n);
 endfunction
 
 function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
 
@@ -367,13 +401,8 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
         br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
 
-        opc10, opc11, opc12:
+        opc10, opc11, opc12, opc13:
             ret = tagged Valid (tagged ArchReg rc);
-
-`ifdef HW_MULTIPLY
-        opc13:
-            ret = tagged Valid (tagged ArchReg rc);
-`endif
 
         opc1c:
         begin
@@ -387,7 +416,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
 endfunction
 
 function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
 
@@ -410,18 +439,16 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
                 opc10:
                 begin
                     case (funct)
-                        addlv, addqv, sublv, subqv: ret = tagged Valid (tagged ControlReg); // TODO correct this
+                        addlv, addqv, sublv, subqv: ret = tagged Valid (tagged ControlReg);
                     endcase
                 end
 
-`ifdef HW_MULTIPLY
                 opc13:
                 begin
                     case (funct)
                         mullv, mulqv: ret = tagged Valid (tagged ControlReg);
                     endcase
                 end
-`endif
             endcase
         end
     endcase
@@ -433,7 +460,7 @@ endfunction
 
 
 function Maybe#(ISA_REG_INDEX) isaGetDst2(ISA_INSTRUCTION i);
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
 
@@ -491,7 +518,7 @@ endfunction
 
 function Integer isaGetNumDsts(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
 
@@ -514,7 +541,6 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
                opc11: return 1;
                opc12: return 1;
 
-`ifdef HW_MULTIPLY
                opc13:
                begin
                    case (funct)
@@ -522,7 +548,6 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
                        default: return 1;
                    endcase
                end
-`endif
 
                opc1c: return (funct >= 'h38) ? 0 : 1;
                default: return 0;
@@ -536,7 +561,7 @@ endfunction
 
 function Bool isaIsLoad(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
 
@@ -558,7 +583,7 @@ endfunction
 
 function Bool isaIsStore(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
 
@@ -580,7 +605,7 @@ endfunction
 
 function ISA_MEMOP_TYPE isaLoadType(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -610,7 +635,7 @@ endfunction
 
 function ISA_MEMOP_TYPE isaStoreType(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -638,7 +663,7 @@ endfunction
 
 function Bool isaIsBranch(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -689,7 +714,7 @@ endfunction
 
 function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
 
-    OPCODE    opcode = i[31:26];
+    OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
@@ -723,10 +748,6 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
 
                // TODO implement the rest ( except floating point )
                opc1c: return (funct >= 'h38);
-
-`ifndef HW_MULTIPLY
-               opc13: return True;
-`endif
 
                default: return False;
            endcase;
