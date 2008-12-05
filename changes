@@ -1566,3 +1566,13 @@ gain from earlier decoding.)
 - Some pipelines are now multi-cycle to save area (e.g. population count).
 - Refactoring removes about 150 adders from the synthesized result.  Down from
   over 400 before.
+
+----------
+mcadler     Date: Fri Dec  5 07:59:14 EST 2008  CSN: CSN-hasim-alpha-112
+                  Fri Dec  5 12:59:14 UTC 2008
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.dic    Locally Added               0 
+
+Forgot to add this in previous commit.
