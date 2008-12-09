@@ -87,4 +87,4 @@ Packagehint=hasim-models
 [HAsim Hybrid Model Foundation/Params]
 MAKE_ALL_TARGET=bit
 MODEL_CLOCK_DIVIDER=10
-MODEL_CLOCK_MULTIPLIER=11
+MODEL_CLOCK_MULTIPLIER=13

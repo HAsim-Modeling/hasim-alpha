@@ -1576,3 +1576,18 @@ Directory modules/hasim/functional-partition/isa/datapath
  isa_datapath_alpha.dic    Locally Added               0 
 
 Forgot to add this in previous commit.
+
+----------
+mcadler     Date: Mon Dec  8 19:58:56 EST 2008  CSN: CSN-hasim-alpha-113
+                  Tue Dec  9 00:58:56 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          112 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified          112 
+
+Increase default speeds:
+ - Unpipelined: 75MHz
+ - In-order: 65MHz
