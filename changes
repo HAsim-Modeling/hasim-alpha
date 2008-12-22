@@ -1591,3 +1591,17 @@ Directory config/pm/hasim-alpha/alpha-inorder
 Increase default speeds:
  - Unpipelined: 75MHz
  - In-order: 65MHz
+
+----------
+mcadler     Date: Mon Dec 22 14:30:37 EST 2008  CSN: CSN-hasim-alpha-114
+                  Mon Dec 22 19:30:37 UTC 2008
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          113 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified          113 
+
+Now that the LUT combining switch is removed from Xilinx "map" all models
+appear to run at 75MHz.  Make that the default.

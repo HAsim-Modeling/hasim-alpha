@@ -50,8 +50,6 @@ Packagehint=hasim-alpha
 
 [HAsim Hybrid Model Foundation/Params]
 MAKE_ALL_TARGET=bit
-MODEL_CLOCK_DIVIDER=2
-MODEL_CLOCK_MULTIPLIER=3
 
 [Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
