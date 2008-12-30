@@ -80,4 +80,4 @@ File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
 
 [Hasim Common Library/Params]
-TOKEN_INDEX_BITS=3
+TOKEN_ID_BITS=3

@@ -76,9 +76,6 @@ File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
 
-[Hasim Common Library/Params]
-TOKEN_INDEX_BITS=9
-
 [Hasim 6-stage CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-in-order.apm
 Packagehint=hasim-models

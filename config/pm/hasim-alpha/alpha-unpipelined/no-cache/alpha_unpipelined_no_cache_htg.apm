@@ -83,4 +83,4 @@ File=config/pm/hasim-models/pipeline/unpipelined/no-cache/unpipelined.apm
 Packagehint=hasim-models
 
 [Hasim Common Library/Params]
-TOKEN_INDEX_BITS=3
+TOKEN_ID_BITS=3

@@ -78,8 +78,6 @@ Packagehint=hasim-alpha
 [HAsim Hybrid Model Foundation/Params]
 MAKE_ALL_TARGET=bit
 
-[Hasim Common Library/Params]
-TOKEN_INDEX_BITS=9
 
 [Hasim 6-stage CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/single-issue-out-of-order.apm
