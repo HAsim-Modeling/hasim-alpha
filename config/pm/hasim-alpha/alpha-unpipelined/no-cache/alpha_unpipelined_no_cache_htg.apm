@@ -4,7 +4,7 @@ SaveParameters=0
 Description=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 File=alpha_unpipelined_no_cache_htg
 Version=2.1
-Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe
+Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe*
 Type=HAsim
 Class=Asim::Model
 
@@ -83,4 +83,9 @@ File=config/pm/hasim-models/pipeline/unpipelined/no-cache/unpipelined.apm
 Packagehint=hasim-models
 
 [Hasim Common Library/Params]
-TOKEN_ID_BITS=3
+TOKEN_ID_BITS=2
+CONTEXT_ID_BITS=3
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=9
+FUNCP_TLB_CACHE_SET_INDEX_BITS=7

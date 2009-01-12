@@ -80,4 +80,9 @@ File=modules/hasim/timing-models/memory/memory.awb
 Packagehint=hasim-models
 
 [Hasim Common Library/Params]
-TOKEN_ID_BITS=3
+TOKEN_ID_BITS=2
+CONTEXT_ID_BITS=3
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=9
+FUNCP_TLB_CACHE_SET_INDEX_BITS=7

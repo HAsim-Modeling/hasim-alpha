@@ -1634,3 +1634,24 @@ Directory config/pm/hasim-alpha/alpha-ooo
  alpha_superscalar_inorder_htg.apm Locally Modified          114 
 
 TOKEN_INDEX_BITS is now called TOKEN_ID_BITS.
+
+----------
+mcadler     Date: Mon Jan 12 09:07:18 EST 2009  CSN: CSN-hasim-alpha-117
+                  Mon Jan 12 14:07:18 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          116 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          116 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified          116 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_definition_alpha.awb  Locally Modified          116 
+ isa_derived_types.bsv     Locally Modified          116 
+
+- Make number of physical registers a parameter in the base hasim functional
+  model.  It used to be a source constant.
+- Support up to 8 hardware contexts in the unpipelined model.  Increase TLB
+  cache size.  No space to increase functional memory cache on the Xilinx 110T.

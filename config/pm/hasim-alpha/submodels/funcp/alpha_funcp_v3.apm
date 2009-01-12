@@ -23,7 +23,6 @@ hasim_isa_semantics=Hybrid ISA Semantics
 funcp_base_types=Functional Partition Base Types
 funcp_interface=Functional Partition Interface
 
-
 [Functional Partition Version 3]
 File=modules/hasim/functional-partition/functional_partition_default.awb
 Packagehint=hasim
@@ -35,7 +34,6 @@ funcp_memstate_cache=Set-Associative Writeback Cache
 [Register State Manager using Macro Ops/Requires]
 funcp_regstate_connections=Connections from register state to other functional components
 funcp_regstate_data=Register State Data
-
 
 [Register State Manager using Macro Ops]
 File=modules/hasim/functional-partition/register-state/manager/macro-ops/regmgr-macro.awb
@@ -80,8 +78,6 @@ Packagehint=hasim
 isa_emulator=Hybrid ISA Emulator
 hasim_isa_datapath=Alpha ISA Datapath
 
-[Hybrid Memory for Functional Partition/Params]
-MEMORY_STORE_INFO_SIZE=128
 
 [Functional Partition Base Types]
 File=modules/hasim/functional-partition/base-types/funcp-base-types.awb
@@ -116,7 +112,6 @@ m5_hasim_base=m5 HAsim Base Class
 [m5 ISA Emulator Implementation]
 File=modules/hasim/functional/isa-emulator/m5-isa-emulator-impl.awb
 Packagehint=m5
-
 
 [Set-Associative Writeback Cache]
 File=modules/hasim/functional-partition/memory-state/cache/set-associative/memstate-cache-set-assoc.awb

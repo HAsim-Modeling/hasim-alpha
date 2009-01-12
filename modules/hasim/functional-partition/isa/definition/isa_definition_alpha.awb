@@ -1,28 +1,15 @@
-#/********************************************************************
-# *
-# * Awb module specification
-# *
-# *******************************************************************/
+%name Alpha ISA Definition
+%desc Alpha ISA Definition
+%provides hasim_isa
 
-#/*
-# %AWB_START
-#
-# %name Alpha ISA Definition
-# %desc Alpha ISA Definition
-# %provides hasim_isa
-#
-# %attributes hasim template
-#
-# %public isa_datatypes.h
-# %public isa_datatypes.bsv
-# %public isa_decode_functions.bsv
-# %public isa_derived_types.bsv
-# %public isa_memory_conversions.bsv
-#
-# %private README.txt
-#
-# %param SIMULATED_ISA "ALPHA"            "Modeled ISA"
-#
-# %AWB_END
-# */
+%attributes hasim template
 
+%public isa_datatypes.h
+%public isa_datatypes.bsv
+%public isa_decode_functions.bsv
+%public isa_derived_types.bsv
+%public isa_memory_conversions.bsv
+
+%private README.txt
+
+%param SIMULATED_ISA "ALPHA"            "Modeled ISA"
