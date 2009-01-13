@@ -46,6 +46,8 @@ Packagehint=hasim-alpha
 [Memory State for Functional Partition/Requires]
 funcp_memstate_manager=Manager using Macro Ops for Mem State
 funcp_memory=Hybrid Memory for Functional Partition
+funcp_memstate_tlb=Standard Hybrid TLB
+funcp_memstate_base_types=Functional Partition Memory State Base Types
 
 [Hybrid Memory for Functional Partition]
 File=modules/hasim/functional-partition/memory-state/memory/hybrid/hybrid-funcp-memory.awb
@@ -53,7 +55,6 @@ Packagehint=hasim
 
 [Hybrid Memory for Functional Partition/Requires]
 funcp_simulated_memory=m5 Hybrid Memory
-funcp_memory_tlb=Standard Hybrid TLB
 
 [Register State for Functional Partition/Requires]
 funcp_regstate_manager=Register State Manager using Macro Ops
@@ -77,7 +78,6 @@ Packagehint=hasim
 [Hybrid ISA Semantics/Requires]
 isa_emulator=Hybrid ISA Emulator
 hasim_isa_datapath=Alpha ISA Datapath
-
 
 [Functional Partition Base Types]
 File=modules/hasim/functional-partition/base-types/funcp-base-types.awb
@@ -135,4 +135,8 @@ Packagehint=hasim
 
 [Register State Data]
 File=modules/hasim/functional-partition/register-state/data/regstate-data.awb
+Packagehint=hasim
+
+[Functional Partition Memory State Base Types]
+File=modules/hasim/functional-partition/memory-state/base-types/memstate-base-types.awb
 Packagehint=hasim
