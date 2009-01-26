@@ -1668,3 +1668,13 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_memory_conversions.bsv Locally Modified          117 
 
 Functional memory state interface changed slightly.
+
+----------
+mcadler     Date: Mon Jan 26 10:17:01 EST 2009  CSN: CSN-hasim-alpha-119
+                  Mon Jan 26 15:17:01 UTC 2009
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified          118 
+
+Add register state base types.
