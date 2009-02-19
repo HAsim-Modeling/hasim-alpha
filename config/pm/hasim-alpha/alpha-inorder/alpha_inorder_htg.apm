@@ -73,7 +73,7 @@ File=modules/hasim/timing-models/chip/hasim_chip.awb
 Packagehint=hasim-models
 
 [L1 caches]
-File=config/pm/hasim-models/l1-caches/l1_caches.apm
+File=config/pm/hasim-models/l1-caches/null_l1_caches.apm
 Packagehint=hasim-models
 
 [Memory]
