@@ -10,9 +10,9 @@ Class=Asim::Model
 
 [Hasim - Hardware (fpga) based system/Requires]
 hasim_funcp=Functional Partition Version 3
-hasim_chip=Single core chip
+hasim_chip=Single Core Chip
 hasim_isa=Alpha ISA Definition
-hasim_memory=Memory
+hasim_memory=Null Memory
 
 [Model]
 DefaultAttributes=hasim unpipelined cache alpha simulation
@@ -48,38 +48,41 @@ Packagehint=hasim-alpha
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-[Hasim Unpipelined CPU With Cache]
-File=config/pm/hasim-models/pipeline/unpipelined/with-cache/unpipelined.apm
-Packagehint=hasim-models
 
 [Hasim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[Single core chip/Requires]
-hasim_shared_cache=Shared cache
-hasim_core=Core
 
-[Shared cache]
-File=modules/hasim/timing-models/caches/l2-cache/hasim_shared_cache.awb
+
+
+
+
+
+
+[Pipeline and Caches]
+File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
 Packagehint=hasim-models
 
-[Core/Requires]
-hasim_pipeline=Hasim Unpipelined CPU With Cache
-hasim_l1_caches=L1 caches
-
-[Single core chip]
-File=modules/hasim/timing-models/chip/hasim_chip.awb
-Packagehint=hasim-models
-
-[L1 caches]
+[Split (Instruction and Data)]
 File=config/pm/hasim-models/l1-caches/l1_caches.apm
 Packagehint=hasim-models
 
-[Memory]
-File=modules/hasim/timing-models/memory/memory.awb
+[Hasim Unpipelined Pipeline With Caches]
+File=modules/hasim/timing-models/pipeline/unpipelined/with-cache/unpipelined-pipeline-with-cache.awb
 Packagehint=hasim-models
 
-[Core]
-File=modules/hasim/timing-models/core/hasim_core.awb
+[Pipeline and Caches/Requires]
+hasim_pipeline=Hasim Unpipelined Pipeline With Caches
+hasim_l1_caches=Split (Instruction and Data)
+
+[Single Core Chip/Requires]
+hasim_core=Pipeline and Caches
+
+[Single Core Chip]
+File=modules/hasim/timing-models/chip/single-core-chip.awb
+Packagehint=hasim-models
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-magic.awb
 Packagehint=hasim-models

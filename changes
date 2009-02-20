@@ -1693,3 +1693,41 @@ Directory config/pm/hasim-alpha/alpha-inorder
   multi-context caches.
   
 Michael P.
+
+----------
+pellauer    Date: Fri Feb 20 17:05:31 EST 2009  CSN: CSN-hasim-alpha-121
+                  Fri Feb 20 22:05:31 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified          120 
+ alpha_inorder_exe.apm     Locally Modified          120 
+
+Directory config/pm/hasim-alpha/alpha-5stage
+ alpha_5stage_exe.apm      Locally Removed           119 
+ alpha_5stage_htg.apm      Locally Removed           119 
+
+Directory config/pm/hasim-alpha
+ alpha-5stage/             Locally Removed           119 
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          119 
+ alpha_superscalar_ooo_htg.apm Locally Modified          119 
+ alpha_single_issue_ooo_exe.apm Locally Modified          119 
+ alpha_single_issue_ooo_htg.apm Locally Modified          119 
+ alpha_superscalar_inorder_exe.apm Locally Modified          119 
+ alpha_superscalar_inorder_htg.apm Locally Modified          119 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_exe.apm Locally Modified          119 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          119 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          119 
+
+
+* Update APMs to reflect hasim-models file name cleanup.
+* Kill the 5stage model.
+
+Michael P.
+

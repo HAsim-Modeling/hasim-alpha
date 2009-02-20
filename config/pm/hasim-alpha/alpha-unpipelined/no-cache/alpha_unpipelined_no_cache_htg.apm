@@ -10,9 +10,9 @@ Class=Asim::Model
 
 [Hasim - Hardware (fpga) based system/Requires]
 hasim_funcp=Functional Partition Version 3
-hasim_chip=Single core chip
+hasim_chip=Single Core Chip
 hasim_isa=Alpha ISA Definition
-hasim_memory=Memory
+hasim_memory=Null Memory
 
 [Model]
 DefaultAttributes=unpipelined alpha hybrid hasim
@@ -55,32 +55,17 @@ MAKE_ALL_TARGET=bit
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[Single core chip/Requires]
-hasim_shared_cache=Shared cache
-hasim_core=Cacheless Core
 
-[Shared cache]
-File=modules/hasim/timing-models/caches/l2-cache/hasim_shared_cache.awb
-Packagehint=hasim-models
 
-[Single core chip]
-File=modules/hasim/timing-models/chip/hasim_chip.awb
-Packagehint=hasim-models
 
-[Memory]
-File=modules/hasim/timing-models/memory/memory.awb
-Packagehint=hasim-models
 
 [Cacheless Core]
-File=modules/hasim/timing-models/core/cacheless-core/hasim_core.awb
+File=modules/hasim/timing-models/core/cacheless-core/core-no-cache.awb
 Packagehint=hasim-models
 
 [Cacheless Core/Requires]
-hasim_pipeline=Hasim Unpipelined CPU
+hasim_pipeline=Hasim Unpipelined Pipeline
 
-[Hasim Unpipelined CPU]
-File=config/pm/hasim-models/pipeline/unpipelined/no-cache/unpipelined.apm
-Packagehint=hasim-models
 
 [Hasim Common Library/Params]
 TOKEN_ID_BITS=2
@@ -89,3 +74,18 @@ CONTEXT_ID_BITS=3
 [Functional Partition Version 3/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=9
 FUNCP_TLB_CACHE_SET_INDEX_BITS=7
+
+[Hasim Unpipelined Pipeline]
+File=modules/hasim/timing-models/pipeline/unpipelined/no-cache/unpipelined-pipeline.awb
+Packagehint=hasim-models
+
+[Single Core Chip/Requires]
+hasim_core=Cacheless Core
+
+[Single Core Chip]
+File=modules/hasim/timing-models/chip/single-core-chip.awb
+Packagehint=hasim-models
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-magic.awb
+Packagehint=hasim-models
