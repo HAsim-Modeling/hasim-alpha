@@ -78,3 +78,6 @@ Packagehint=hasim-models
 [Null Memory]
 File=modules/hasim/timing-models/memory/memory-magic.awb
 Packagehint=hasim-models
+
+[Hasim Common Library/Params]
+TOKEN_ID_BITS=6

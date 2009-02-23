@@ -1731,3 +1731,15 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
 
 Michael P.
 
+
+----------
+mcadler     Date: Mon Feb 23 08:45:05 EST 2009  CSN: CSN-hasim-alpha-122
+                  Mon Feb 23 13:45:05 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          121 
+ alpha_inorder_htg.apm     Locally Modified          121 
+
+Reduce token ID space to 6 bits to save space.  32 instructions in flight
+ought to be enough for a single-issue in-order model.
