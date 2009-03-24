@@ -1743,3 +1743,19 @@ Directory config/pm/hasim-alpha/alpha-inorder
 
 Reduce token ID space to 6 bits to save space.  32 instructions in flight
 ought to be enough for a single-issue in-order model.
+
+----------
+pellauer    Date: Tue Mar 24 13:34:37 EDT 2009  CSN: CSN-hasim-alpha-123
+                  Tue Mar 24 17:34:37 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ cache-models/             Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_pseudorandom_exe.apm Locally Added               0 
+
+
+* Add pseudo-random DCache model.
+
+Michael P.
