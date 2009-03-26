@@ -1759,3 +1759,31 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 * Add pseudo-random DCache model.
 
 Michael P.
+
+----------
+ruhler      Date: Thu Mar 26 13:40:41 EDT 2009  CSN: CSN-hasim-alpha-124
+                  Thu Mar 26 17:40:41 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          123 
+ alpha_superscalar_ooo_htg.apm Locally Modified          123 
+ alpha_single_issue_ooo_exe.apm Locally Modified          123 
+ alpha_single_issue_ooo_htg.apm Locally Modified          123 
+ alpha_superscalar_inorder_exe.apm Locally Modified          123 
+ alpha_superscalar_inorder_htg.apm Locally Modified          123 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          123 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          123 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          123 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          123 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_htg.apm     Locally Modified          123 
+
+Added chip_base_types requirement to existing models.

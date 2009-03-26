@@ -61,15 +61,13 @@ File=config/pm/hasim-models/l1-caches/null_l1_caches.apm
 Packagehint=hasim-models
 
 [Pipeline and Caches/Requires]
-hasim_pipeline=Inorder
+hasim_pipeline=Inorder Pipeline
 hasim_l1_caches=Split (Instruction and Data)
 
-[Inorder]
-File=config/pm/hasim-models/pipeline/inorder/inorder.apm
-Packagehint=hasim-models
 
 [Single Core Chip/Requires]
 hasim_core=Pipeline and Caches
+chip_base_types=Chip Base Types
 
 [Single Core Chip]
 File=modules/hasim/timing-models/chip/single-core-chip.awb
@@ -81,3 +79,11 @@ Packagehint=hasim-models
 
 [Hasim Common Library/Params]
 TOKEN_ID_BITS=6
+
+[Inorder Pipeline]
+File=config/pm/hasim-models/pipeline/inorder/inorder.apm
+Packagehint=hasim-models
+
+[Chip Base Types]
+File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
+Packagehint=hasim-models
