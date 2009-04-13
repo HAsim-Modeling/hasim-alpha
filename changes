@@ -1787,3 +1787,13 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_htg.apm     Locally Modified          123 
 
 Added chip_base_types requirement to existing models.
+
+----------
+mcadler     Date: Mon Apr 13 15:52:26 EDT 2009  CSN: CSN-hasim-alpha-125
+                  Mon Apr 13 19:52:26 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          124 
+
+Update TLB cache sets after reducing the ways per set.
