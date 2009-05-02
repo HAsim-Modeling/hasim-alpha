@@ -1797,3 +1797,14 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
  alpha_unpipelined_no_cache_exe.apm Locally Modified          124 
 
 Update TLB cache sets after reducing the ways per set.
+
+----------
+mcadler     Date: Sat May  2 08:13:24 EDT 2009  CSN: CSN-hasim-alpha-126
+                  Sat May  2 12:13:24 UTC 2009
+
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified          125 
+
+Memory requests now go directly to the functional memory module instead of
+through a special cache module.

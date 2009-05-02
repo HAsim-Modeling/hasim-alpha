@@ -29,7 +29,6 @@ Packagehint=hasim
 
 [Manager using Macro Ops for Mem State/Requires]
 funcp_memstate_storebuffer=Hashed Store Buffer
-funcp_memstate_cache=Set-Associative Writeback Cache
 
 [Register State Manager using Macro Ops/Requires]
 funcp_regstate_connections=Connections from register state to other functional components
@@ -113,10 +112,6 @@ m5_hasim_base=m5 HAsim Base Class
 [m5 ISA Emulator Implementation]
 File=modules/hasim/functional/isa-emulator/m5-isa-emulator-impl.awb
 Packagehint=m5
-
-[Set-Associative Writeback Cache]
-File=modules/hasim/functional-partition/memory-state/cache/set-associative/memstate-cache-set-assoc.awb
-Packagehint=hasim
 
 [Standard Hybrid TLB]
 File=modules/hasim/functional-partition/memory-state/tlb/hybrid/std/funcp-tlb-std.awb
