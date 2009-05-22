@@ -1808,3 +1808,13 @@ Directory config/pm/hasim-alpha/submodels/funcp
 
 Memory requests now go directly to the functional memory module instead of
 through a special cache module.
+
+----------
+mcadler     Date: Fri May 22 07:24:56 EDT 2009  CSN: CSN-hasim-alpha-127
+                  Fri May 22 11:24:56 UTC 2009
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          126 
+
+Eliminate a number of Bluespec scheduler warnings.

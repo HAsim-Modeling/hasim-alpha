@@ -27,6 +27,7 @@
 // ***** Imports *****
 
 import FIFO::*;
+import FIFOF::*;
 import Vector::*;
 
 // Project foundation includes.
@@ -732,7 +733,7 @@ module [HASIM_MODULE] mkISA_Datapath
     // ====================================================================
 
     // Hold input register values while operating one byte at a time
-    FIFO#(ISA_DP_BITOPS_SLOW_QUEUE) bitopsQ <- mkFIFO1();
+    FIFOF#(ISA_DP_BITOPS_SLOW_QUEUE) bitopsQ <- mkFIFOF1();
 
     // Pass intermediate results from byte-sized operations to an adder
     FIFO#(Tuple2#(Bit#(8), Bool)) bitopsSumQ <- mkFIFO();
@@ -747,7 +748,8 @@ module [HASIM_MODULE] mkISA_Datapath
     // dpBITOPS_SLOW --
     //     Entry point for slow bit operations.
     //
-    rule dpBITOPS_SLOW (dpQ.first().pipe == ISA_DP_PIPE_BITOPS_SLOW);
+    rule dpBITOPS_SLOW ((dpQ.first().pipe == ISA_DP_PIPE_BITOPS_SLOW) &&
+                        ! bitopsQ.notEmpty());
         let dp = dpQ.first();
         dpQ.deq();
 
@@ -1248,6 +1250,7 @@ module [HASIM_MODULE] mkISA_Datapath
     //
     // ====================================================================
 
+    (* descending_urgency = "dpSHIFT, dpNOP, dpMEMADDR, dpILLEGAL, dpCONTROL, dpMULResult, dpBRANCH, dpBITOPS_SLOW_Sum, dpBITOPS, dpLOGICAL, dpCMOV, dpCMP, dpADD" *)
     rule dpSHIFT ((dpQ.first().pipe == ISA_DP_PIPE_SHIFT) && readyToRespondStd());
         let dp = dpQ.first();
         dpQ.deq();
