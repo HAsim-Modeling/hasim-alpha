@@ -1831,3 +1831,20 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_acp.apm     Locally Added               0 
 
 Add model configurations for ACP.
+
+----------
+mpellaue    Date: Tue May 26 13:13:33 EDT 2009  CSN: CSN-hasim-alpha-129
+                  Tue May 26 17:13:33 UTC 2009
+
+
+Directory .
+ configure                 Locally Modified          128 
+ Makefile.in               Locally Modified          128 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Added               0 
+
+
+* Add direct-mapped writethrough cache model using scratchpad memory.
+
+Michael P.
