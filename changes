@@ -1818,3 +1818,16 @@ Directory modules/hasim/functional-partition/isa/datapath
  isa_datapath_alpha.bsv    Locally Modified          126 
 
 Eliminate a number of Bluespec scheduler warnings.
+
+----------
+mcadler     Date: Mon May 25 22:35:38 EDT 2009  CSN: CSN-hasim-alpha-128
+                  Tue May 26 02:35:38 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_acp.apm     Locally Added               0 
+
+Add model configurations for ACP.
