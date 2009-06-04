@@ -1848,3 +1848,16 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 * Add direct-mapped writethrough cache model using scratchpad memory.
 
 Michael P.
+
+----------
+pellauer    Date: Thu Jun  4 10:53:08 EDT 2009  CSN: CSN-hasim-alpha-130
+                  Thu Jun  4 14:53:08 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          129 
+
+
+* Update NUM_CPUS parameter in unpipelined model.
+
+Michael P.
