@@ -90,3 +90,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
+
+[Chip Base Types/Params]
+NUM_CPUS=8

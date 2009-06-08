@@ -1861,3 +1861,14 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
 * Update NUM_CPUS parameter in unpipelined model.
 
 Michael P.
+
+----------
+mcadler     Date: Mon Jun  8 18:03:30 EDT 2009  CSN: CSN-hasim-alpha-131
+                  Mon Jun  8 22:03:30 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          130 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          130 
+
+Define NUM_CPUS.
