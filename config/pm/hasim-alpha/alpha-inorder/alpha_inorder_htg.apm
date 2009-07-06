@@ -67,7 +67,6 @@ Packagehint=hasim-models
 hasim_pipeline=Inorder Pipeline
 hasim_l1_caches=Split (Instruction and Data)
 
-
 [Single Core Chip/Requires]
 hasim_core=Pipeline and Caches
 chip_base_types=Chip Base Types
@@ -82,6 +81,10 @@ Packagehint=hasim-models
 
 [Hasim Common Library/Params]
 TOKEN_ID_BITS=6
+TERM_FPGA_SWITCHES=0
+TERM_VDEV_STREAMS=0
+TERM_FPGA_BUTTONS=0
+TERM_FPGA_LEDS=0
 
 [Inorder Pipeline]
 File=config/pm/hasim-models/pipeline/inorder/inorder.apm

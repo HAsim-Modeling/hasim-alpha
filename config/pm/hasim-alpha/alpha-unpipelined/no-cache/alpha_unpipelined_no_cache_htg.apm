@@ -4,7 +4,7 @@ SaveParameters=0
 Description=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 File=alpha_unpipelined_no_cache_htg
 Version=2.1
-Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe*
+Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 Type=HAsim
 Class=Asim::Model
 
@@ -65,6 +65,10 @@ hasim_pipeline=Hasim Unpipelined Pipeline
 [Hasim Common Library/Params]
 TOKEN_ID_BITS=2
 CONTEXT_ID_BITS=3
+TERM_FPGA_SWITCHES=0
+TERM_VDEV_STREAMS=0
+TERM_FPGA_BUTTONS=0
+TERM_FPGA_LEDS=0
 
 [Functional Partition Version 3/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=9
@@ -89,7 +93,6 @@ Packagehint=hasim-models
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
-
 
 [Chip Base Types/Params]
 NUM_CPUS=8

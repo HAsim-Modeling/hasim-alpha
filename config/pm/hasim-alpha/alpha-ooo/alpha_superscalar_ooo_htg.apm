@@ -64,6 +64,10 @@ MAKE_ALL_TARGET=bit
 
 [Hasim Common Library/Params]
 TOKEN_ID_BITS=9
+TERM_FPGA_SWITCHES=0
+TERM_VDEV_STREAMS=0
+TERM_FPGA_BUTTONS=0
+TERM_FPGA_LEDS=0
 
 [Hasim 6-stage CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-out-of-order.apm

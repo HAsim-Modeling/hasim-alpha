@@ -62,6 +62,10 @@ hasim_pipeline=Hasim Unpipelined Pipeline
 [Hasim Common Library/Params]
 TOKEN_ID_BITS=2
 CONTEXT_ID_BITS=3
+TERM_FPGA_SWITCHES=0
+TERM_VDEV_STREAMS=0
+TERM_FPGA_BUTTONS=0
+TERM_FPGA_LEDS=0
 
 [Functional Partition Version 3/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=9
