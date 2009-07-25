@@ -1901,3 +1901,36 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_htg.apm     Locally Modified          131 
 
 Corrected Connection Terminus termination parameters
+
+----------
+keflemin    Date: Sat Jul 25 16:13:01 EDT 2009  CSN: CSN-hasim-alpha-133
+                  Sat Jul 25 20:13:01 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          132 
+ alpha_superscalar_ooo_htg.apm Locally Modified          132 
+ alpha_single_issue_ooo_exe.apm Locally Modified          132 
+ alpha_single_issue_ooo_htg.apm Locally Modified          132 
+ alpha_superscalar_inorder_exe.apm Locally Modified          132 
+ alpha_superscalar_inorder_htg.apm Locally Modified          132 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_exe.apm Locally Modified          132 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          132 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          132 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          132 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          132 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          132 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          132 
+ alpha_inorder_htg.apm     Locally Modified          132 
+ alpha_inorder_acp.apm     Locally Modified          132 
+
+
+Changed to new hw/sw system
