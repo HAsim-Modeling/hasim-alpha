@@ -99,7 +99,7 @@ ISA_DP_BITOPS_SLOW_PIPE
 typedef struct
 {
     ISA_DP_BITOPS_SLOW_PIPE pipe;
-    TOKEN_INDEX tokenIdx;
+    FUNCP_ISA_DATAPATH_REQ req;
     ISA_ADDRESS addr;
     FUNCT funct;
     Bit#(64) src0;
@@ -125,7 +125,7 @@ ISA_DP_MUL_PIPE
 typedef struct
 {
     ISA_DP_MUL_PIPE pipe;
-    TOKEN_INDEX tokenIdx;
+    FUNCP_ISA_DATAPATH_REQ req;
     Bool testOverflow;
     Bool isNegative;
     ISA_ADDRESS addr;
@@ -153,6 +153,7 @@ module [HASIM_MODULE] mkISA_Datapath
     
     Connection_Server#(FUNCP_ISA_DATAPATH_REQ, FUNCP_ISA_DATAPATH_RSP) link_fp <- mkConnection_Server("isa_datapath");
     Connection_Receive#(FUNCP_ISA_DATAPATH_SRCVALS) link_fp_srcvals <- mkConnection_Receive("isa_datapath_srcvals");
+    Connection_Send#(FUNCP_ISA_WRITEBACK) link_fp_writeback <- mkConnection_Send("isa_datapath_writeback");
     
 
     // ***** Debugging Log *****
@@ -235,7 +236,58 @@ module [HASIM_MODULE] mkISA_Datapath
         return readyToRespondTok(dpQ.first().req.token.index);
     endfunction
 
-    
+
+    // ====================================================================
+    //
+    // Writeback helper data and functions.
+    //
+    // Writebacks are sent to the register state manager on a soft
+    // connection that is separate from the ISA datapath server.  This
+    // permits the ISA datapath to return a control response early and
+    // forward the data later.  The register state scoreboard will ensure
+    // that instructions reading the data block until writeback is
+    // complete.
+    //
+    // ====================================================================
+
+    //
+    // One register may be written per cycle.  This merge FIFO collapses
+    // the max. number of registers written by an instruction into a FIFO.
+    //
+    MERGE_FIFOF#(ISA_MAX_DSTS,
+                 Tuple3#(TOKEN, Maybe#(FUNCP_PHYSICAL_REG_INDEX), ISA_VALUE)) writebackQ <- mkMergeFIFOF();
+
+    //
+    // forwardWritebacks --
+    //     Helper function for passing all writebacks from an operation to
+    //     the writebackQ.
+    //
+    function Action forwardWritebacks(FUNCP_ISA_DATAPATH_REQ req,
+                                      ISA_RESULT_VALUES writebacks);
+    action
+        Bool did_write = False;
+
+        for (Integer d = 0; d < valueOf(ISA_MAX_DSTS); d = d + 1)
+        begin
+            // Valid destination physical register and value?
+            if (req.instDstPhysRegs[d] matches tagged Valid .pr &&&
+                writebacks[d] matches tagged Valid .val)
+            begin
+                writebackQ.ports[d].enq(tuple3(req.token, tagged Valid pr, val));
+                did_write = True;
+            end
+        end
+        
+        if (! did_write)
+        begin
+            // Token has no written registers.  Must send a "done" message
+            // anyway.
+            writebackQ.ports[0].enq(tuple3(req.token, tagged Invalid, ?));
+        end
+    endaction
+    endfunction
+
+
     // ====================================================================
     //
     // Stage 1:  Decode.
@@ -399,7 +451,7 @@ module [HASIM_MODULE] mkISA_Datapath
             src1 = lit;
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
         if (opcode != opc10)
         begin
@@ -460,7 +512,8 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRspOp(tagged RNop, writebacks));
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
 
@@ -489,7 +542,7 @@ module [HASIM_MODULE] mkISA_Datapath
             src1 = lit;
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
         FUNCP_ISA_DATAPATH_EXCEPTIONS except = FUNCP_ISA_EXCEPT_NONE;
 
         case (funct)
@@ -522,7 +575,8 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRsp(except, tagged RNop, writebacks));
+        link_fp.makeResp(initISADatapathRsp(except, tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
 
@@ -548,7 +602,7 @@ module [HASIM_MODULE] mkISA_Datapath
         OPCODE opcode = isaGetOpcode(dp.req.instruction);
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
         FUNCP_ISA_DATAPATH_EXCEPTIONS except = FUNCP_ISA_EXCEPT_NONE;
 
         if (isaGetLiteral(dp.req.instruction) matches tagged Valid .lit)
@@ -578,7 +632,8 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRsp(except, tagged RNop, writebacks));
+        link_fp.makeResp(initISADatapathRsp(except, tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
 
@@ -611,7 +666,7 @@ module [HASIM_MODULE] mkISA_Datapath
         OPCODE opcode = isaGetOpcode(dp.req.instruction);
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
         if (isaGetLiteral(dp.req.instruction) matches tagged Valid .lit)
             src1 = lit;
@@ -637,7 +692,8 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRspOp(tagged RNop, writebacks));
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
 
@@ -663,7 +719,7 @@ module [HASIM_MODULE] mkISA_Datapath
         OPCODE opcode = isaGetOpcode(dp.req.instruction);
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
         FUNCP_ISA_DATAPATH_EXCEPTIONS except = FUNCP_ISA_EXCEPT_NONE;
 
         if (isaGetLiteral(dp.req.instruction) matches tagged Valid .lit)
@@ -722,7 +778,8 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRsp(except, tagged RNop, writebacks));
+        link_fp.makeResp(initISADatapathRsp(except, tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
 
@@ -776,7 +833,7 @@ module [HASIM_MODULE] mkISA_Datapath
         bitopsSum <= 0;
         bitopsIdx <= tagged Valid 7;
         bitopsQ.enq(ISA_DP_BITOPS_SLOW_QUEUE { pipe: pipe,
-                                               tokenIdx: dp.req.token.index,
+                                               req: dp.req,
                                                addr: addr,
                                                funct: funct,
                                                src0: src0,
@@ -791,16 +848,16 @@ module [HASIM_MODULE] mkISA_Datapath
     //     on to the adder.
     //
     rule dpBITOPS_SLOW_Operate (bitopsIdx matches tagged Valid .vecIdx);
-        let req = bitopsQ.first();
+        let bit_op = bitopsQ.first();
 
         //
         // Operate on one 8 bit chunk for each iteration.
         //
-        Vector#(8, Bit#(8)) vec0 = unpack(req.src0);
-        Vector#(8, Bit#(8)) vec1 = unpack(req.src1);
+        Vector#(8, Bit#(8)) vec0 = unpack(bit_op.src0);
+        Vector#(8, Bit#(8)) vec1 = unpack(bit_op.src1);
         
         Bit#(3) idx;
-        if (req.pipe == ISA_DP_BITOPS_CTLZ)
+        if (bit_op.pipe == ISA_DP_BITOPS_CTLZ)
             idx = vecIdx;
         else
             idx = 7 - vecIdx;
@@ -811,7 +868,7 @@ module [HASIM_MODULE] mkISA_Datapath
         Bit#(8) r = ?;
         Bool done = (vecIdx == 0);
 
-        case (req.pipe)
+        case (bit_op.pipe)
             ISA_DP_BITOPS_CTPOP:
             begin
                 r = zeroExtend(pack(countOnes(s0)));
@@ -826,7 +883,7 @@ module [HASIM_MODULE] mkISA_Datapath
             ISA_DP_BITOPS_CTTZ:
             begin
                 UInt#(4) z;
-                if (req.pipe == ISA_DP_BITOPS_CTLZ)
+                if (bit_op.pipe == ISA_DP_BITOPS_CTLZ)
                     z = countZerosMSB(s0);
                 else
                     z = countZerosLSB(s0);
@@ -850,7 +907,7 @@ module [HASIM_MODULE] mkISA_Datapath
     //     Add intermediate results from operate stage.  Send result to
     //     functional partition if done.
     //
-    rule dpBITOPS_SLOW_Sum (readyToRespondTok(bitopsQ.first.tokenIdx));
+    rule dpBITOPS_SLOW_Sum (readyToRespondTok(bitopsQ.first().req.token.index));
         match { .r, .done } = bitopsSumQ.first();
         bitopsSumQ.deq();
 
@@ -861,18 +918,19 @@ module [HASIM_MODULE] mkISA_Datapath
         // Return the result to the functional partition.
         if (done)
         begin
-            let req = bitopsQ.first();
+            let bit_op = bitopsQ.first();
             bitopsQ.deq();
 
             // The writebacks that are sent to the register file.
-            Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+            ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
             writebacks[0] = tagged Valid zeroExtend(sum);
 
-            debug_ALU(req.addr, opc1c, req.funct, writebacks[0], req.src0, req.src1);
+            debug_ALU(bit_op.addr, opc1c, bit_op.funct, writebacks[0], bit_op.src0, bit_op.src1);
 
             // Return the result to the functional partition.
             dpResponseQ.deq();
-            link_fp.makeResp(initISADatapathRspOp(tagged RNop, writebacks));
+            link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+            forwardWritebacks(bit_op.req, writebacks);
         end
     endrule
 
@@ -899,7 +957,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let branch_imm = isaGetBranchImmediate(dp.req.instruction);
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
         // The result for the timing partition.
         FUNCP_ISA_EXECUTION_RESULT timep_result = tagged RNop;
@@ -947,7 +1005,8 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRspOp(timep_result, writebacks));
+        link_fp.makeResp(initISADatapathRspOp(timep_result));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
 
@@ -980,7 +1039,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let funct = isaGetFunct(dp.req.instruction);
 
         ISA_DP_MUL_QUEUE mulReq = ?;
-        mulReq.tokenIdx = dp.req.token.index;
+        mulReq.req = dp.req;
         mulReq.isNegative = False;
         mulReq.addr = addr;
         mulReq.funct = funct;
@@ -1040,30 +1099,30 @@ module [HASIM_MODULE] mkISA_Datapath
     // dpMULResult --
     //     Consume the output of the pipelined multiplier.
     //
-    rule dpMULResult (readyToRespondTok(mulQ.first().tokenIdx));
+    rule dpMULResult (readyToRespondTok(mulQ.first().req.token.index));
         let prod <- multiplier.resp();
 
-        let req = mulQ.first();
+        let mul_req = mulQ.first();
         mulQ.deq();
 
-        if (req.isNegative)
+        if (mul_req.isNegative)
             prod = -prod;
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
-        case (req.pipe)
+        case (mul_req.pipe)
             ISA_DP_MUL_MULL:
             begin
                 writebacks[0] = tagged Valid signExtend(prod[31:0]);
-                if (req.testOverflow)
+                if (mul_req.testOverflow)
                     writebacks[1] = tagged Valid (signedMulOverflow(prod[63:0]) ? 1 : 0);
             end
 
             ISA_DP_MUL_MULQ:
             begin
                 writebacks[0] = tagged Valid prod[63:0];
-                if (req.testOverflow)
+                if (mul_req.testOverflow)
                     writebacks[1] = tagged Valid (signedMulOverflow(prod) ? 1 : 0);
             end
 
@@ -1073,11 +1132,12 @@ module [HASIM_MODULE] mkISA_Datapath
             end
         endcase
 
-        debug_ALU(req.addr, opc13, req.funct, writebacks[0], req.src0, req.src1);
+        debug_ALU(mul_req.addr, opc13, mul_req.funct, writebacks[0], mul_req.src0, mul_req.src1);
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRspOp(tagged RNop, writebacks));
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(mul_req.req, writebacks);
     endrule
 
 
@@ -1101,8 +1161,7 @@ module [HASIM_MODULE] mkISA_Datapath
             Bit#(64) src0 = reg_srcs.srcValues[0];
             debugLog.record($format("[0x%x] EXIT src0 = 0x%x", addr, src0));
             dpResponseQ.deq();
-            link_fp.makeResp(initISADatapathRspOp(tagged RTerminate unpack(truncate(src0)),
-                                                  replicate(tagged Invalid)));
+            link_fp.makeResp(initISADatapathRspOp(tagged RTerminate unpack(truncate(src0))));
         end
         else
         begin
@@ -1110,6 +1169,8 @@ module [HASIM_MODULE] mkISA_Datapath
             dpResponseQ.deq();
             link_fp.makeResp(initISADatapathRspNop());
         end
+
+        forwardWritebacks(dp.req, replicate(Invalid));
     endrule
 
 
@@ -1133,6 +1194,7 @@ module [HASIM_MODULE] mkISA_Datapath
         // Return the result to the functional partition.
         dpResponseQ.deq();
         link_fp.makeResp(initISADatapathRspException(FUNCP_ISA_EXCEPT_ILLEGAL_INSTR));
+        forwardWritebacks(dp.req, replicate(Invalid));
     endrule
 
 
@@ -1159,7 +1221,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let mem_disp = isaGetMemDisp(dp.req.instruction);
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
         // The effective address for Loads/Stores
         ISA_ADDRESS effective_addr = src0 + mem_disp;
@@ -1217,7 +1279,8 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRspOp(timep_result, writebacks));
+        link_fp.makeResp(initISADatapathRspOp(timep_result));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
 
@@ -1241,6 +1304,7 @@ module [HASIM_MODULE] mkISA_Datapath
         // Return the result to the functional partition.
         dpResponseQ.deq();
         link_fp.makeResp(initISADatapathRspNop());
+        forwardWritebacks(dp.req, replicate(Invalid));
     endrule
 
 
@@ -1266,7 +1330,7 @@ module [HASIM_MODULE] mkISA_Datapath
         OPCODE opcode = isaGetOpcode(dp.req.instruction);
 
         // The writebacks that are sent to the register file.
-        Vector#(ISA_MAX_DSTS, Maybe#(Bit#(64))) writebacks = replicate(tagged Invalid);
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
         FUNCP_ISA_DATAPATH_EXCEPTIONS except = FUNCP_ISA_EXCEPT_NONE;
 
         if (isaGetLiteral(dp.req.instruction) matches tagged Valid .lit)
@@ -1355,7 +1419,32 @@ module [HASIM_MODULE] mkISA_Datapath
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
-        link_fp.makeResp(initISADatapathRsp(except, tagged RNop, writebacks));
+        link_fp.makeResp(initISADatapathRsp(except, tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
     endrule
 
+    
+    // ====================================================================
+    //
+    // Writeback pipeline
+    //
+    // ====================================================================
+
+    //    
+    // handleWritebacks --
+    //     Read register write requests from the writebackQ and forward them
+    //     to the register state manager.
+    //    
+    rule handleWritebacks (True);
+        match {.tok, .m_pr, .val} = writebackQ.first();
+        writebackQ.deq();
+
+        // All register writes requested in the same cycle (group) are for
+        // the same token.  A token is done if the write request is the
+        // last in the group.
+        link_fp_writeback.send(initISAWriteback(tok,
+                                                m_pr,
+                                                val,
+                                                writebackQ.lastInGroup()));
+    endrule
 endmodule

@@ -1944,3 +1944,14 @@ Directory config/pm/hasim-alpha/alpha-ooo
  alpha_single_issue_ooo_exe.apm Locally Modified          133 
 
 Fixed build bug due to model body being erased
+
+----------
+mcadler     Date: Mon Aug  3 20:37:06 EDT 2009  CSN: CSN-hasim-alpha-135
+                  Tue Aug  4 00:37:06 UTC 2009
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          134 
+
+Pass register writebacks on a soft connection separate from the ISA datapath
+service.
