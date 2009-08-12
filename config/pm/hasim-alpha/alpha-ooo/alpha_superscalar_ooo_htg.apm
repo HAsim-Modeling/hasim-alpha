@@ -68,6 +68,7 @@ TERM_FPGA_SWITCHES=0
 TERM_VDEV_STREAMS=0
 TERM_FPGA_BUTTONS=0
 TERM_FPGA_LEDS=0
+TERM_VDEV_STARTER=0
 
 [Hasim 6-stage CPU]
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/superscalar-out-of-order.apm
