@@ -1985,3 +1985,27 @@ Directory config/pm/hasim-alpha/alpha-inorder
 
 
 * Set new TERM_VDEV_STARTER variable for new Starter virtual device.
+
+----------
+mcadler     Date: Thu Aug 13 08:46:05 EDT 2009  CSN: CSN-hasim-alpha-137
+                  Thu Aug 13 12:46:05 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          136 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          136 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          136 
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified          136 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.h           Locally Modified          136 
+ isa_datatypes.bsv         Locally Modified          136 
+
+- Store FP registers on the FPGA in preparation for an FP data path.
+- Allocate more physical registers in Alpha models for FP register homes.
+- Add a simple FP workload.
+
+- The HTG version of alpha unpipelined now supports only 4 contexts instead of 8
+  because 8 no longer fit.

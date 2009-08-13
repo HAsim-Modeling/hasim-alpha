@@ -7,12 +7,13 @@ Version=2.1
 Name=Unpipelined Alpha Model Simulation
 Type=HAsim
 Class=Asim::Model
+DefaultBenchmark=0
 
 [Hasim - Hardware (fpga) based system/Requires]
 hasim_funcp=Functional Partition Version 3
 hasim_chip=Single Core Chip
 hasim_isa=Alpha ISA Definition
-hasim_memory=Null Memory
+hasim_memory=Magic Memory
 
 [Model]
 DefaultAttributes=hasim hybrid alpha exe unpipelined
@@ -69,7 +70,7 @@ TERM_FPGA_LEDS=0
 TERM_VDEV_STARTER=0
 
 [Functional Partition Version 3/Params]
-FUNCP_PHYSICAL_REG_INDEX_BITS=9
+FUNCP_PHYSICAL_REG_INDEX_BITS=10
 FUNCP_TLB_CACHE_SET_INDEX_BITS=8
 
 [Hasim Unpipelined Pipeline]
@@ -84,18 +85,12 @@ chip_base_types=Chip Base Types
 File=modules/hasim/timing-models/chip/single-core-chip.awb
 Packagehint=hasim-models
 
-[Null Memory]
-File=modules/hasim/timing-models/memory/memory-magic.awb
-Packagehint=hasim-models
-
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-
 [Chip Base Types/Params]
 NUM_CPUS=8
-
 
 [Default Software System]
 File=modules/model/default_software_system.awb
@@ -109,3 +104,6 @@ hardware_system=Hasim - Hardware (fpga) based system
 File=modules/model/hybrid_system.awb
 Packagehint=hasim
 
+[Magic Memory]
+File=modules/hasim/timing-models/memory/memory-magic.awb
+Packagehint=hasim-models

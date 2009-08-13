@@ -68,31 +68,35 @@ typedef enum
 // encapsulating every addressable register in the system. This should pack into an efficient
 // number of bits, so you may want to define a custom instance of bits.
 
-typedef 35 ISA_NUM_REGS;
+typedef 67 ISA_NUM_REGS;
 
 typedef union tagged {
     Bit#(5) ArchReg;
+    Bit#(5) FPReg;
     void ControlReg;
     void LockReg;
     void LockAddrReg;
 } ISA_REG_INDEX deriving (Eq);
 
-instance Bits#(ISA_REG_INDEX, 6);
-    function Bit#(6) pack(ISA_REG_INDEX x);
+instance Bits#(ISA_REG_INDEX, 7);
+    function Bit#(7) pack(ISA_REG_INDEX x);
         return case (x) matches
-                   tagged ArchReg .v : return {1'b0, v};
-                   tagged ControlReg : return {6'b100000};
-                   tagged LockReg    : return {6'b100001};
-                   tagged LockAddrReg: return {6'b100010};
+                   tagged ArchReg .v : return {2'b00, v};
+                   tagged FPReg .v   : return {2'b01, v};
+                   tagged ControlReg : return {7'b1000000};
+                   tagged LockReg    : return {7'b1000001};
+                   tagged LockAddrReg: return {7'b1000010};
                endcase;
     endfunction
 
-    function ISA_REG_INDEX unpack(Bit#(6) x);
-        if(x[5] == 0)
+    function ISA_REG_INDEX unpack(Bit#(7) x);
+        if (x[6:5] == 0)
             return tagged ArchReg x[4:0];
-        else if(x[4:0] == 0)
+        else if (x[6:5] == 1)
+            return tagged FPReg x[4:0];
+        else if (x[1:0] == 0)
             return tagged ControlReg;
-        else if(x[4:0] == 1)
+        else if (x[1:0] == 1)
             return tagged LockReg;
         else
             return tagged LockAddrReg;
@@ -112,11 +116,13 @@ instance Literal#(ISA_REG_INDEX);
     
         if (x < 32)
             return tagged ArchReg fromInteger(x);
-        else if (x == 32)
+        else if (x < 64)
+            return tagged FPReg fromInteger(x);
+        else if (x == 64)
             return tagged ControlReg;
-        else if (x == 33)
+        else if (x == 65)
             return tagged LockReg;
-        else if (x == 34)
+        else if (x == 66)
             return tagged LockAddrReg;
         else 
             return error("ISA_REG_INDEX: Literal out of bounds: " + integerToString(x));

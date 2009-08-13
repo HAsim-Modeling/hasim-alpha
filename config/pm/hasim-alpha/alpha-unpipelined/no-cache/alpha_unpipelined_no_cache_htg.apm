@@ -7,12 +7,13 @@ Version=2.1
 Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 Type=HAsim
 Class=Asim::Model
+DefaultBenchmark=0
 
 [Hasim - Hardware (fpga) based system/Requires]
 hasim_funcp=Functional Partition Version 3
 hasim_chip=Single Core Chip
 hasim_isa=Alpha ISA Definition
-hasim_memory=Null Memory
+hasim_memory=Magic Memory
 
 [Model]
 DefaultAttributes=unpipelined alpha hybrid hasim
@@ -64,7 +65,7 @@ hasim_pipeline=Hasim Unpipelined Pipeline
 
 [Hasim Common Library/Params]
 TOKEN_ID_BITS=2
-CONTEXT_ID_BITS=3
+CONTEXT_ID_BITS=2
 TERM_FPGA_SWITCHES=0
 TERM_VDEV_STREAMS=0
 TERM_FPGA_BUTTONS=0
@@ -87,17 +88,12 @@ chip_base_types=Chip Base Types
 File=modules/hasim/timing-models/chip/single-core-chip.awb
 Packagehint=hasim-models
 
-[Null Memory]
-File=modules/hasim/timing-models/memory/memory-magic.awb
-Packagehint=hasim-models
-
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
 [Chip Base Types/Params]
-NUM_CPUS=8
-
+NUM_CPUS=4
 
 [Default Software System]
 File=modules/model/default_software_system.awb
@@ -111,3 +107,6 @@ hardware_system=Hasim - Hardware (fpga) based system
 File=modules/model/hybrid_system.awb
 Packagehint=hasim
 
+[Magic Memory]
+File=modules/hasim/timing-models/memory/memory-magic.awb
+Packagehint=hasim-models
