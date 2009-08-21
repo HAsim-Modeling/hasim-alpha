@@ -2009,3 +2009,16 @@ Directory modules/hasim/functional-partition/isa/definition
 
 - The HTG version of alpha unpipelined now supports only 4 contexts instead of 8
   because 8 no longer fit.
+
+----------
+mpellaue    Date: Fri Aug 21 17:25:55 EDT 2009  CSN: CSN-hasim-alpha-138
+                  Fri Aug 21 21:25:55 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          137 
+
+
+* Minor updates to alpha inorder exe.
+
+Michael P.
