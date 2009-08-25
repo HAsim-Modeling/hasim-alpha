@@ -31,6 +31,50 @@ function Tuple2#(ISA_ADDRESS, MEM_OFFSET) isaAlignAddress(ISA_ADDRESS a);
 endfunction
 
 
+//
+// isaMAP_S --
+//     Alpha exponent mapping for conversion from float (S) to double (T)
+//
+function Bit#(11) isaMAP_S(Bit#(8) b);
+    if (b[7] == 1)
+    begin
+        if (b[6:0] == 7'b1111111)
+            return 11'b11111111111;
+        else
+            return { 4'b1000, b[6:0] };
+    end
+    else
+    begin
+        if (b[6:0] == 0)
+            return 0;
+        else
+            return { 4'b0111, b[6:0] };
+    end
+endfunction
+
+
+//
+// isaMAP_F --
+//     Alpha exponent mapping for conversion from VAX single to double precision
+//
+function Bit#(11) isaMAP_F(Bit#(8) b);
+    if (b[7] == 1)
+    begin
+        if (b[6:0] == 7'b1111111)
+            return 11'b10001111111;
+        else
+            return { 4'b1000, b[6:0] };
+    end
+    else
+    begin
+        if (b[6:0] == 0)
+            return 0;
+        else
+            return { 4'b0111, b[6:0] };
+    end
+endfunction
+
+
 // isaInstructionFromMemValue
 
 // This function takes a value from the memory virtual device and turns
@@ -143,6 +187,7 @@ function ISA_VALUE isaLoadValueFromMemValue(MEM_VALUE val, MEM_OFFSET offset, IS
 
 endfunction
 
+
 function ISA_VALUE isaLoadValueFromSpanningMemValues(MEM_VALUE v1, MEM_VALUE v2, MEM_OFFSET offset, ISA_MEMOP_TYPE memtype);
  
     Bit#(128) combined_val = {v2, v1}; // Because of endian-ness, the second value goes first.
@@ -154,6 +199,9 @@ function ISA_VALUE isaLoadValueFromSpanningMemValues(MEM_VALUE v1, MEM_VALUE v2,
                 LOAD_ZERO_8 : return zeroExtend(shifted_v[7:0]);
                 LOAD_ZERO_16: return zeroExtend(shifted_v[15:0]);
                 LOAD_SIGN_32: return signExtend(shifted_v[31:0]);
+                LOAD_CVT_T_32: return { shifted_v[31],              // sign bit
+                                        isaMAP_S(shifted_v[30:23]), // exponent
+                                        shifted_v[22:0], 29'd0 };   // fraction
                 default: return shifted_v;
             endcase;
 
@@ -183,6 +231,7 @@ function Bool isaMemOpSpansTwoMemValues(ISA_ADDRESS vaddr, ISA_MEMOP_TYPE op_typ
             endcase
 
         LOAD_SIGN_32,
+        LOAD_CVT_T_32,
         STORE_32:
         
             case (offset)

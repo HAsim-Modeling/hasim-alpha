@@ -38,7 +38,10 @@ import Vector::*;
 
 `include "asim/provides/hasim_isa.bsh"
 `include "asim/provides/funcp_interface.bsh"
+`include "asim/provides/isa_emulator.bsh"
 
+`include "asim/rrr/remote_client_stub_ISA_REGOP_EMULATOR.bsh"
+`include "asim/dict/STATS_ISA_DATAPATH_ALPHA.bsh"
 `include "asim/dict/ASSERTIONS_ISA_DATAPATH_ALPHA.bsh"
 
 `define CPU_FEATURE_MASK 0
@@ -57,12 +60,17 @@ typedef enum
     ISA_DP_PIPE_CMOV,
     ISA_DP_PIPE_CMP,
     ISA_DP_PIPE_CONTROL,
+    ISA_DP_PIPE_FP_CMOV,
+    ISA_DP_PIPE_FP_EMUL,
+    ISA_DP_PIPE_FP_INT,
     ISA_DP_PIPE_ILLEGAL,
     ISA_DP_PIPE_LOGICAL,
     ISA_DP_PIPE_MEMADDR,
     ISA_DP_PIPE_MUL,
     ISA_DP_PIPE_NOP,
-    ISA_DP_PIPE_SHIFT
+    ISA_DP_PIPE_SHIFT,
+    ISA_DP_PIPE_XFER_FROM_FP,
+    ISA_DP_PIPE_XFER_TO_FP
 }
 ISA_DP_PIPE
     deriving (Eq, Bits);
@@ -164,10 +172,18 @@ module [HASIM_MODULE] mkISA_Datapath
     DEBUG_FILE debugLog <- mkDebugFile(`HASIM_ISA_DP_LOGFILE);
 
 
+    // ***** Statistics *****
+
+    STAT statISAEmul <- mkStatCounter(`STATS_ISA_DATAPATH_ALPHA_REGOP_EMULATED_INSTRS);
+
+
     // ***** Local state *****
 
     ASSERTION_NODE assertNode <- mkAssertionNode(`ASSERTIONS_ISA_DATAPATH_ALPHA__BASE);
     ASSERTION assertUnexpectedOpcode <- mkAssertionChecker(`ASSERTIONS_ISA_DATAPATH_ALPHA_UNEXPECTED_OPCODE, ASSERT_ERROR, assertNode);
+
+    // Floating point state
+    Wire#(Bool) src0IsFPZero <- mkWire();
 
     // Queue coming out of initial decode step
     FIFO#(ISA_DP_QUEUE) dpQ <- mkFIFO();
@@ -224,6 +240,36 @@ module [HASIM_MODULE] mkISA_Datapath
         else
         begin
             debugLog.record($format("[0x%x] ALU (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
+        end
+    endaction
+    endfunction
+
+    function Action debug_FP (ISA_ADDRESS addr_d, OPCODE opcode_d, FP_FUNC funct_d, Maybe#(Bit#(64)) val_d, Bit#(64) src0_d, Bit#(64) src1_d);
+    action
+        Bit#(6) op = pack(opcode_d);
+        Bit#(11) fu = pack(funct_d);
+        if (val_d matches tagged Valid .alu_d)
+        begin
+            debugLog.record($format("[0x%x] FP (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d));
+        end
+        else
+        begin
+            debugLog.record($format("[0x%x] FP (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
+        end
+    endaction
+    endfunction
+
+    function Action debug_FP3 (ISA_ADDRESS addr_d, OPCODE opcode_d, FP_FUNC funct_d, Maybe#(Bit#(64)) val_d, Bit#(64) src0_d, Bit#(64) src1_d, Bit#(64) src2_d);
+    action
+        Bit#(6) op = pack(opcode_d);
+        Bit#(11) fu = pack(funct_d);
+        if (val_d matches tagged Valid .alu_d)
+        begin
+            debugLog.record($format("[0x%x] FP (op 0x%x / func 0x%x) 0x%x <- src0 0x%x, src1 0x%x, src2 0x%x", addr_d, op, fu, alu_d, src0_d, src1_d, src2_d));
+        end
+        else
+        begin
+            debugLog.record($format("[0x%x] FP (op 0x%x / func 0x%x) Invalid", addr_d, op, fu));
         end
     endaction
     endfunction
@@ -313,19 +359,22 @@ module [HASIM_MODULE] mkISA_Datapath
 
             ldbu, ldl, ldq, ldwu,
             ldq_u,
-            ldl_l, ldq_l:
+            ldl_l, ldq_l,
+            ldt, lds:
             begin
                 pipeline = ISA_DP_PIPE_MEMADDR;
             end
 
             stl_c, stq_c,
             stb, stl, stq, stw,
-            stq_u:
+            stq_u,
+            stt, sts:
             begin
                 pipeline = ISA_DP_PIPE_MEMADDR;
             end
 
             beq, bge, bgt, blbc, blbs, ble, blt, bne,
+            fbeq, fblt, fble, fbne, fbge, fbgt,
             br, bsr,
             jmp:
             begin
@@ -350,27 +399,6 @@ module [HASIM_MODULE] mkISA_Datapath
                     pipeline = ISA_DP_PIPE_CMP;
             end
 
-            opc12:
-            begin
-                pipeline = ISA_DP_PIPE_SHIFT;
-            end
-
-            opc13:
-            begin
-                pipeline = ISA_DP_PIPE_MUL;
-            end
-
-            opc17:
-            begin
-                case (isaGetFPFunc(req.instruction))
-                    // fnop (dst other than r31 is emulated and doesn't get here)
-                    cpys:
-                    begin
-                        pipeline = ISA_DP_PIPE_NOP;
-                    end
-                endcase
-            end
-
             opc11:
             begin
                 //
@@ -383,12 +411,63 @@ module [HASIM_MODULE] mkISA_Datapath
                     pipeline = ISA_DP_PIPE_CMOV;
             end
 
+            opc12:
+            begin
+                pipeline = ISA_DP_PIPE_SHIFT;
+            end
+
+            opc13:
+            begin
+                pipeline = ISA_DP_PIPE_MUL;
+            end
+
+            opc14:
+            begin
+                case (isaGetFPFunc(req.instruction))
+                    itofs, itoff, itoft:
+                        pipeline = ISA_DP_PIPE_XFER_TO_FP;
+                    default:
+                        pipeline = ISA_DP_PIPE_FP_EMUL;
+                endcase
+            end
+
+            opc15, opc16:
+            begin
+                if (req.instDstPhysRegs[0] matches tagged Valid .dst_pr)
+                    pipeline = ISA_DP_PIPE_FP_EMUL;
+                else
+                    pipeline = ISA_DP_PIPE_NOP;
+            end
+
+            opc17:
+            begin
+                case (isaGetFPFunc(req.instruction))
+                    cvtlq, cpys, cpysn, cpyse, cvtql:
+                        pipeline = ISA_DP_PIPE_FP_INT;
+                    fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
+                        pipeline = ISA_DP_PIPE_FP_CMOV;
+                    default:
+                        pipeline = ISA_DP_PIPE_FP_EMUL;
+                endcase
+            end
+
+            opc18:
+            begin
+                // RPCC is emulated.  Every other opc18 is a NOP in the
+                // functional model.  (Cache prefetch, etc. may have timing
+                // model side effects.)
+                pipeline = ISA_DP_PIPE_NOP;
+            end
+
             opc1c:
             begin
                 case (isaGetFunct(req.instruction))
                 ctpop, perr, ctlz, cttz:
                     pipeline = ISA_DP_PIPE_BITOPS_SLOW;
                     
+                ftoit, ftois:
+                    pipeline = ISA_DP_PIPE_XFER_FROM_FP;
+
                 default:
                     pipeline = ISA_DP_PIPE_BITOPS;
                 endcase
@@ -951,7 +1030,6 @@ module [HASIM_MODULE] mkISA_Datapath
         let reg_srcs <- getRegSources();
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
-        Bit#(64) src1 = reg_srcs.srcValues[1];
 
         OPCODE opcode = isaGetOpcode(dp.req.instruction);
         let branch_imm = isaGetBranchImmediate(dp.req.instruction);
@@ -977,6 +1055,23 @@ module [HASIM_MODULE] mkISA_Datapath
                                  bne : return src0 != 0;
                              endcase;
                 debugLog.record($format("[0x%x] Bxx to 0x%x, src0=0x%x, %staken", addr, newAddr, src0, taken? "": "not "));
+                timep_result = taken? tagged RBranchTaken truncate(newAddr): tagged RBranchNotTaken truncate(addr + 4);
+            end
+
+            fbeq, fblt, fble, fbne, fbge, fbgt:
+            begin
+                let newAddr = addr + 4 + (signExtend(branch_imm) << 2);
+                let sign_bit = src0[63];
+                Bool taken = case (opcode)
+                                 // src0IsFPZero includes test for negative zero
+                                 fbeq: return src0IsFPZero;
+                                 fblt: return (sign_bit == 1) && ! src0IsFPZero;
+                                 fble: return (sign_bit == 1) || src0IsFPZero;
+                                 fbne: return ! src0IsFPZero;
+                                 fbge: return (sign_bit == 0) || src0IsFPZero;
+                                 fbgt: return (sign_bit == 0) && ! src0IsFPZero;
+                             endcase;
+                debugLog.record($format("[0x%x] FBxx to 0x%x, src0=0x%x, %staken", addr, newAddr, src0, taken? "": "not "));
                 timep_result = taken? tagged RBranchTaken truncate(newAddr): tagged RBranchNotTaken truncate(addr + 4);
             end
 
@@ -1230,7 +1325,8 @@ module [HASIM_MODULE] mkISA_Datapath
             effective_addr = effective_addr & ~7;
 
         case (opcode)
-            ldbu, ldl, ldq, ldwu:
+            ldbu, ldl, ldq, ldwu,
+            ldt, lds:
             begin
                 debugLog.record($format("[0x%x] LD [0x%x]", addr, effective_addr));
             end
@@ -1255,10 +1351,20 @@ module [HASIM_MODULE] mkISA_Datapath
                 debugLog.record($format("[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
-            stb, stl, stq, stw:
+            stb, stl, stq, stw,
+            stt:
             begin
                 writebacks[0] = tagged Valid src1;
                 debugLog.record($format("[0x%x] ST [0x%x] <- 0x%x", addr, effective_addr, src1));
+            end
+
+            sts:
+            begin
+                // Convert T to S
+                Bit#(32) single_fp = { src1[63:62],   // Sign bit and high exponent bit
+                                       src1[58:29] }; // Rest of exponent and fraction
+                writebacks[0] = tagged Valid zeroExtend(single_fp);
+                debugLog.record($format("[0x%x] STS [0x%x] <- 0x%x", addr, effective_addr, single_fp));
             end
 
             stq_u:
@@ -1314,7 +1420,6 @@ module [HASIM_MODULE] mkISA_Datapath
     //
     // ====================================================================
 
-    (* descending_urgency = "dpSHIFT, dpNOP, dpMEMADDR, dpILLEGAL, dpCONTROL, dpMULResult, dpBRANCH, dpBITOPS_SLOW_Sum, dpBITOPS, dpLOGICAL, dpCMOV, dpCMP, dpADD" *)
     rule dpSHIFT ((dpQ.first().pipe == ISA_DP_PIPE_SHIFT) && readyToRespondStd());
         let dp = dpQ.first();
         dpQ.deq();
@@ -1426,6 +1531,321 @@ module [HASIM_MODULE] mkISA_Datapath
     
     // ====================================================================
     //
+    //   Integer copies on FP registers
+    //
+    // ====================================================================
+
+    rule dpIntOnFP ((dpQ.first().pipe == ISA_DP_PIPE_FP_INT) && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        let addr = dp.req.instAddress;
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        Bit#(64) src0 = reg_srcs.srcValues[0];
+        Bit#(64) src1 = reg_srcs.srcValues[1];
+
+        OPCODE opcode = isaGetOpcode(dp.req.instruction);
+
+        // The writebacks that are sent to the register file.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        let funct = isaGetFPFunc(dp.req.instruction);
+        
+        Bit#(64) d = ?;
+
+        case (funct)
+            cvtlq:
+            begin
+                d = signExtend({ src0[63:62], src0[58:29] });
+            end
+
+            cpys:
+            begin
+                d = { src0[63], src1[62:0] };
+            end
+
+            cpysn:
+            begin
+                d = { ~src0[63], src1[62:0] };
+            end
+
+            cpyse:
+            begin
+                d = { src0[63:52], src1[51:0] };
+            end
+
+            cvtql:
+            begin
+                d = { src0[31:30], 3'b0, src0[29:0], 29'b0 };
+            end
+        endcase
+
+        writebacks[0] = tagged Valid d;
+
+        debug_FP(addr, opcode, funct, writebacks[0], src0, src1);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
+    endrule
+
+
+    // ====================================================================
+    //
+    //   Register transfer between FP and integer registers.
+    //
+    // ====================================================================
+
+    rule dpFromFP ((dpQ.first().pipe == ISA_DP_PIPE_XFER_FROM_FP) && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        let addr = dp.req.instAddress;
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        Bit#(64) src0 = reg_srcs.srcValues[0];
+
+        OPCODE opcode = isaGetOpcode(dp.req.instruction);
+
+        // The writebacks that are sent to the register file.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        let funct = isaGetFunct(dp.req.instruction);
+        
+        case (funct)
+            ftois:
+            begin
+                Bit#(32) s = signExtend(src0[63]);
+                Bit#(64) d = { s, src0[63:62], src0[58:29] };
+                writebacks[0] = tagged Valid d;
+            end
+
+            ftoit:
+            begin
+                writebacks[0] = tagged Valid src0;
+            end
+        endcase
+
+        debug_ALU(addr, opcode, funct, writebacks[0], src0, 0);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
+    endrule
+
+
+    rule dpToFP ((dpQ.first().pipe == ISA_DP_PIPE_XFER_TO_FP) && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        let addr = dp.req.instAddress;
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        Bit#(64) src0 = reg_srcs.srcValues[0];
+
+        OPCODE opcode = isaGetOpcode(dp.req.instruction);
+
+        // The writebacks that are sent to the register file.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        let funct = isaGetFPFunc(dp.req.instruction);
+        
+        case (funct)
+            itoff:
+            begin
+                Bit#(64) d = { src0[31], isaMAP_F(src0[30:23]), src0[22:0], 29'b0 };
+                writebacks[0] = tagged Valid d;
+            end
+
+            itofs:
+            begin
+                Bit#(64) d = { src0[31], isaMAP_S(src0[30:23]), src0[22:0], 29'b0 };
+                writebacks[0] = tagged Valid d;
+            end
+
+            itoft:
+            begin
+                writebacks[0] = tagged Valid src0;
+            end
+        endcase
+
+        debug_FP(addr, opcode, funct, writebacks[0], src0, 0);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
+    endrule
+
+
+    // ====================================================================
+    //
+    //   Floating point CMOV.
+    //
+    // ====================================================================
+
+    //    
+    // fpZeroTest --
+    //     Generate a wire with tests for floating point zero.  The result is
+    //     shared by multiple rules (CMOV and floating branch).
+    //
+    rule fpZeroTest (True);
+        let reg_srcs = link_fp_srcvals.receive();
+        Bit#(64) src0 = reg_srcs.srcValues[0];
+
+        // Test for both zero and negative zero by ignoring the sign bit
+        src0IsFPZero <= (src0[62:0] == 63'b0);
+    endrule
+
+
+    //
+    // dpFPCMOV --
+    //     Floating point conditional move.
+    //
+    rule dpFPCMOV ((dpQ.first().pipe == ISA_DP_PIPE_FP_CMOV) && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        let addr = dp.req.instAddress;
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        Bit#(64) src0 = reg_srcs.srcValues[0];
+        Bit#(64) src1 = reg_srcs.srcValues[1];
+        Bit#(64) src2 = reg_srcs.srcValues[2];
+
+        OPCODE opcode = isaGetOpcode(dp.req.instruction);
+
+        // The writebacks that are sent to the register file.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+        FUNCP_ISA_DATAPATH_EXCEPTIONS except = FUNCP_ISA_EXCEPT_NONE;
+
+        let funct = isaGetFPFunc(dp.req.instruction);
+        let sign_bit = src0[63];
+
+        case (funct)
+            fcmoveq: writebacks[0] = tagged Valid ((src0IsFPZero) ? src1 : src2);
+            fcmovne: writebacks[0] = tagged Valid ((! src0IsFPZero) ? src1 : src2);
+            fcmovlt: writebacks[0] = tagged Valid (((sign_bit == 1) && ! src0IsFPZero) ? src1 : src2);
+            fcmovge: writebacks[0] = tagged Valid (((sign_bit == 0) || src0IsFPZero) ? src1 : src2);
+            fcmovle: writebacks[0] = tagged Valid (((sign_bit == 1) || src0IsFPZero) ? src1 : src2);
+            fcmovgt: writebacks[0] = tagged Valid (((sign_bit == 0) && ! src0IsFPZero) ? src1 : src2);
+
+            default:
+            begin
+                except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
+                debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
+            end
+        endcase
+
+        debug_FP3(addr, opcode, funct, writebacks[0], src0, src1, src2);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRsp(except, tagged RNop));
+        forwardWritebacks(dp.req, writebacks);
+    endrule
+
+
+    // ====================================================================
+    //
+    //   Floating point emulation pipeline.
+    //
+    // ====================================================================
+
+    // Emulation RRR Stubs
+    ClientStub_ISA_REGOP_EMULATOR emulClient <- mkClientStub_ISA_REGOP_EMULATOR();
+
+    // Internal communication with details of emulation requests
+    FIFO#(Tuple2#(TOKEN, Maybe#(FUNCP_PHYSICAL_REG_INDEX))) dpFPEmulQ <- mkSizedFIFO(4);
+
+
+    //
+    // dpFPEmulReq --
+    //     Pass the instruction and input values to software.  Send an early
+    //     response to the timing model that the instruction is a "normal"
+    //     operation.  The destination register will be written when the
+    //     result comes back from software.
+    //
+    (* descending_urgency = "dpFPEmulReq, dpFPCMOV, dpToFP, dpFromFP, dpIntOnFP, dpSHIFT, dpNOP, dpMEMADDR, dpILLEGAL, dpCONTROL, dpMULResult, dpBRANCH, dpBITOPS_SLOW_Sum, dpBITOPS, dpLOGICAL, dpCMOV, dpCMP, dpADD" *)
+    rule dpFPEmulReq ((dpQ.first().pipe == ISA_DP_PIPE_FP_EMUL) && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        let addr = dp.req.instAddress;
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        Bit#(64) src0 = reg_srcs.srcValues[0];
+        Bit#(64) src1 = reg_srcs.srcValues[1];
+
+        ISA_REG_INDEX src0_reg = tagged FPReg dp.req.instruction[25:21];
+        ISA_REG_INDEX src1_reg = tagged FPReg dp.req.instruction[20:16];
+        ISA_REG_INDEX dst_reg = tagged FPReg dp.req.instruction[4:0];
+
+        // The writebacks that are sent to the register file.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        debugLog.record($format("[0x%x] FPEmul F%0d <- 0x%x op 0x%x", addr, dp.req.instruction[4:0], src0, src1));
+
+        //
+        // Request emulation
+        //
+        emulClient.makeRequest_emulateRegOp(
+            contextIdToRRR(tokContextId(dp.req.token)),
+            dp.req.instruction,
+            dp.req.instAddress,
+            src0,
+            src1,
+            zeroExtend(pack(src0_reg)),
+            zeroExtend(pack(src1_reg)),
+            zeroExtend(pack(dst_reg)));
+
+        // Return the result to the functional partition.  For floating point
+        // emulation we assume there is no exception and no control changes.
+        // The register write will happen when the result is returned from
+        // software.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+
+        //
+        // Pass details of the request to the stage that will receive the response
+        // from emulation.  Responses will be returned in order.
+        //
+        dpFPEmulQ.enq(tuple2(dp.req.token, dp.req.instDstPhysRegs[0]));
+        statISAEmul.incr();
+    endrule
+
+
+    //
+    // dpFPEmulResp --
+    //     Get the floating point emulation response from software.
+    //
+    rule dpFPEmulResp (True);
+        let dstVal <- emulClient.getResponse_emulateRegOp();
+
+        match {.tok, .dst_pr} = dpFPEmulQ.first();
+        dpFPEmulQ.deq();
+        
+        debugLog.record($format("FPEmulResp PR%0d <- 0x%x", validValue(dst_pr), dstVal));
+
+        link_fp_writeback.send(initISAWriteback(tok, dst_pr, dstVal, True));
+    endrule
+
+
+    // ====================================================================
+    //
     // Writeback pipeline
     //
     // ====================================================================
@@ -1434,7 +1854,8 @@ module [HASIM_MODULE] mkISA_Datapath
     // handleWritebacks --
     //     Read register write requests from the writebackQ and forward them
     //     to the register state manager.
-    //    
+    //
+    (* descending_urgency = "dpFPEmulResp, handleWritebacks" *)
     rule handleWritebacks (True);
         match {.tok, .m_pr, .val} = writebackQ.first();
         writebackQ.deq();

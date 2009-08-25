@@ -12,7 +12,8 @@ use strict;
 my $gcfg = Asim::GenCFG->new();
 
 my @bmarks = ("bitops_tests/bitops_tests",
-              "fp/fp_simple",
+              "fp/fp_simple_double",
+              "fp/fp_simple_float",
               "hello/hello",
               "memory_tests/memory_tests_aligned",
               "memory_tests/memory_tests_unaligned",

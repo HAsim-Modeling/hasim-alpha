@@ -161,8 +161,25 @@ FUNCT umulh     = 'h30;
 FUNCT mullv     = 'h40;
 FUNCT mulqv     = 'h60;
 
-// opc14 opc15 opc16 opc17 are floating point instructions. Not implemented yet.
-FP_FUNC cpys    = 'h020;        // opc17.cpys with f31 target is fnop
+// opc14 is mostly emulated floating point.
+FP_FUNC itofs   = 'h004;
+FP_FUNC itoff   = 'h014;
+FP_FUNC itoft   = 'h024;
+
+// opc15 and opc16 are emulated floating point instructions.
+
+// opc17 are floating point instructions. Most are emulated.
+FP_FUNC cvtlq   = 'h010;
+FP_FUNC cpys    = 'h020;
+FP_FUNC cpysn   = 'h021;
+FP_FUNC cpyse   = 'h022;
+FP_FUNC fcmoveq = 'h02a;
+FP_FUNC fcmovne = 'h02b;
+FP_FUNC fcmovlt = 'h02c;
+FP_FUNC fcmovge = 'h02d;
+FP_FUNC fcmovle = 'h02e;
+FP_FUNC fcmovgt = 'h02f;
+FP_FUNC cvtql   = 'h030;
 
 // opc18
 MEM_FUNC trapb  = 'h0000;
@@ -238,6 +255,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
+    FP_FUNC   fpFunc = i[15:5];
 
     let           ra = i[25:21];
     let           rb = i[20:16];
@@ -253,14 +271,19 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
                     ret = tagged Valid (tagged ArchReg ra);
             endcase
         end
+
         lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l,
         stl_c, stq_c, stb, stl, stq, stw, stq_u,
+        ldt, lds, stt, sts,
         jmp:
             ret = tagged Valid (tagged ArchReg rb);
 
         beq, bge, bgt, blbc, blbs, ble, blt, bne,
         opc10, opc12, opc13:
             ret = tagged Valid (tagged ArchReg ra);
+
+        fbeq, fblt, fble, fbne, fbge, fbgt:
+            ret = tagged Valid (tagged FPReg ra);
 
         opc11:
         begin
@@ -270,11 +293,34 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
             endcase
         end
 
+        opc14:
+            case (fpFunc)
+                itofs, itoff, itoft:
+                    ret = tagged Valid (tagged ArchReg ra);
+                default:
+                    ret = tagged Valid (tagged FPReg rb);
+            endcase
+
+        opc15, opc16:
+            ret = tagged Valid (tagged FPReg ra);
+
+        opc17:
+            case (fpFunc)
+                cvtlq, cvtql:
+                    ret = tagged Valid (tagged FPReg rb);
+                cpys, cpysn, cpyse:
+                    ret = tagged Valid (tagged FPReg ra);
+                fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
+                    ret = tagged Valid (tagged FPReg ra);
+            endcase
+
         opc1c:
         begin
             case (funct)
                 perr:
                     ret = tagged Valid (tagged ArchReg ra);
+                ftoit, ftois:
+                    ret = tagged Valid (tagged FPReg ra);
                 default:
                     ret = tagged Valid (tagged ArchReg rb);
             endcase
@@ -288,6 +334,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
     OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
+    FP_FUNC   fpFunc = i[15:5];
     MEM_FUNC memFunc = i[15:0];
 
     let           ra = i[25:21];
@@ -299,6 +346,9 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
     case (opcode)
         stl_c, stq_c, stb, stl, stq, stw, stq_u:
             ret = tagged Valid (tagged ArchReg ra);
+
+        stt, sts:
+            ret = tagged Valid (tagged FPReg ra);
 
         opc10, opc12, opc13:
         begin
@@ -317,6 +367,17 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
             endcase
         end
 
+        opc15, opc16:
+            ret = tagged Valid (tagged FPReg rb);
+
+        opc17:
+            case (fpFunc)
+                cpys, cpysn, cpyse:
+                    ret = tagged Valid (tagged FPReg rb);
+                fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
+                    ret = tagged Valid (tagged FPReg rb);
+            endcase
+
         opc1c:
         begin
             case (funct)
@@ -333,6 +394,7 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
     OPCODE    opcode = isaGetOpcode(i);
     Bool      useLit = unpack(i[12]);
     FUNCT      funct = i[11:5];
+    FP_FUNC   fpFunc = i[15:5];
     MEM_FUNC memFunc = i[15:0];
 
     let           ra = i[25:21];
@@ -368,6 +430,15 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
                    ret = tagged Valid (tagged ControlReg);
             endcase
         end
+
+
+        opc17:
+        begin
+            case (fpFunc)
+                fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
+                    ret = tagged Valid (tagged FPReg rc);
+            endcase
+        end
     endcase
 
     return ret;
@@ -387,6 +458,7 @@ endfunction
 function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
     OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
+    FP_FUNC   fpFunc = i[15:5];
     MEM_FUNC memFunc = i[15:0];
 
     let           ra = i[25:21];
@@ -401,12 +473,26 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
         br, bsr, jmp:
             ret = tagged Valid (tagged ArchReg ra);
 
+        ldt, lds:
+            ret = tagged Valid (tagged FPReg ra);
+
         opc10, opc11, opc12, opc13:
             ret = tagged Valid (tagged ArchReg rc);
 
+        ldt, lds, opc14, opc15, opc16:
+            ret = tagged Valid (tagged FPReg rc);
+
+        opc17:
+            case (fpFunc)
+                cvtlq, cpys, cpysn, cpyse, cvtql:
+                    ret = tagged Valid (tagged FPReg rc);
+                fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
+                    ret = tagged Valid (tagged FPReg rc);
+            endcase
+
         opc1c:
         begin
-            if (funct >= 'h30 && funct < 'h38 || funct == 'h00 || funct == 'h01)
+            if ((funct >= 0 && funct < 'h38) || (funct >= 'h70))
                 ret = tagged Valid (tagged ArchReg rc);
         end
     endcase
@@ -504,6 +590,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
                begin
                   return case (v) matches
                              tagged ArchReg 31: return tagged Invalid;
+                             tagged FPReg 31: return tagged Invalid;
                              default: return ret;
                          endcase;
                end
@@ -520,6 +607,7 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
 
     OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
+    FP_FUNC   fpFunc = i[15:5];
     MEM_FUNC memFunc = i[15:0];
 
     let           ra = i[25:21];
@@ -528,6 +616,7 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
 
     return case (opcode)
                lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u: return 1;
+               ldt, lds: return 1;
                ldl_l, ldq_l: return 3;
                stl_c, stq_c: return 3;
                br, bsr, jmp: return 1;
@@ -549,7 +638,16 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
                    endcase
                end
 
-               opc1c: return (funct >= 'h38) ? 0 : 1;
+               opc14, opc15, opc16: return 1;
+
+               opc17:
+                   case (fpFunc)
+                       cvtlq, cpys, cpysn, cpyse, cvtql: return 1;
+                       fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt: return 1;
+                       default: return 0;
+                   endcase
+
+               opc1c: return ((funct >= 'h38) && (funct < 'h70)) ? 0 : 1;
                default: return 0;
            endcase;
 endfunction
@@ -571,6 +669,7 @@ function Bool isaIsLoad(ISA_INSTRUCTION i);
 
     return case (opcode)
                ldbu, ldl, ldq, ldwu, ldq_u, ldl_l, ldq_l: return True;
+               ldt, lds: return True;
                default: return False; 
            endcase;
 
@@ -593,6 +692,7 @@ function Bool isaIsStore(ISA_INSTRUCTION i);
 
     return case (opcode)
                stl_c, stq_c, stb, stl, stq, stw, stq_u: return True;
+               stt, sts: return True;
                default: return False;
            endcase;
 
@@ -622,6 +722,8 @@ function ISA_MEMOP_TYPE isaLoadType(ISA_INSTRUCTION i);
                ldq_u: return LOAD_UNALIGNED_64;
                ldl_l: return LOAD_SIGN_32;
                ldq_l: return LOAD_64;
+               ldt: return LOAD_64;
+               lds: return LOAD_CVT_T_32;
                default: return LOAD_64;
            endcase;
 
@@ -651,6 +753,8 @@ function ISA_MEMOP_TYPE isaStoreType(ISA_INSTRUCTION i);
                stl: return STORE_32;
                stq: return STORE_64;
                stw: return STORE_16;
+               stt: return STORE_64;
+               sts: return STORE_32;
                default: return STORE_64;
            endcase;
 
@@ -674,6 +778,7 @@ function Bool isaIsBranch(ISA_INSTRUCTION i);
 
     return case (opcode)
                br, bsr, jmp, beq, bge, bgt, blbc, blbs, ble, blt, bne: True;
+               fbeq, fblt, fble, fbne, fbge, fbgt: True;
                default: return False;
            endcase;
 
@@ -728,26 +833,31 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
 
                // No clue category. TODO look if any of these can be implemented
                call_pal, opc02, opc03, opc04, opc05, opc07: return True;
-               opc18: return True;
                pal19, pal1d, pal1e, pal1f: return True;
 
-               // Expensive to implement
-               // ldq_u, stq_u: return True;
-               // ldl_l, ldq_l, stl_c, stq_c: return True;
-
                // Floating point
-               ldf, ldg, lds, ldt, stf, stg, sts, stt: return True;
-               opc14, opc15, opc16: return True;
-
-               // opc17.cpys to f31 is a fnop, otherwise emulate
-               opc17: return ((fpFunc != cpys) || (rc != 31));
-
-               fbeq, fblt, fble, fbne, fbge, fbgt: return True;
+               ldf, ldg, stf, stg: return True;
 
                opc01: return (memFunc != exit);
 
+               // Some of opc17 is just FP register bit manipulation.  The
+               // other functions are emulated.
+               opc17: 
+                   case (fpFunc)
+                       cvtlq, cpys, cpysn, cpyse, cvtql:
+                           return False;
+                       fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
+                           return False;
+                       default:
+                           return True;
+                   endcase
+
+               // Most of opc18 functions have no functional side effects
+               // and can be treated as NOPs.
+               opc18: return (memFunc == rpcc);
+
                // TODO implement the rest ( except floating point )
-               opc1c: return (funct >= 'h38);
+               opc1c: return ((funct >= 'h38) && (funct < 'h70));
 
                default: return False;
            endcase;
@@ -756,7 +866,11 @@ endfunction
 
 function Bool isBranchImm(ISA_INSTRUCTION inst);
     let opcode = inst[31:26];
-    return opcode == beq || opcode == bge || opcode == bgt || opcode == blbc || opcode == blbs || opcode == ble || opcode == blt || opcode == bne;
+    return case (opcode)
+               beq, bge, bgt, blbc, blbs, ble, blt, bne: True;
+               fbeq, fblt, fble, fbne, fbge, fbgt: True;
+               default: return False;
+           endcase;
 endfunction
 
 function ISA_ADDRESS predPcBranchImm(ISA_ADDRESS addr, ISA_INSTRUCTION inst);

@@ -17,3 +17,5 @@
 //
 
 def ASSERTIONS.ISA_DATAPATH_ALPHA.UNEXPECTED_OPCODE    "FUNCP ALU: Unexpected opcode";
+
+def STATS.ISA_DATAPATH_ALPHA.REGOP_EMULATED_INSTRS     "FUNCP: Emulated Register-Only Instructions";

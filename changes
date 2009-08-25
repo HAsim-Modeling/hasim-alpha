@@ -2022,3 +2022,26 @@ Directory config/pm/hasim-alpha/alpha-inorder
 * Minor updates to alpha inorder exe.
 
 Michael P.
+
+----------
+mcadler     Date: Tue Aug 25 10:42:39 EDT 2009  CSN: CSN-hasim-alpha-139
+                  Tue Aug 25 14:42:39 UTC 2009
+
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified          138 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          138 
+ isa_datapath_alpha.dic    Locally Modified          138 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified          138 
+ isa_datatypes.bsv         Locally Modified          138 
+ isa_memory_conversions.bsv Locally Modified          138 
+
+- Implement FP operations that are relatively simple in hardware.  (E.g.
+  fcmov, floating branches).
+- Add a register-only instruction emulation path that emulates inside the
+  functional execution unit.  FP operations flow through this pipeline.
+- Split fp_simple into fp_simple_double & fp_simple_float

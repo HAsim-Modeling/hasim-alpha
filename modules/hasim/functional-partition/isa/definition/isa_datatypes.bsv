@@ -56,11 +56,12 @@ typedef enum
     LOAD_ZERO_8,
     LOAD_ZERO_16,
     LOAD_SIGN_32,
+    LOAD_CVT_T_32,      // lds (single precision floating point load)
     LOAD_64,
     LOAD_UNALIGNED_64
 }
-  ISA_MEMOP_TYPE
-     deriving (Eq, Bits, Bounded);
+ISA_MEMOP_TYPE
+    deriving (Eq, Bits, Bounded);
 
 // ISA_REG_INDEX
 
