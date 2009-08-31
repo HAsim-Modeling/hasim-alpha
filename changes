@@ -2045,3 +2045,37 @@ Directory modules/hasim/functional-partition/isa/definition
 - Add a register-only instruction emulation path that emulates inside the
   functional execution unit.  FP operations flow through this pipeline.
 - Split fp_simple into fp_simple_double & fp_simple_float
+
+----------
+mpellaue    Date: Mon Aug 31 18:50:51 EDT 2009  CSN: CSN-hasim-alpha-140
+                  Mon Aug 31 22:50:51 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          139 
+ alpha_superscalar_ooo_htg.apm Locally Modified          139 
+ alpha_single_issue_ooo_exe.apm Locally Modified          139 
+ alpha_single_issue_ooo_htg.apm Locally Modified          139 
+ alpha_superscalar_inorder_exe.apm Locally Modified          139 
+ alpha_superscalar_inorder_htg.apm Locally Modified          139 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          139 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          139 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          139 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          139 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          139 
+ alpha_inorder_htg.apm     Locally Modified          139 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          139 
+
+
+* Update all HAsim APMs to conform to the new organization.
+* Hopefully no parameter settings were lost in the transition.
+
+Michael P.
