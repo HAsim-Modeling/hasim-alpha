@@ -19,15 +19,19 @@ my @bmarks = ("bitops_tests/bitops_tests",
               "memory_tests/memory_tests_unaligned",
              );
 	      
-foreach my $bm (@bmarks) {
-    my ($dir, $bmark) = split('/', $bm);
+for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
+    foreach my $bm (@bmarks) {
+        my ($dir, $bmark) = split('/', $bm);
 
-    $gcfg->add(name => $bmark,
-               tree => [ "user_mode" ],
-               setup => "tools/scripts/bmark/setup-bmark $bmark --group tests/$dir --isa alpha",
-               feeder => "m5",
-               feedflags => "m5_configs/se.py --hasim-sim --cmd program/${bmark}.alpha.bin",
-              );
+        my $bm_name = sprintf("%s_%03dt", $bmark, $num_contexts);
+
+        $gcfg->add(name => $bm_name,
+                   tree => [ "user_mode" ],
+                   setup => "tools/scripts/bmark/setup-bmark $bm_name --group tests/$dir --isa alpha --binary ${bmark}.alpha.bin --contexts=${num_contexts}",
+                   feeder => "m5",
+                   feedflags => "m5_configs/se.py --hasim-sim --cmd ${bmark}.alpha.bin --num-cpus=${num_contexts}",
+                  );
+    }
 }
 
 $gcfg->action(@ARGV);

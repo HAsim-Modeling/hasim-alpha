@@ -9,7 +9,7 @@ use strict;
 use Benchmarks::CPU2000_data;
 use Benchmarks::CPU2006_data;
 
-sub m5_cmd($$$$$);
+sub m5_cmd($$$$$$);
 
 my $bmdir;
 $bmdir = `awb-resolver -config=benchmarkdir`;
@@ -33,39 +33,42 @@ my @spec2k_skip = (
     'test_253.perlbmk',         # no fork() syscall in m5 user mode
 );
 
-foreach my $size (sort keys %{CPU2000_data::spec2k}) {
-    my %group = %{${CPU2000_data::spec2k}{$size}};
-    foreach my $name (sort keys %group) {
-        my %bm = %{$group{$name}};
+for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
+    foreach my $size (sort keys %{CPU2000_data::spec2k}) {
+        my %group = %{${CPU2000_data::spec2k}{$size}};
+        foreach my $name (sort keys %group) {
+            my %bm = %{$group{$name}};
 
-        my $bmark = "cpu2000_${size}_${name}";
+            my $ctx_str = sprintf("%03dt", $num_contexts);
+            my $bmark = "cpu2000_${size}_${ctx_str}_${name}";
 
-        # Is this benchmark on the skip list?
-        my $skipMe = 0;
-        foreach my $skip (@spec2k_skip) {
-            if ($bmark =~ $skip) {
-                $skipMe = 1;
-                last;
+            # Is this benchmark on the skip list?
+            my $skipMe = 0;
+            foreach my $skip (@spec2k_skip) {
+                if ($bmark =~ $skip) {
+                    $skipMe = 1;
+                    last;
+                }
             }
+            next if ($skipMe);
+
+            my $data = $name;
+            $data =~ s/_.*//;
+            $data = "${bmdir}/cpu2000.1.3/data/${data}/data";
+
+            my $setup = "tools/scripts/bmark/setup-bmark $bmark --group spec/cpu2000.1.3 --binary bin-static/$bm{program} --linkto ${data}:data/all/input/:data/${size}/input/ --isa alpha --contexts=${num_contexts}";
+            my $cmp = join(':', @{$bm{compare}});
+            if ($cmp ne '') {
+                $setup .= " --compare=\"${cmp}\"";
+            }
+
+            $gcfg->add(name => $bmark,
+                       tree => [ "cpu2000", $size, $ctx_str, ${CPU2000_data::isFP}{$name} ? "FP" : "INT" ],
+                       setup => $setup,
+                       feeder => "m5",
+                       feedflags => m5_cmd("$bm{program}", $num_contexts, $bm{args}, $bm{input}, $bm{output}, $bm{errout}),
+                      );
         }
-        next if ($skipMe);
-
-        my $data = $name;
-        $data =~ s/_.*//;
-        $data = "${bmdir}/cpu2000.1.3/data/${data}.tar.gz";
-
-        my $setup = "tools/scripts/bmark/setup-bmark $bmark --group spec/cpu2000.1.3 --binary bin-static/$bm{program} --data ${data} --linkto data/all/input/:data/${size}/input/ --isa alpha";
-        my $cmp = join(':', @{$bm{compare}});
-        if ($cmp ne '') {
-            $setup .= " --compare=\"${cmp}\"";
-        }
-
-        $gcfg->add(name => $bmark,
-                   tree => [ "cpu2000", $size, ${CPU2000_data::isFP}{$name} ? "FP" : "INT" ],
-                   setup => $setup,
-                   feeder => "m5",
-                   feedflags => m5_cmd("program/$bm{program}", $bm{args}, $bm{input}, $bm{output}, $bm{errout}),
-                  );
     }
 }
 
@@ -95,42 +98,45 @@ my @spec2006_skip = (
     '482.sphinx3',              # getrlimit syscall: unimplemented resource 2
 );
 
-foreach my $size (sort keys %{CPU2006_data::spec2006}) {
-    my %group = %{${CPU2006_data::spec2006}{$size}};
-    foreach my $name (sort keys %group) {
-        my %bm = %{$group{$name}};
+for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
+    foreach my $size (sort keys %{CPU2006_data::spec2006}) {
+        my %group = %{${CPU2006_data::spec2006}{$size}};
+        foreach my $name (sort keys %group) {
+            my %bm = %{$group{$name}};
 
-        my $bmark = "cpu2006_${size}_${name}";
+            my $ctx_str = sprintf("%03dt", $num_contexts);
+            my $bmark = "cpu2006_${size}_${ctx_str}_${name}";
 
-        # Is this benchmark on the skip list?
-        my $skipMe = 0;
-        foreach my $skip (@spec2006_skip) {
-            if ($bmark =~ $skip) {
-                $skipMe = 1;
-                last;
+            # Is this benchmark on the skip list?
+            my $skipMe = 0;
+            foreach my $skip (@spec2006_skip) {
+                if ($bmark =~ $skip) {
+                    $skipMe = 1;
+                    last;
+                }
             }
+            next if ($skipMe);
+
+            my $data = $name;
+            $data =~ s/_.*//;
+            $data = "${bmdir}/cpu2006.1.0/data/${data}/data";
+
+            my $setup = "tools/scripts/bmark/setup-bmark $bmark --group spec/cpu2006.1.0 --binary bin-static/$bm{program} --linkto ${data}:data/all/input/:data/${size}/input/ --isa alpha --contexts=${num_contexts}";
+            my $cmp = join(':', @{$bm{compare}});
+            if ($cmp ne '') {
+                $setup .= " --compare=\"${cmp}\"";
+            }
+
+            my $m5cmd = m5_cmd("$bm{program}", $num_contexts, $bm{args}, $bm{input}, $bm{output}, $bm{errout});
+            $m5cmd .= " --physmem=2GB";
+
+            $gcfg->add(name => $bmark,
+                       tree => [ "cpu2006", $size, $ctx_str, ${CPU2006_data::isFP}{$name} ? "FP" : "INT" ],
+                       setup => $setup,
+                       feeder => "m5",
+                       feedflags => $m5cmd,
+                      );
         }
-        next if ($skipMe);
-
-        my $data = $name;
-        $data =~ s/_.*//;
-        $data = "${bmdir}/cpu2006.1.0/data/${data}.tar.gz";
-
-        my $setup = "tools/scripts/bmark/setup-bmark $bmark --group spec/cpu2006.1.0 --binary bin-static/$bm{program} --data ${data} --linkto data/all/input/:data/${size}/input/ --isa alpha";
-        my $cmp = join(':', @{$bm{compare}});
-        if ($cmp ne '') {
-            $setup .= " --compare=\"${cmp}\"";
-        }
-
-        my $m5cmd = m5_cmd("program/$bm{program}", $bm{args}, $bm{input}, $bm{output}, $bm{errout});
-        $m5cmd .= " --physmem=2GB";
-
-        $gcfg->add(name => $bmark,
-                   tree => [ "cpu2006", $size, ${CPU2006_data::isFP}{$name} ? "FP" : "INT" ],
-                   setup => $setup,
-                   feeder => "m5",
-                   feedflags => $m5cmd,
-                  );
     }
 }
 
@@ -139,18 +145,20 @@ $gcfg->action(@ARGV);
 
 
 ##
-## m5_cmd(program, args, input, output, error) --
+## m5_cmd(program, num_contexts, args, input, output, error) --
 ##
 ##  Construct an m5 command line.
 ##
-sub m5_cmd($$$$$) {
+sub m5_cmd($$$$$$) {
     my $program = shift;
+    my $num_contexts = shift;
     my $args = shift;
     my $input = shift;
     my $output = shift;
     my $errout = shift;
 
     my $cmd = "m5_configs/se.py --hasim-sim";
+    $cmd .= " --num-cpus=${num_contexts}";
     $cmd .= " --cmd=${program}";
     $cmd .= " \\\"--options=${args}\\\"" if ($args ne '');
     $cmd .= " --input=${input}" if ($input ne '');

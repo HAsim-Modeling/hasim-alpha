@@ -17,13 +17,17 @@ my @bmarks = ("median",
 	      "qsort",
 	      "vvadd");
 	      
-foreach my $bmark (@bmarks) {
-    $gcfg->add(name => $bmark,
-               tree => [ "benchmarks" ],
-               setup => "tools/scripts/bmark/setup-bmark $bmark --group 6.375/$bmark --isa alpha",
-               feeder => "m5",
-               feedflags => "m5_configs/se.py --hasim-sim --cmd program/${bmark}.alpha.bin",
-              );
+for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
+    foreach my $bmark (@bmarks) {
+        my $bm_name = sprintf("%s_%03dt", $bmark, $num_contexts);
+
+        $gcfg->add(name => $bm_name,
+                   tree => [ "benchmarks" ],
+                   setup => "tools/scripts/bmark/setup-bmark $bm_name --group 6.375/$bmark --isa alpha --binary ${bmark}.alpha.bin --contexts=${num_contexts}",
+                   feeder => "m5",
+                   feedflags => "m5_configs/se.py --hasim-sim --cmd ${bmark}.alpha.bin --num-cpus=${num_contexts}",
+                  );
+    }
 }
 
 $gcfg->action(@ARGV);

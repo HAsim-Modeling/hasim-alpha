@@ -6,9 +6,9 @@
 
 experiments = alpha_unpipelined_no_cache_exe
 #
-config/bm/alpha/tests.cfx/user_mode/memory_tests_unaligned.cfg
+config/bm/alpha/tests.cfx/user_mode/memory_tests_unaligned_002t.cfg
 
 
 experiments = alpha_inorder_exe alpha_superscalar_ooo_exe
 #
-config/bm/alpha/6_375.cfx/benchmarks/qsort.cfg
+config/bm/alpha/6_375.cfx/benchmarks/qsort_001t.cfg

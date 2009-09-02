@@ -2079,3 +2079,32 @@ Directory modules/hasim/functional-partition/isa/datapath
 * Hopefully no parameter settings were lost in the transition.
 
 Michael P.
+
+----------
+mcadler     Date: Tue Sep  1 20:23:19 EDT 2009  CSN: CSN-hasim-alpha-141
+                  Wed Sep  2 00:23:19 UTC 2009
+
+
+Directory experiments/hasim-alpha/regression
+ regression.benchmarks     Locally Modified          140 
+
+Directory experiments/hasim-alpha/nightly
+ nightly.benchmarks        Locally Modified          140 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          140 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          140 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          140 
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified          140 
+ 6_375.cfx                 Locally Modified          140 
+ SPEC.cfx                  Locally Modified          140 
+
+- Fix alpha_unpipelined_no_cache to specify multiple instances & contexts
+  as defined before the last check-in.
+- Benchmarks may now specify multiple instances (m5 CPUs).  For now this works
+  only by running multiple copies of the same benchmark, though the only
+  hurdle for running unique programs in each thread is specifying them
+  in the cfx and setup scripts.
+- Update regression benchmark names (now includes the number of threads).

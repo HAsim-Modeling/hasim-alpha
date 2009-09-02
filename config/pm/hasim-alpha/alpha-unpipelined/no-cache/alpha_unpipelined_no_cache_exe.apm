@@ -123,3 +123,13 @@ Packagehint=hasim-models
 
 [Soft Connections Library/Params]
 CON_CWIDTH=350
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=10
+
+[Default HAsim Common Library/Params]
+CONTEXT_ID_BITS=3
+TOKEN_ID_BITS=2
+
+[Chip Base Types/Params]
+NUM_CPUS=8
