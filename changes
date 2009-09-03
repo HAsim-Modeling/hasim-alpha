@@ -2108,3 +2108,14 @@ Directory config/bm/alpha
   hurdle for running unique programs in each thread is specifying them
   in the cfx and setup scripts.
 - Update regression benchmark names (now includes the number of threads).
+
+----------
+emer        Date: Thu Sep  3 14:40:47 EDT 2009  CSN: CSN-hasim-alpha-142
+                  Thu Sep  3 18:40:47 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_exe.apm Locally Modified          141 
+
+Updated unpipelined model with caches to new organization, but
+it doesn't build yet.
