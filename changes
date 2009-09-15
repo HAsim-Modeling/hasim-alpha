@@ -2119,3 +2119,16 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
 
 Updated unpipelined model with caches to new organization, but
 it doesn't build yet.
+
+----------
+ruhler      Date: Tue Sep 15 15:58:26 EDT 2009  CSN: CSN-hasim-alpha-143
+                  Tue Sep 15 19:58:26 UTC 2009
+
+
+Directory config/pm/hasim-alpha
+ alpha-smt/                Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-smt
+ alpha_smt_exe.apm         Locally Added               - 
+
+Added inorder smt model.
