@@ -7,6 +7,7 @@ Version=2.1
 Name=Alpha Functional Model
 Type=HAsim
 Class=Asim::Model
+DefaultBenchmark=0
 
 [Model]
 DefaultAttributes=alpha hybrid hasim
@@ -24,7 +25,7 @@ funcp_base_types=Functional Partition Base Types
 funcp_interface=Functional Partition Interface
 
 [Functional Partition Version 3]
-File=modules/hasim/functional-partition/functional_partition_default.awb
+File=modules/hasim/functional-partition/functional-partition-default.awb
 Packagehint=hasim
 
 [Manager using Macro Ops for Mem State/Requires]
@@ -72,7 +73,7 @@ File=modules/hasim/functional-partition/hybrid_isa_semantics.awb
 Packagehint=hasim
 
 [Hybrid ISA Emulator]
-File=modules/hasim/functional-partition/isa-emulator/isa-emulator.awb
+File=modules/hasim/functional-partition/isa/isa-emulator/isa-emulator.awb
 Packagehint=hasim
 
 [Hybrid ISA Semantics/Requires]

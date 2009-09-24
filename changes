@@ -2132,3 +2132,17 @@ Directory config/pm/hasim-alpha/alpha-smt
  alpha_smt_exe.apm         Locally Added               - 
 
 Added inorder smt model.
+
+----------
+mcadler     Date: Thu Sep 24 17:16:46 EDT 2009  CSN: CSN-hasim-alpha-144
+                  Thu Sep 24 21:16:46 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          143 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified          143 
+
+- Switch Alpha unpipelined ACP configuration to Nallatech.
+- Simple module renaming.
