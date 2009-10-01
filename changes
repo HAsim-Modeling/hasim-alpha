@@ -2146,3 +2146,13 @@ Directory config/pm/hasim-alpha/submodels/funcp
 
 - Switch Alpha unpipelined ACP configuration to Nallatech.
 - Simple module renaming.
+
+----------
+mcadler     Date: Thu Oct  1 13:17:36 EDT 2009  CSN: CSN-hasim-alpha-145
+                  Thu Oct  1 17:17:36 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          144 
+
+Unpipelined model runs at 85MHz.

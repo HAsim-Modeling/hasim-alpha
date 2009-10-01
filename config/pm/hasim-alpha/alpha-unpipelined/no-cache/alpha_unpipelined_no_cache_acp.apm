@@ -112,7 +112,6 @@ hasim_isa=Alpha ISA Definition
 hasim_funcp=Functional Partition Version 3
 hasim_model_services=Model Services
 
-
 [HAsim Performance Model]
 File=modules/hasim/model/hasim-model.awb
 Packagehint=hasim
@@ -134,3 +133,6 @@ TOKEN_ID_BITS=2
 [Hasim Unpipelined Pipeline]
 File=modules/hasim/timing-models/pipeline/unpipelined/no-cache/unpipelined-pipeline.awb
 Packagehint=hasim-models
+
+[FPGA Environment/Params]
+MODEL_CLOCK_FREQ=85
