@@ -7,7 +7,8 @@ Version=2.1
 Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 Type=HAsim
 Class=Asim::Model
-DefaultBenchmark=0
+DefaultBenchmark=
+DefaultRunOpts=
 
 [Model]
 DefaultAttributes=unpipelined alpha hybrid hasim
@@ -44,9 +45,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-[Magic Memory]
-File=modules/hasim/timing-models/memory/memory-magic.awb
-Packagehint=hasim-models
 
 [Soft Connections Library]
 File=config/pm/hasim/submodels/common/soft-connections-lib.apm
@@ -93,7 +91,7 @@ File=config/pm/hasim/submodels/common/project-common-default.apm
 Packagehint=hasim
 
 [Single Chip Timing Partition/Requires]
-hasim_memory=Magic Memory
+hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
 hasim_chip=Single Core Chip
 
@@ -112,8 +110,6 @@ hasim_isa=Alpha ISA Definition
 hasim_funcp=Functional Partition Version 3
 hasim_model_services=Model Services
 
-[HW/SW Hybrid Project Foundation/Params]
-MAKE_ALL_TARGET=bit
 
 [HAsim Performance Model]
 File=modules/hasim/model/hasim-model.awb
@@ -135,4 +131,15 @@ TOKEN_ID_BITS=2
 
 [Hasim Unpipelined Pipeline]
 File=modules/hasim/timing-models/pipeline/unpipelined/no-cache/unpipelined-pipeline.awb
+Packagehint=hasim-models
+
+[Null Memory/Requires]
+memory_base_types=Memory Base Types
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models

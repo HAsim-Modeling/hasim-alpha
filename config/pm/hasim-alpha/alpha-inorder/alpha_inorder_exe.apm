@@ -7,7 +7,8 @@ Version=2.1
 Name=Inorder Alpha Simulation
 Type=HAsim
 Class=Asim::Model
-DefaultBenchmark=0
+DefaultBenchmark=
+DefaultRunOpts=
 
 [Model]
 DefaultAttributes=hasim inorder alpha simulation
@@ -97,7 +98,7 @@ Packagehint=hasim
 [Single Chip Timing Partition/Requires]
 hasim_modellib=HAsim Modeling Library
 hasim_chip=Single Core Chip
-hasim_memory=Magic Memory
+hasim_memory=Null Memory
 
 [Platform Services]
 File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
@@ -122,9 +123,17 @@ Packagehint=hasim
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[Magic Memory]
-File=modules/hasim/timing-models/memory/memory-magic.awb
-Packagehint=hasim-models
 
 [Soft Connections Library/Params]
 CON_CWIDTH=350
+
+[Null Memory/Requires]
+memory_base_types=Memory Base Types
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
+Packagehint=hasim-models

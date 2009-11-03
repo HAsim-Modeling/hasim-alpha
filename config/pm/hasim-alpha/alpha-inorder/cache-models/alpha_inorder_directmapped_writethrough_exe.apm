@@ -7,7 +7,8 @@ Version=2.1
 Name=Inorder Alpha Direct-Mapped Writethrough Caches Simulation
 Type=HAsim
 Class=Asim::Model
-DefaultBenchmark=0
+DefaultBenchmark=
+DefaultRunOpts=
 
 [Model]
 DefaultAttributes=hasim inorder alpha simulation
@@ -36,14 +37,6 @@ Packagehint=hasim-models
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline
 hasim_l1_caches=Split (Instruction and Data)
-
-[Single Core Chip/Requires]
-hasim_core=Pipeline and Caches
-chip_base_types=Chip Base Types
-
-[Single Core Chip]
-File=modules/hasim/timing-models/chip/single-core-chip.awb
-Packagehint=hasim-models
 
 [Inorder Pipeline]
 File=config/pm/hasim-models/pipeline/inorder/inorder.apm
@@ -75,10 +68,6 @@ CON_CWIDTH=350
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
 
-[Magic Memory]
-File=modules/hasim/timing-models/memory/memory-magic.awb
-Packagehint=hasim-models
-
 [Soft Connections Hybrid Application Environment]
 File=modules/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
 Packagehint=platforms
@@ -102,9 +91,9 @@ File=config/pm/hasim/submodels/common/project-common-default.apm
 Packagehint=hasim
 
 [Single Chip Timing Partition/Requires]
-hasim_memory=Magic Memory
+hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
-hasim_chip=Single Core Chip
+hasim_chip=Multi-Core Chip
 
 [Platform Services]
 File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
@@ -128,3 +117,53 @@ Packagehint=hasim
 [Default HAsim Common Library]
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
+
+[Null Memory/Requires]
+memory_base_types=Memory Base Types
+
+[Null Last Level Cache]
+File=modules/hasim/timing-models/caches/last-level-caches/null/last-level-cache-null.awb
+Packagehint=hasim-models
+
+[Uncore with Interconnect]
+File=modules/hasim/timing-models/uncore/uncore-with-interconnect.awb
+Packagehint=hasim-models
+
+[Uncore with Interconnect/Requires]
+hasim_last_level_cache=Null Last Level Cache
+hasim_interconnect=Crossbar Interconnect
+hasim_memory_controller=Magic Memory Controller
+
+[Multi-Core Chip/Requires]
+chip_base_types=Chip Base Types
+hasim_core=Pipeline and Caches
+hasim_uncore=Uncore with Interconnect
+
+[Crossbar Interconnect]
+File=modules/hasim/timing-models/uncore/interconnects/crossbar/icn-crossbar.awb
+Packagehint=hasim-models
+
+[Multi-Core Chip]
+File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
+Packagehint=hasim-models
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Magic Memory Controller]
+File=modules/hasim/timing-models/uncore/memory-controller/magic/memory-controller-magic.awb
+Packagehint=hasim-models
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
+Packagehint=hasim-models
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=10
+
+[Chip Base Types/Params]
+NUM_CPUS=8
+
+[Default HAsim Common Library/Params]
+CONTEXT_ID_BITS=3

@@ -1,48 +1,45 @@
 
 [Global]
 SaveParameters=0
-Description=Single issue ooo
-File=alpha_single_issue_ooo_htg
+Description=Inorder Alpha Ring Network ACP
+File=alpha_inorder_dm_wt_ring_acp
 Version=2.1
-Name=Single issue ooo
+Name=Inorder Alpha Ring Network ACP
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
 
 [Model]
-DefaultAttributes=hasim ooo alpha
+DefaultAttributes=hasim inorder alpha simulation
 model=HW/SW Hybrid Project Foundation
 
 [FPGA Environment]
-File=config/pm/hasim/submodels/fpgaenv/fpgaenv-hybrid-htg-v5-pcie.apm
-Packagehint=platforms
+File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
+Packagehint=platform-acp
 
 [Functional Partition Version 3]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
 Packagehint=hasim-alpha
 
-[Cacheless Core]
-File=modules/hasim/timing-models/core/cacheless-core/core-no-cache.awb
-Packagehint=hasim-models
-
-[Cacheless Core/Requires]
-hasim_pipeline=Hasim 6-stage CPU
-
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-[Hasim 6-stage CPU]
-File=config/pm/hasim-models/pipeline/superscalar-out-of-order/single-issue-out-of-order.apm
+[Pipeline and Caches]
+File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
 Packagehint=hasim-models
 
-[Single Core Chip/Requires]
-hasim_core=Cacheless Core
-chip_base_types=Chip Base Types
+[Split (Instruction and Data)]
+File=config/pm/hasim-models/l1-caches/l1_caches.apm
+Packagehint=hasim-models
 
-[Single Core Chip]
-File=modules/hasim/timing-models/chip/single-core-chip.awb
+[Pipeline and Caches/Requires]
+hasim_pipeline=Inorder Pipeline
+hasim_l1_caches=Split (Instruction and Data)
+
+[Inorder Pipeline]
+File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
 
 [Chip Base Types]
@@ -71,7 +68,6 @@ CON_CWIDTH=350
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
 
-
 [Soft Connections Hybrid Application Environment]
 File=modules/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
 Packagehint=platforms
@@ -97,7 +93,7 @@ Packagehint=hasim
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
-hasim_chip=Single Core Chip
+hasim_chip=Multi-Core Chip
 
 [Platform Services]
 File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
@@ -114,7 +110,6 @@ hasim_isa=Alpha ISA Definition
 hasim_funcp=Functional Partition Version 3
 hasim_model_services=Model Services
 
-
 [HAsim Performance Model]
 File=modules/hasim/model/hasim-model.awb
 Packagehint=hasim
@@ -126,10 +121,53 @@ Packagehint=hasim
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
 
+[Null Last Level Cache]
+File=modules/hasim/timing-models/caches/last-level-caches/null/last-level-cache-null.awb
+Packagehint=hasim-models
+
+[Uncore with Interconnect]
+File=modules/hasim/timing-models/uncore/uncore-with-interconnect.awb
+Packagehint=hasim-models
+
+[Uncore with Interconnect/Requires]
+hasim_last_level_cache=Null Last Level Cache
+hasim_interconnect=Ring Interconnect
+hasim_memory_controller=Magic Memory Controller
+
+[Multi-Core Chip/Requires]
+chip_base_types=Chip Base Types
+hasim_core=Pipeline and Caches
+hasim_uncore=Uncore with Interconnect
+
+[Multi-Core Chip]
+File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
+Packagehint=hasim-models
+
 [Null Memory]
 File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Magic Memory Controller]
+File=modules/hasim/timing-models/uncore/memory-controller/magic/memory-controller-magic.awb
 Packagehint=hasim-models
 
 [Memory Base Types]
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
+
+[Ring Interconnect]
+File=modules/hasim/timing-models/uncore/interconnects/ring/icn-ring.awb
+Packagehint=hasim-models
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=10
+
+[Chip Base Types/Params]
+NUM_CPUS=8
+
+[Default HAsim Common Library/Params]
+CONTEXT_ID_BITS=3
+TOKEN_ID_BITS=6
+
+[FPGA Environment/Params]
+MODEL_CLOCK_FREQ=65

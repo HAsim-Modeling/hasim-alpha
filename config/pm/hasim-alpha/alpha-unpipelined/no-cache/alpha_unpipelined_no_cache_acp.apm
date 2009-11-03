@@ -7,7 +7,8 @@ Version=2.1
 Name=Unpipelined Alpha Model - ACP
 Type=HAsim
 Class=Asim::Model
-DefaultBenchmark=0
+DefaultBenchmark=
+DefaultRunOpts=
 
 [Model]
 DefaultAttributes=unpipelined alpha hybrid hasim
@@ -44,9 +45,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-[Magic Memory]
-File=modules/hasim/timing-models/memory/memory-magic.awb
-Packagehint=hasim-models
 
 [Soft Connections Library]
 File=config/pm/hasim/submodels/common/soft-connections-lib.apm
@@ -93,7 +91,7 @@ File=config/pm/hasim/submodels/common/project-common-default.apm
 Packagehint=hasim
 
 [Single Chip Timing Partition/Requires]
-hasim_memory=Magic Memory
+hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
 hasim_chip=Single Core Chip
 
@@ -136,3 +134,14 @@ Packagehint=hasim-models
 
 [FPGA Environment/Params]
 MODEL_CLOCK_FREQ=85
+
+[Null Memory/Requires]
+memory_base_types=Memory Base Types
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
+Packagehint=hasim-models

@@ -2156,3 +2156,42 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
  alpha_unpipelined_no_cache_acp.apm Locally Modified          144 
 
 Unpipelined model runs at 85MHz.
+
+----------
+pellauer    Date: Tue Nov  3 11:16:51 EST 2009  CSN: CSN-hasim-alpha-146
+                  Tue Nov  3 16:16:51 UTC 2009
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          145 
+ alpha_superscalar_ooo_htg.apm Locally Modified          145 
+ alpha_single_issue_ooo_exe.apm Locally Modified          145 
+ alpha_single_issue_ooo_htg.apm Locally Modified          145 
+ alpha_superscalar_inorder_exe.apm Locally Modified          145 
+ alpha_superscalar_inorder_htg.apm Locally Modified          145 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          145 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          145 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          145 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_ring_acp.apm Locally Added               0 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          145 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          145 
+ alpha_inorder_dm_wt_ring_exe.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          145 
+ alpha_inorder_htg.apm     Locally Modified          145 
+ alpha_inorder_acp.apm     Locally Modified          145 
+
+Directory config/pm/hasim-alpha/alpha-smt
+ alpha_smt_exe.apm         Locally Modified          145 
+
+
+* Update all alpha models to the new memory arrangement.
+* Set directmapped cache to use crossbar by default.
+* Add directmapped cache with ring network model.
+
+Michael P.

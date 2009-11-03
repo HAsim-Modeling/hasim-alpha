@@ -7,6 +7,8 @@ Version=2.1
 Name=Inorder Alpha Synthesis - ACP
 Type=HAsim
 Class=Asim::Model
+DefaultBenchmark=
+DefaultRunOpts=
 
 [Hasim - Hardware (fpga) based system/Requires]
 hasim_funcp=Functional Partition Version 3
@@ -31,7 +33,7 @@ File=config/pm/hasim/submodels/controller/hybrid_standard_controller.apm
 Packagehint=hasim
 
 [HAsim Hybrid Model Foundation/Requires]
-hasim_common=Hasim Common Library
+hasim_common=Default HAsim Common Library
 system=Hybrid System foundation
 hasim_controller=Hasim Standard Controller
 fpgaenv=FPGA Environment
@@ -48,12 +50,7 @@ Packagehint=hasim-alpha
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
 
-[Hasim Common Library]
-File=config/pm/hasim/submodels/common/hasim_common.apm
-Packagehint=hasim
 
-[HAsim Hybrid Model Foundation/Params]
-MAKE_ALL_TARGET=bit
 
 [Pipeline and Caches]
 File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
@@ -76,11 +73,9 @@ File=modules/hasim/timing-models/chip/single-core-chip.awb
 Packagehint=hasim-models
 
 [Null Memory]
-File=modules/hasim/timing-models/memory/memory-magic.awb
+File=modules/hasim/timing-models/memory/memory-null.awb
 Packagehint=hasim-models
 
-[Hasim Common Library/Params]
-TOKEN_ID_BITS=6
 
 [Inorder Pipeline]
 File=config/pm/hasim-models/pipeline/inorder/inorder.apm
@@ -89,9 +84,6 @@ Packagehint=hasim-models
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
-
-[Functional Partition Version 3/Params]
-FUNCP_TLB_CACHE_SET_INDEX_BITS=7
 
 
 [Default Software System]
@@ -106,3 +98,17 @@ hardware_system=Hasim - Hardware (fpga) based system
 File=modules/model/hybrid_system.awb
 Packagehint=hasim
 
+
+[Null Memory/Requires]
+memory_base_types=Memory Base Types
+
+[Default HAsim Common Library/Params]
+TOKEN_ID_BITS=6
+
+[Default HAsim Common Library]
+File=config/pm/hasim/submodels/common/hasim_common.apm
+Packagehint=hasim
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
+Packagehint=hasim-models
