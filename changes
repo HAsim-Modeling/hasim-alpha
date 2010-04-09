@@ -2195,3 +2195,17 @@ Directory config/pm/hasim-alpha/alpha-smt
 * Add directmapped cache with ring network model.
 
 Michael P.
+
+----------
+pellauer    Date: Fri Apr  9 17:19:52 EDT 2010  CSN: CSN-hasim-alpha-147
+                  Fri Apr  9 21:19:52 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Added               0 
+
+
+ * Added crossbar ACP version.
+ 
+ Michael P.
+ 
