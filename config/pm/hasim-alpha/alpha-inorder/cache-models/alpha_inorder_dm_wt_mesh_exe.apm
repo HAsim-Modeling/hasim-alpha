@@ -1,0 +1,170 @@
+
+[Global]
+SaveParameters=0
+Description=Inorder Alpha Grid Network Simulation
+File=alpha_inorder_dm_wt_mesh_exe
+Version=2.1
+Name=Inorder Alpha Grid Network Simulation
+Type=HAsim
+Class=Asim::Model
+DefaultBenchmark=
+DefaultRunOpts=
+
+[Model]
+DefaultAttributes=hasim inorder alpha simulation
+model=HW/SW Hybrid Project Foundation
+
+[FPGA Environment]
+File=config/pm/hasim/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
+Packagehint=platforms
+
+[Functional Partition Version 3]
+File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
+Packagehint=hasim-alpha
+
+[Alpha ISA Definition]
+File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
+Packagehint=hasim-alpha
+
+[Pipeline and Caches]
+File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
+Packagehint=hasim-models
+
+[Split (Instruction and Data)]
+File=config/pm/hasim-models/l1-caches/l1_caches.apm
+Packagehint=hasim-models
+
+[Pipeline and Caches/Requires]
+hasim_pipeline=Inorder Pipeline
+hasim_l1_caches=Split (Instruction and Data)
+
+[Inorder Pipeline]
+File=config/pm/hasim-models/pipeline/inorder/inorder.apm
+Packagehint=hasim-models
+
+[Chip Base Types]
+File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
+Packagehint=hasim-models
+
+[Soft Connections Library]
+File=config/pm/hasim/submodels/common/soft-connections-lib.apm
+Packagehint=hasim
+
+[HAsim Modeling Library/Requires]
+hasim_cache_algorithms=Cache Modeling Algorithms
+
+[HW/SW Hybrid Project Foundation]
+File=modules/project/project-hybrid.awb
+Packagehint=platforms
+
+[Cache Modeling Algorithms]
+File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
+Packagehint=hasim-models
+
+[Soft Connections Library/Params]
+CON_CWIDTH=350
+
+[HAsim Modeling Library]
+File=modules/hasim/util/modellib/hasim-modellib.awb
+Packagehint=hasim
+
+[Soft Connections Hybrid Application Environment]
+File=modules/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
+Packagehint=platforms
+
+[Model Services]
+File=config/pm/hasim/submodels/common/hasim-model-services.apm
+Packagehint=hasim
+
+[HW/SW Hybrid Project Foundation/Requires]
+project_common=Hybrid Project Common Utilities
+fpgaenv=FPGA Environment
+application_env=Soft Connections Hybrid Application Environment
+
+[Soft Connections Hybrid Application Environment/Requires]
+platform_services=Platform Services
+soft_connections_lib=Soft Connections Library
+connected_application=HAsim Performance Model
+
+[Hybrid Project Common Utilities]
+File=config/pm/hasim/submodels/common/project-common-default.apm
+Packagehint=hasim
+
+[Single Chip Timing Partition/Requires]
+hasim_memory=Null Memory
+hasim_modellib=HAsim Modeling Library
+hasim_chip=Multi-Core Chip
+
+[Platform Services]
+File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
+Packagehint=hasim
+
+[Single Chip Timing Partition]
+File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
+Packagehint=hasim
+
+[HAsim Performance Model/Requires]
+hasim_common=Default HAsim Common Library
+hasim_timep=Single Chip Timing Partition
+hasim_isa=Alpha ISA Definition
+hasim_funcp=Functional Partition Version 3
+hasim_model_services=Model Services
+
+[HAsim Performance Model]
+File=modules/hasim/model/hasim-model.awb
+Packagehint=hasim
+
+[Default HAsim Common Library]
+File=config/pm/hasim/submodels/common/hasim_common.apm
+Packagehint=hasim
+
+[Null Memory/Requires]
+memory_base_types=Memory Base Types
+
+[Null Last Level Cache]
+File=modules/hasim/timing-models/caches/last-level-caches/null/last-level-cache-null.awb
+Packagehint=hasim-models
+
+[Uncore with Interconnect]
+File=modules/hasim/timing-models/uncore/uncore-with-interconnect.awb
+Packagehint=hasim-models
+
+[Uncore with Interconnect/Requires]
+hasim_last_level_cache=Null Last Level Cache
+hasim_interconnect=Mesh Interconnect
+hasim_memory_controller=Latency-Delay Controller
+
+[Multi-Core Chip/Requires]
+chip_base_types=Chip Base Types
+hasim_core=Pipeline and Caches
+hasim_uncore=Uncore with Interconnect
+
+[Multi-Core Chip]
+File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
+Packagehint=hasim-models
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
+Packagehint=hasim-models
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=10
+
+[Chip Base Types/Params]
+NUM_CPUS=8
+
+[Default HAsim Common Library/Params]
+CONTEXT_ID_BITS=3
+
+[Mesh Interconnect]
+File=modules/hasim/timing-models/uncore/interconnects/torus/icn-mesh.awb
+Packagehint=hasim-models
+
+[Latency-Delay Controller]
+File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
+Packagehint=hasim-models
+
