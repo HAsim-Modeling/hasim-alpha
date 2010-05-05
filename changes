@@ -2223,3 +2223,17 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 * Adding mesh/grid model APMS.
 
 Michael P.
+
+----------
+pellauer    Date: Wed May  5 02:02:14 EDT 2010  CSN: CSN-hasim-alpha-149
+                  Wed May  5 06:02:14 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          148 
+ alpha_inorder_dm_wt_ring_exe.apm Locally Modified          148 
+
+
+* Update ring/crossbar APMs.
+
+Michael P.

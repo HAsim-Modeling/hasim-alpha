@@ -132,7 +132,7 @@ Packagehint=hasim-models
 [Uncore with Interconnect/Requires]
 hasim_last_level_cache=Null Last Level Cache
 hasim_interconnect=Crossbar Interconnect
-hasim_memory_controller=Magic Memory Controller
+hasim_memory_controller=Latency-Delay Controller
 
 [Multi-Core Chip/Requires]
 chip_base_types=Chip Base Types
@@ -151,9 +151,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/memory-null.awb
 Packagehint=hasim-models
 
-[Magic Memory Controller]
-File=modules/hasim/timing-models/uncore/memory-controller/magic/memory-controller-magic.awb
-Packagehint=hasim-models
 
 [Memory Base Types]
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
@@ -167,3 +164,8 @@ NUM_CPUS=8
 
 [Default HAsim Common Library/Params]
 CONTEXT_ID_BITS=3
+TOKEN_ID_BITS=6
+
+[Latency-Delay Controller]
+File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
+Packagehint=hasim-models
