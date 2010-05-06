@@ -2237,3 +2237,22 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 * Update ring/crossbar APMs.
 
 Michael P.
+
+----------
+pellauer    Date: Thu May  6 18:24:07 EDT 2010  CSN: CSN-hasim-alpha-150
+                  Thu May  6 22:24:07 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_ring_acp.apm Locally Modified          149 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          149 
+ alpha_inorder_dm_wt_mesh_exe.apm Locally Modified          149 
+ alpha_inorder_dm_wt_ring_exe.apm Locally Modified          149 
+
+
+* Scale EXE models to 16 Contexts. Synthesis attempts at 16-core models will
+  commence.
+  
+  
+Michael P.
+

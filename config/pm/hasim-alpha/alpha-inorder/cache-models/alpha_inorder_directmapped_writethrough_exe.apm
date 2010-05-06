@@ -151,19 +151,19 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/memory-null.awb
 Packagehint=hasim-models
 
-
 [Memory Base Types]
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
 [Functional Partition Version 3/Params]
-FUNCP_PHYSICAL_REG_INDEX_BITS=10
+FUNCP_PHYSICAL_REG_INDEX_BITS=11
+MAX_NUM_CONTEXTS=16
 
 [Chip Base Types/Params]
-NUM_CPUS=8
+NUM_CPUS=16
 
 [Default HAsim Common Library/Params]
-CONTEXT_ID_BITS=3
+CONTEXT_ID_BITS=4
 TOKEN_ID_BITS=6
 
 [Latency-Delay Controller]
