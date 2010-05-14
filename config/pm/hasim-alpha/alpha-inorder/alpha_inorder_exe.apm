@@ -124,9 +124,6 @@ File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
 
-[Soft Connections Library/Params]
-CON_CWIDTH=350
-
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
 

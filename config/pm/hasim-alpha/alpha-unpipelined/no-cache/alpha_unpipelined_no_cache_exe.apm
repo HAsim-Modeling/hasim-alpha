@@ -118,9 +118,8 @@ Packagehint=hasim-models
 [Cacheless Core/Requires]
 hasim_pipeline=Hasim Unpipelined Pipeline
 
-
 [Soft Connections Library/Params]
-CON_CWIDTH=350
+CON_CWIDTH=64
 
 [Functional Partition Version 3/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=10

@@ -65,7 +65,7 @@ File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
 Packagehint=hasim-models
 
 [Soft Connections Library/Params]
-CON_CWIDTH=350
+CON_CWIDTH=64
 
 [HAsim Modeling Library]
 File=modules/hasim/util/modellib/hasim-modellib.awb

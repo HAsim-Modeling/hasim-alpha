@@ -61,9 +61,6 @@ Packagehint=platforms
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
 Packagehint=hasim-models
 
-[Soft Connections Library/Params]
-CON_CWIDTH=350
-
 [HAsim Modeling Library]
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
@@ -121,16 +118,13 @@ Packagehint=hasim
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
 
-[Null Last Level Cache]
-File=modules/hasim/timing-models/caches/last-level-caches/null/last-level-cache-null.awb
-Packagehint=hasim-models
 
 [Uncore with Interconnect]
 File=modules/hasim/timing-models/uncore/uncore-with-interconnect.awb
 Packagehint=hasim-models
 
 [Uncore with Interconnect/Requires]
-hasim_last_level_cache=Null Last Level Cache
+hasim_last_level_cache=Writeback No Coherence Last Level Cache
 hasim_interconnect=Ring Interconnect
 hasim_memory_controller=Latency-Delay Controller
 
@@ -169,3 +163,14 @@ TOKEN_ID_BITS=6
 [Latency-Delay Controller]
 File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
 Packagehint=hasim-models
+
+[Writeback No Coherence Last Level Cache]
+File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
+Packagehint=hasim-models
+
+[Set Associative Last Level Cache Alg]
+File=modules/hasim/timing-models/caches/last-level-caches/alg/llc-set-associative.awb
+Packagehint=hasim-models
+
+[Writeback No Coherence Last Level Cache/Requires]
+hasim_last_level_cache_alg=Set Associative Last Level Cache Alg

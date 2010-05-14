@@ -2256,3 +2256,48 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
   
 Michael P.
 
+
+----------
+pellauer    Date: Fri May 14 12:25:19 EDT 2010  CSN: CSN-hasim-alpha-151
+                  Fri May 14 16:25:19 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          150 
+ alpha_superscalar_ooo_htg.apm Locally Modified          150 
+ alpha_single_issue_ooo_exe.apm Locally Modified          150 
+ alpha_single_issue_ooo_htg.apm Locally Modified          150 
+ alpha_superscalar_inorder_exe.apm Locally Modified          150 
+ alpha_superscalar_inorder_htg.apm Locally Modified          150 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_exe.apm Locally Modified          150 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          150 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          150 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          150 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_ring_acp.apm Locally Modified          150 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          150 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          150 
+ alpha_inorder_dm_wt_mesh_exe.apm Locally Modified          150 
+ alpha_inorder_dm_wt_mesh_acp.apm Locally Modified          150 
+ alpha_inorder_dm_wt_ring_exe.apm Locally Modified          150 
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Modified          150 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          150 
+ alpha_inorder_htg.apm     Locally Modified          150 
+
+Directory config/pm/hasim-alpha/alpha-smt
+ alpha_smt_exe.apm         Locally Modified          150 
+
+
+* Update all models to use CON_CWIDTH of 64 (down from 350 in most cases).
+
+* Add L2 cache model to cache-model inorder pipelines. Currently a 
+  4-way set-associative cache with a 12-bit index.
+  
+Michael P.

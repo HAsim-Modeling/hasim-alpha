@@ -45,7 +45,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-
 [Soft Connections Library]
 File=config/pm/hasim/submodels/common/soft-connections-lib.apm
 Packagehint=hasim
@@ -61,8 +60,6 @@ Packagehint=platforms
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
 Packagehint=hasim-models
 
-[Soft Connections Library/Params]
-CON_CWIDTH=350
 
 [HAsim Modeling Library]
 File=modules/hasim/util/modellib/hasim-modellib.awb

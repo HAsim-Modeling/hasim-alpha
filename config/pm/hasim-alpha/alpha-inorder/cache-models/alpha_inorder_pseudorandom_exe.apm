@@ -38,14 +38,6 @@ Packagehint=hasim-models
 hasim_pipeline=Inorder Pipeline
 hasim_l1_caches=Split (Instruction and Data)
 
-[Single Core Chip/Requires]
-hasim_core=Pipeline and Caches
-chip_base_types=Chip Base Types
-
-[Single Core Chip]
-File=modules/hasim/timing-models/chip/single-core-chip.awb
-Packagehint=hasim-models
-
 [Inorder Pipeline]
 File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
@@ -69,13 +61,9 @@ Packagehint=platforms
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
 Packagehint=hasim-models
 
-[Soft Connections Library/Params]
-CON_CWIDTH=350
-
 [HAsim Modeling Library]
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
-
 
 [Soft Connections Hybrid Application Environment]
 File=modules/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
@@ -102,7 +90,7 @@ Packagehint=hasim
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
-hasim_chip=Single Core Chip
+hasim_chip=Multi-Core Chip
 
 [Platform Services]
 File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
@@ -137,3 +125,51 @@ Packagehint=hasim-models
 [Memory Base Types]
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
+
+[Uncore with Interconnect]
+File=modules/hasim/timing-models/uncore/uncore-with-interconnect.awb
+Packagehint=hasim-models
+
+[Uncore with Interconnect/Requires]
+hasim_last_level_cache=Writeback No Coherence Last Level Cache
+hasim_interconnect=Crossbar Interconnect
+hasim_memory_controller=Latency-Delay Controller
+
+[Multi-Core Chip/Requires]
+chip_base_types=Chip Base Types
+hasim_core=Pipeline and Caches
+hasim_uncore=Uncore with Interconnect
+
+[Crossbar Interconnect]
+File=modules/hasim/timing-models/uncore/interconnects/crossbar/icn-crossbar.awb
+Packagehint=hasim-models
+
+[Writeback No Coherence Last Level Cache]
+File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
+Packagehint=hasim-models
+
+[Latency-Delay Controller]
+File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
+Packagehint=hasim-models
+
+[Multi-Core Chip]
+File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
+Packagehint=hasim-models
+
+[Set Associative Last Level Cache Alg]
+File=modules/hasim/timing-models/caches/last-level-caches/alg/llc-set-associative.awb
+Packagehint=hasim-models
+
+[Writeback No Coherence Last Level Cache/Requires]
+hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=11
+MAX_NUM_CONTEXTS=16
+
+[Chip Base Types/Params]
+NUM_CPUS=16
+
+[Default HAsim Common Library/Params]
+CONTEXT_ID_BITS=4
+TOKEN_ID_BITS=6

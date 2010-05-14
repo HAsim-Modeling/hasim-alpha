@@ -128,4 +128,4 @@ File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
 [Soft Connections Library/Params]
-CON_CWIDTH=350
+CON_CWIDTH=64

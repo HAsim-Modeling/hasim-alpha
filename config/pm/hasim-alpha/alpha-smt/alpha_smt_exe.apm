@@ -125,7 +125,7 @@ Packagehint=hasim
 
 
 [Soft Connections Library/Params]
-CON_CWIDTH=350
+CON_CWIDTH=64
 
 [Default HAsim Common Library/Params]
 CONTEXT_ID_BITS=2
