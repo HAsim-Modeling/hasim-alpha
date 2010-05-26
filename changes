@@ -2301,3 +2301,16 @@ Directory config/pm/hasim-alpha/alpha-smt
   4-way set-associative cache with a 12-bit index.
   
 Michael P.
+
+----------
+pellauer    Date: Tue May 25 23:18:48 EDT 2010  CSN: CSN-hasim-alpha-152
+                  Wed May 26 03:18:48 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_exe.apm Locally Modified          151 
+
+
+* Unpipelined with cache model is now updated work with real cache hierarchy and interconnect.
+
+Michael P.
