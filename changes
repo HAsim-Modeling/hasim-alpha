@@ -2314,3 +2314,18 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
 * Unpipelined with cache model is now updated work with real cache hierarchy and interconnect.
 
 Michael P.
+
+----------
+pellauer    Date: Tue Jun  1 17:45:36 EDT 2010  CSN: CSN-hasim-alpha-153
+                  Tue Jun  1 21:45:36 UTC 2010
+
+
+Directory config/bm/alpha
+ splash-2.cfx              Locally Added               0 
+
+
+* Add splash2 config file. For certain benchmarks (those that just start with N
+  threads magically) we should be ready to run. For others (those that spawn
+  threads as they go) we need to rethink a bit of M5-hasim's interaction.
+  
+Michael P.
