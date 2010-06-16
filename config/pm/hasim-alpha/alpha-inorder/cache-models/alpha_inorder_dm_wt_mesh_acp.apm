@@ -118,7 +118,6 @@ Packagehint=hasim
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
 
-
 [Uncore with Interconnect]
 File=modules/hasim/timing-models/uncore/uncore-with-interconnect.awb
 Packagehint=hasim-models
@@ -153,6 +152,7 @@ NUM_CPUS=8
 
 [Default HAsim Common Library/Params]
 CONTEXT_ID_BITS=3
+TOKEN_ID_BITS=6
 
 [Mesh Interconnect]
 File=modules/hasim/timing-models/uncore/interconnects/torus/icn-mesh.awb

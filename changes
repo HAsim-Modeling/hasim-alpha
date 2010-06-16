@@ -2329,3 +2329,26 @@ Directory config/bm/alpha
   threads as they go) we need to rethink a bit of M5-hasim's interaction.
   
 Michael P.
+
+----------
+pellauer    Date: Wed Jun 16 14:34:48 EDT 2010  CSN: CSN-hasim-alpha-154
+                  Wed Jun 16 18:34:48 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_mesh_exe.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Added               0 
+ alpha_inorder_dm_wt_crossbar_acp_16.apm Locally Added               0 
+ alpha_inorder_dm_wt_ring_acp_16.apm Locally Added               0 
+ alpha_inorder_dm_wt_mesh_acp.apm Locally Modified          153 
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Modified          153 
+
+
+* Add some useful model variants.
+
+* Mesh ACP now uses correct memory controller.
+* Crossbar ACP now uses correct number of token bits.
+
+Michael P.

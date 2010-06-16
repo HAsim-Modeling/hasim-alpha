@@ -1,22 +1,22 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Alpha Direct Writethrough Caches Crossbar ACP
-File=alpha_inorder_dm_wt_crossbar_acp
+Description=Unpipelined Alpha with Cache Mesh
+File=alpha_unpipelined_with_cache_mesh_exe
 Version=2.1
-Name=Inorder Alpha Writethrough Caches Crossbar ACP
+Name=Simulation Unpipelined Alpha with Cache Mesh
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
 
 [Model]
-DefaultAttributes=hasim inorder alpha acp
+DefaultAttributes=hasim unpipelined cache alpha simulation
 model=HW/SW Hybrid Project Foundation
 
 [FPGA Environment]
-File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
-Packagehint=platform-acp
+File=config/pm/hasim/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
+Packagehint=platforms
 
 [Functional Partition Version 3]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
@@ -30,17 +30,13 @@ Packagehint=hasim-alpha
 File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
 Packagehint=hasim-models
 
-[Split (Instruction and Data)]
-File=config/pm/hasim-models/l1-caches/l1_caches.apm
+[Hasim Unpipelined Pipeline With Caches]
+File=modules/hasim/timing-models/pipeline/unpipelined/with-cache/unpipelined-pipeline-with-cache.awb
 Packagehint=hasim-models
 
 [Pipeline and Caches/Requires]
-hasim_pipeline=Inorder Pipeline
-hasim_l1_caches=Split (Instruction and Data)
-
-[Inorder Pipeline]
-File=config/pm/hasim-models/pipeline/inorder/inorder.apm
-Packagehint=hasim-models
+hasim_pipeline=Hasim Unpipelined Pipeline With Caches
+hasim_l1_caches=Split (Instruction and Data) No TLBs
 
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
@@ -124,7 +120,7 @@ Packagehint=hasim-models
 
 [Uncore with Interconnect/Requires]
 hasim_last_level_cache=Writeback No Coherence Last Level Cache
-hasim_interconnect=Crossbar Interconnect
+hasim_interconnect=Mesh Interconnect
 hasim_memory_controller=Latency-Delay Controller
 
 [Multi-Core Chip/Requires]
@@ -132,38 +128,16 @@ chip_base_types=Chip Base Types
 hasim_core=Pipeline and Caches
 hasim_uncore=Uncore with Interconnect
 
-[Crossbar Interconnect]
-File=modules/hasim/timing-models/uncore/interconnects/crossbar/icn-crossbar.awb
+[Writeback No Coherence Last Level Cache]
+File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
+Packagehint=hasim-models
+
+[Latency-Delay Controller]
+File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
 Packagehint=hasim-models
 
 [Multi-Core Chip]
 File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
-Packagehint=hasim-models
-
-[Null Memory]
-File=modules/hasim/timing-models/memory/memory-null.awb
-Packagehint=hasim-models
-
-
-[Memory Base Types]
-File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
-Packagehint=hasim-models
-
-[Functional Partition Version 3/Params]
-FUNCP_PHYSICAL_REG_INDEX_BITS=10
-
-[Chip Base Types/Params]
-NUM_CPUS=8
-
-[Default HAsim Common Library/Params]
-CONTEXT_ID_BITS=3
-TOKEN_ID_BITS=6
-
-[FPGA Environment/Params]
-MODEL_CLOCK_FREQ=50
-
-[Writeback No Coherence Last Level Cache]
-File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
 Packagehint=hasim-models
 
 [Set Associative Last Level Cache Alg]
@@ -173,6 +147,33 @@ Packagehint=hasim-models
 [Writeback No Coherence Last Level Cache/Requires]
 hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
 
-[Latency-Delay Controller]
-File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
+Packagehint=hasim-models
+
+[Chip Base Types/Params]
+NUM_CPUS=16
+
+[Functional Partition Version 3/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=11
+MAX_NUM_CONTEXTS=16
+
+[Default HAsim Common Library/Params]
+CONTEXT_ID_BITS=4
+TOKEN_ID_BITS=3
+
+[Split (Instruction and Data) No TLBs]
+File=config/pm/hasim-models/l1-caches/l1_caches_no_tlbs.apm
+Packagehint=hasim-models
+
+[Mesh Interconnect/Params]
+MESH_HEIGHT=4
+MESH_WIDTH=4
+
+[Mesh Interconnect]
+File=modules/hasim/timing-models/uncore/interconnects/torus/icn-mesh.awb
 Packagehint=hasim-models

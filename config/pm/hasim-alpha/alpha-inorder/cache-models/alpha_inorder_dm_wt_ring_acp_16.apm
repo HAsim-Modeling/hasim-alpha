@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Alpha Direct Writethrough Caches Crossbar ACP
-File=alpha_inorder_dm_wt_crossbar_acp
+Description=Inorder Alpha Direct Writethrough Caches Ring ACP
+File=alpha_inorder_dm_wt_ring_acp_16
 Version=2.1
-Name=Inorder Alpha Writethrough Caches Crossbar ACP
+Name=Inorder Alpha Writethrough Caches Ring ACP 16
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
@@ -124,7 +124,7 @@ Packagehint=hasim-models
 
 [Uncore with Interconnect/Requires]
 hasim_last_level_cache=Writeback No Coherence Last Level Cache
-hasim_interconnect=Crossbar Interconnect
+hasim_interconnect=Ring Interconnect
 hasim_memory_controller=Latency-Delay Controller
 
 [Multi-Core Chip/Requires]
@@ -132,9 +132,6 @@ chip_base_types=Chip Base Types
 hasim_core=Pipeline and Caches
 hasim_uncore=Uncore with Interconnect
 
-[Crossbar Interconnect]
-File=modules/hasim/timing-models/uncore/interconnects/crossbar/icn-crossbar.awb
-Packagehint=hasim-models
 
 [Multi-Core Chip]
 File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
@@ -144,19 +141,19 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/memory-null.awb
 Packagehint=hasim-models
 
-
 [Memory Base Types]
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
 [Functional Partition Version 3/Params]
-FUNCP_PHYSICAL_REG_INDEX_BITS=10
+FUNCP_PHYSICAL_REG_INDEX_BITS=11
+MAX_NUM_CONTEXTS=16
 
 [Chip Base Types/Params]
-NUM_CPUS=8
+NUM_CPUS=16
 
 [Default HAsim Common Library/Params]
-CONTEXT_ID_BITS=3
+CONTEXT_ID_BITS=4
 TOKEN_ID_BITS=6
 
 [FPGA Environment/Params]
@@ -175,4 +172,9 @@ hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
 
 [Latency-Delay Controller]
 File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
+Packagehint=hasim-models
+
+
+[Ring Interconnect]
+File=modules/hasim/timing-models/uncore/interconnects/ring/icn-ring.awb
 Packagehint=hasim-models
