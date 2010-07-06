@@ -2352,3 +2352,18 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 * Crossbar ACP now uses correct number of token bits.
 
 Michael P.
+
+----------
+pellauer    Date: Tue Jul  6 15:57:54 EDT 2010  CSN: CSN-hasim-alpha-155
+                  Tue Jul  6 19:57:54 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_single_issue_ooo_exe.apm Locally Modified          154 
+
+
+* OOO Single-Issue model now works with caches, interconnects.
+
+* Coming soon: more interesting OOO single-issue variants.
+
+Michael P.
