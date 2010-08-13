@@ -16,18 +16,12 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-// isa_datapath_template
-
-// This file contains a template ISA datapath.
-
-// You should fill this in with with an ISA-specific ALU, 
-// which may be pipelined if you so choose.
-
 
 // ***** Imports *****
 
 import FIFO::*;
 import FIFOF::*;
+import SpecialFIFOs::*;
 import Vector::*;
 
 // Project foundation includes.
@@ -44,6 +38,8 @@ import Vector::*;
 `include "asim/rrr/remote_client_stub_ISA_REGOP_EMULATOR.bsh"
 `include "asim/dict/STATS_ISA_DATAPATH_ALPHA.bsh"
 `include "asim/dict/ASSERTIONS_ISA_DATAPATH_ALPHA.bsh"
+`include "asim/dict/PARAMS_HASIM_ISA_DATAPATH.bsh"
+
 
 `define CPU_FEATURE_MASK 0
 `define IMPL_VER 0
@@ -61,6 +57,16 @@ typedef enum
     ISA_DP_PIPE_CMOV,
     ISA_DP_PIPE_CMP,
     ISA_DP_PIPE_CONTROL,
+    ISA_DP_PIPE_FP_ADD,
+    ISA_DP_PIPE_FP_MUL,
+    ISA_DP_PIPE_FP_DIV,
+    ISA_DP_PIPE_FP_SQRT,
+    ISA_DP_PIPE_FP_CMP,
+    ISA_DP_PIPE_FP_CVT_S_TO_T,
+    ISA_DP_PIPE_FP_CVT_Q_TO_T,
+    ISA_DP_PIPE_FP_CVT_T_TO_S,
+    ISA_DP_PIPE_FP_CVT_Q_TO_S,
+    ISA_DP_PIPE_FP_CVT_T_TO_Q,
     ISA_DP_PIPE_FP_CMOV,
     ISA_DP_PIPE_FP_EMUL,
     ISA_DP_PIPE_FP_INT,
@@ -75,6 +81,33 @@ typedef enum
 }
 ISA_DP_PIPE
     deriving (Eq, Bits);
+
+// Some macros to distinguish between synthesis, where we have an on-board FP engine,
+// and simulation, where we do not, and must emulate more.
+
+`ifdef SYNTH
+  `define SYNTH_ISA_DP_PIPE_FP_ADD ISA_DP_PIPE_FP_ADD
+  `define SYNTH_ISA_DP_PIPE_FP_MUL ISA_DP_PIPE_FP_MUL
+  `define SYNTH_ISA_DP_PIPE_FP_DIV ISA_DP_PIPE_FP_DIV
+  `define SYNTH_ISA_DP_PIPE_FP_SQRT ISA_DP_PIPE_FP_SQRT
+  `define SYNTH_ISA_DP_PIPE_FP_CMP ISA_DP_PIPE_FP_CMP
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_S_TO_T ISA_DP_PIPE_FP_CVT_S_TO_T
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_T ISA_DP_PIPE_FP_CVT_Q_TO_T
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_S ISA_DP_PIPE_FP_CVT_T_TO_S
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_S ISA_DP_PIPE_FP_CVT_Q_TO_S
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_Q ISA_DP_PIPE_FP_CVT_T_TO_Q
+`else
+  `define SYNTH_ISA_DP_PIPE_FP_ADD ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_MUL ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_DIV ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_SQRT ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_CMP ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_S_TO_T ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_T ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_S ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_S ISA_DP_PIPE_FP_EMUL
+  `define SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_Q ISA_DP_PIPE_FP_EMUL
+`endif 
 
 
 //
@@ -428,16 +461,92 @@ module [HASIM_MODULE] mkISA_Datapath
                     itofs, itoff, itoft:
                         pipeline = ISA_DP_PIPE_XFER_TO_FP;
                     default:
-                        pipeline = ISA_DP_PIPE_FP_EMUL;
+                    begin
+                        case (isaGetFPOp(req.instruction))
+                            sqrtx:
+                            begin
+                                case (isaGetFPFunc(req.instruction)[3:0])
+                                    fpMode_IEEE:// IEEE mode only
+                                    begin
+                                        if (isaIsDefaultFPRounding(req.instruction))
+                                        begin
+                                            // We can do default rounding mode only
+                                            pipeline = `SYNTH_ISA_DP_PIPE_FP_SQRT;
+                                        end
+                                        else
+                                        begin
+                                            // Non-default rounding mode is emulated.
+                                            pipeline = ISA_DP_PIPE_FP_EMUL;
+                                        end
+                                    end
+                                    default:
+                                    begin
+                                        // VAX mode is emulated.
+                                        pipeline = ISA_DP_PIPE_FP_EMUL;
+                                    end
+                                endcase
+                            end
+                            default:
+                            begin
+                                // We should never really get here, but just in case...
+                                pipeline = ISA_DP_PIPE_FP_EMUL;
+                            end
+                        endcase
+                    end
                 endcase
             end
 
-            opc15, opc16:
+            opc15:
             begin
+                // VAX instructions are generally emulated.
                 if (req.instDstPhysRegs[0] matches tagged Valid .dst_pr)
                     pipeline = ISA_DP_PIPE_FP_EMUL;
                 else
                     pipeline = ISA_DP_PIPE_NOP;
+            end
+
+            opc16:
+            begin
+                if (isaIsDefaultFPRounding(req.instruction))
+                begin
+                    case (isaGetFPOp(req.instruction))
+                        addx, subx:
+                            pipeline = `SYNTH_ISA_DP_PIPE_FP_ADD;
+                        mulx:
+                            pipeline = `SYNTH_ISA_DP_PIPE_FP_MUL;
+                        divx:
+                            pipeline = `SYNTH_ISA_DP_PIPE_FP_DIV;
+                        cmpxun, cmpxeq, cmpxlt, cmpxle:
+                            pipeline = `SYNTH_ISA_DP_PIPE_FP_CMP;
+                        cvtxs:
+                            case (isaGetFPSrc(req.instruction))
+                                fpSrc_T:
+                                    pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_S;
+                                fpSrc_Q:
+                                    pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_S;
+                                default:
+                                    // We should never get here, but just in case...
+                                    pipeline = ISA_DP_PIPE_FP_EMUL;
+                            endcase
+                        cvtxt:
+                            case (isaGetFPFunc(req.instruction))
+                                11'h2ac, 11'h6ac: // cvtst has a non-standard encoding.
+                                    pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_S_TO_T;
+                                default:
+                                    pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_T;
+                            endcase
+                        cvtxq:
+                            pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_Q;
+                        default:
+                            // We should never get here, but just in case...
+                            pipeline = ISA_DP_PIPE_FP_EMUL;
+                    endcase
+                end
+                else
+                begin
+                    // Non-default rounding mode is emulated.
+                    pipeline = ISA_DP_PIPE_FP_EMUL;
+                end
             end
 
             opc17:
@@ -447,7 +556,10 @@ module [HASIM_MODULE] mkISA_Datapath
                         pipeline = ISA_DP_PIPE_FP_INT;
                     fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
                         pipeline = ISA_DP_PIPE_FP_CMOV;
+                    mt_fpcr, mf_fpcr:
+                        pipeline = ISA_DP_PIPE_FP_INT;
                     default:
+                        // We should never get here, but just in case...
                         pipeline = ISA_DP_PIPE_FP_EMUL;
                 endcase
             end
@@ -1582,6 +1694,10 @@ module [HASIM_MODULE] mkISA_Datapath
             begin
                 d = { src0[31:30], 3'b0, src0[29:0], 29'b0 };
             end
+            mt_fpcr, mf_fpcr:
+            begin
+                d = src0;
+            end
         endcase
 
         writebacks[0] = tagged Valid d;
@@ -1757,6 +1873,469 @@ module [HASIM_MODULE] mkISA_Datapath
         forwardWritebacks(dp.req, writebacks);
     endrule
 
+    // ====================================================================
+    //
+    //   Floating point accelerator pipelines.
+    //
+    // ====================================================================
+
+    // NOTE: These are only present if we're synthesizing. Otherwise these
+    // are handled via emulation, below:
+
+    Bit#(64) defaultFPRC = { 1'b0, 3'b0, 2'b10, 2'b00, 1'b0, 1'b0, 1'b0, 1'b0, 3'b0, 49'b0};
+
+`ifdef SYNTH
+
+    FP_ACCEL fpAdd    <- mkFPAcceleratorAdd();
+    FP_ACCEL fpMul    <- mkFPAcceleratorMul();
+    FP_ACCEL fpDiv    <- mkFPAcceleratorDiv();
+    FP_ACCEL fpSqrt   <- mkFPAcceleratorSqrt();
+    FP_ACCEL fpCmp    <- mkFPAcceleratorCmp();
+    FP_ACCEL fpCvtStoD <- mkFPAcceleratorCvtStoD();
+    FP_ACCEL fpCvtItoD <- mkFPAcceleratorCvtItoD();
+    FP_ACCEL fpCvtDtoS <- mkFPAcceleratorCvtDtoS();
+    FP_ACCEL fpCvtItoS <- mkFPAcceleratorCvtItoS(); // TEMP: Xilinx ItoS core is bugged. Use ItoD and round.
+    FP_ACCEL fpCvtDtoI <- mkFPAcceleratorCvtDtoI();
+
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpAddQ     <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpMulQ     <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpDivQ     <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpSqrtQ    <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpCmpQ     <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpCvtStoTQ <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpCvtQtoTQ <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpCvtTtoSQ <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpCvtQtoSQ <- mkFIFO();
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) fpCvtTtoQQ <- mkFIFO();
+
+    function Bit#(64) makeFPRC(ISA_INSTRUCTION inst, FP_OUTPUT outp);
+    
+        // Xilinx reports:
+        //exc.underflow
+        //exc.overflow
+        //exc.invalidop
+        //exc.dividebyzero
+    
+        // Alpha expects:
+        // 63: summary... logaical "or" of all exceptions
+        // 62: inexact disable
+        // 61: underflow disable
+        // 60: underflow to zero
+        // 59-58: dynamic rounding mode
+        // 57 integer overflow exception
+        // 56 inexact result exception
+        // 55 underflow exception
+        // 54 overflow exception
+        // 53 div by zero exception
+        // 52 invalid op
+        // 51 overflow disable
+        // 50 division by zero disable
+        // 49 invalid op disable
+        // 48:0 reserved
+        
+        // For now, rather than reading the FPCR as an implicit source, we'll just
+        // update it to the default value, only reporting xilinx exceptions.
+        
+        
+        Bit#(64) res = { outp.overflow | outp.underflow | outp.divideByZero | outp.invalidOp, 3'b0, 2'b10, 2'b00, outp.overflow, outp.underflow, outp.divideByZero, outp.invalidOp, 3'b0, 49'b0};
+        return res;
+
+    endfunction
+
+    function Bit#(64) roundFP(ISA_INSTRUCTION inst, Bit#(64) orig);
+    
+        // Some alpha instructions round results to singles.
+        if (isaGetFPSrc(inst) == fpSrc_S)
+        begin
+            // Cast to single, then extend the result to a 64-bit format.
+            return toDouble(roundToSingle(orig));
+        end
+        else
+        begin
+            return orig;
+        end
+    
+    endfunction
+
+    rule dpFPAddReq (dpQ.first().pipe == ISA_DP_PIPE_FP_ADD && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+        
+        inp.operandA = reg_srcs.srcValues[0];
+        inp.operandB = reg_srcs.srcValues[1];
+
+        let fp_op = isaGetFPOp(dp.req.instruction);
+        let isSub = fp_op[0] == 1'b1;
+        inp.operation = isSub ? 6'b1 : 6'b0;
+
+        fpAdd.makeReq(inp);
+        fpAddQ.enq(dp.req);
+
+    endrule
+
+    rule dpFPAddRsp (True);
+
+        let req = fpAddQ.first();
+        fpAddQ.deq();
+
+        let outp <- fpAdd.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid roundFP(req.instruction, outp.result);
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPMulReq (dpQ.first().pipe == ISA_DP_PIPE_FP_MUL && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+        
+        inp.operandA = reg_srcs.srcValues[0];
+        inp.operandB = reg_srcs.srcValues[1];
+
+        fpMul.makeReq(inp);
+        fpMulQ.enq(dp.req);
+
+    endrule
+        
+    rule dpFPMulRsp (True);
+        let req = fpMulQ.first();
+        fpMulQ.deq();
+
+        let outp <- fpMul.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid roundFP(req.instruction, outp.result);
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPDivReq (dpQ.first().pipe == ISA_DP_PIPE_FP_DIV && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+        
+        inp.operandA = reg_srcs.srcValues[0];
+        inp.operandB = reg_srcs.srcValues[1];
+
+        fpDiv.makeReq(inp);
+        fpDivQ.enq(dp.req);
+
+    endrule
+
+    rule dpFPDivRsp (True);
+        let req = fpDivQ.first();
+        fpDivQ.deq();
+
+        let outp <- fpDiv.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid roundFP(req.instruction, outp.result);
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPSqrtReq (dpQ.first().pipe == ISA_DP_PIPE_FP_SQRT && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+        
+        // Architecturally, this has two sources, but one is ignored.
+        inp.operandA = reg_srcs.srcValues[0];
+        inp.operandB = reg_srcs.srcValues[1];
+
+        fpSqrt.makeReq(inp);
+        fpSqrtQ.enq(dp.req);
+        
+    endrule
+
+    rule dpFPSqrtRsp (True);
+        let req = fpSqrtQ.first();
+        fpSqrtQ.deq();
+
+        let outp <- fpSqrt.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid roundFP(req.instruction, outp.result);
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPCmpReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CMP && readyToRespondStd());        
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+        
+        inp.operandA = reg_srcs.srcValues[0];
+        inp.operandB = reg_srcs.srcValues[1];
+        inp.operation = case (isaGetFPOp(dp.req.instruction))
+                cmpxun: 6'b000100;
+                cmpxeq: 6'b010100;
+                cmpxlt: 6'b001100;
+                cmpxle: 6'b011100;
+            endcase;
+
+        fpCmp.makeReq(inp);
+        fpCmpQ.enq(dp.req);
+
+    endrule
+
+    rule dpFPCmpRsp (True);
+        let req = fpCmpQ.first();
+        fpCmpQ.deq();
+
+        let outp <- fpCmp.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid outp.result;
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+    endrule
+
+    rule dpFPCvtStoTReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_S_TO_T && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+
+        // This has 1 architectural source, but ra is ignored.
+        inp.operandA = reg_srcs.srcValues[1];
+        inp.operandB = reg_srcs.srcValues[0];
+
+        fpCvtStoD.makeReq(inp);
+        fpCvtStoTQ.enq(dp.req);
+
+    endrule
+
+    rule dpFPCvtStoTRsp (True);
+        let req = fpCvtStoTQ.first();
+        fpCvtStoTQ.deq();
+
+        let outp <- fpCvtStoD.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid outp.result;
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPCvtQtoTReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_Q_TO_T && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+
+        // This has two architectural sources, but ra is ignored.
+        inp.operandA = reg_srcs.srcValues[1];
+        inp.operandB = reg_srcs.srcValues[0];
+
+        fpCvtItoD.makeReq(inp);
+        fpCvtQtoTQ.enq(dp.req);
+        
+    endrule
+
+    rule dpFPCvtQtoTRsp (True);
+        let req = fpCvtQtoTQ.first();
+        fpCvtQtoTQ.deq();
+
+        let outp <- fpCvtItoD.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid outp.result;
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPCvtTtoSReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_T_TO_S && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+
+        // This has two architectural sources, but ra is ignored.
+        inp.operandA = reg_srcs.srcValues[1];
+        inp.operandB = reg_srcs.srcValues[0];
+
+        fpCvtDtoS.makeReq(inp);
+        fpCvtTtoSQ.enq(dp.req);
+        
+    endrule
+
+    rule dpFPCvtTtoSRsp (True);
+        let req = fpCvtTtoSQ.first();
+        fpCvtTtoSQ.deq();
+
+        let outp <- fpCvtDtoS.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        // The result is in the lower 32-bits. Gotta store it in Alpha format.
+        writebacks[0] = tagged Valid toDouble(truncate(outp.result));
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPCvtQtoSReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_Q_TO_S && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+
+        // This has two architectural sources, but ra is ignored.
+        inp.operandA = reg_srcs.srcValues[1];
+        inp.operandB = reg_srcs.srcValues[0];
+
+        fpCvtItoS.makeReq(inp);
+        fpCvtQtoSQ.enq(dp.req);
+
+    endrule
+
+    rule dpFPCvtQtoSRsp (True);
+        let req = fpCvtQtoSQ.first();
+        fpCvtQtoSQ.deq();
+
+        let outp <- fpCvtItoS.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        // The result is in the lower 32-bits. Gotta store it in Alpha format.
+        writebacks[0] = tagged Valid toDouble(truncate(outp.result));
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+    rule dpFPCvtTtoQReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_T_TO_Q && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources();
+
+        FP_INPUT inp;
+
+        // This has two architectural sources, but ra is ignored.
+        inp.operandA = reg_srcs.srcValues[1];
+        inp.operandB = reg_srcs.srcValues[0];
+
+        fpCvtDtoI.makeReq(inp);
+        fpCvtTtoQQ.enq(dp.req);
+
+    endrule
+
+    rule dpFPCvtTtoQRsp (True);
+        let req = fpCvtTtoQQ.first();
+        fpCvtTtoQQ.deq();
+
+        let outp <- fpCvtDtoI.getRsp();
+
+        // Marshall up the writebacks, exception handling depends on mode.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        writebacks[0] = tagged Valid outp.result;
+        writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(tagged RNop));
+        forwardWritebacks(req, writebacks);
+
+    endrule
+
+`endif
 
     // ====================================================================
     //
@@ -1768,7 +2347,7 @@ module [HASIM_MODULE] mkISA_Datapath
     ClientStub_ISA_REGOP_EMULATOR emulClient <- mkClientStub_ISA_REGOP_EMULATOR();
 
     // Internal communication with details of emulation requests
-    FIFO#(Tuple2#(TOKEN, Maybe#(FUNCP_PHYSICAL_REG_INDEX))) dpFPEmulQ <- mkSizedFIFO(4);
+    FIFO#(FUNCP_ISA_DATAPATH_REQ) dpFPEmulQ <- mkSizedFIFO(4);
 
 
     //
@@ -1824,7 +2403,7 @@ module [HASIM_MODULE] mkISA_Datapath
         // Pass details of the request to the stage that will receive the response
         // from emulation.  Responses will be returned in order.
         //
-        dpFPEmulQ.enq(tuple2(dp.req.token, dp.req.instDstPhysRegs[0]));
+        dpFPEmulQ.enq(dp.req);
         statISAEmul.incr();
     endrule
 
@@ -1836,12 +2415,21 @@ module [HASIM_MODULE] mkISA_Datapath
     rule dpFPEmulResp (True);
         let dstVal <- emulClient.getResponse_emulateRegOp();
 
-        match {.tok, .dst_pr} = dpFPEmulQ.first();
+        let req = dpFPEmulQ.first();
         dpFPEmulQ.deq();
         
-        debugLog.record($format("FPEmulResp PR%0d <- 0x%x", validValue(dst_pr), dstVal));
+        debugLog.record($format("FPEmulResp PR%0d <- 0x%x", validValue(req.instDstPhysRegs[0]), dstVal));
 
-        link_fp_writeback.send(initISAWriteback(tok, dst_pr, dstVal, True));
+        // Depending on the instruction, we may have to write the FPRC.
+        Bool need_fprc = isValid(req.instDstPhysRegs[1]);
+
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+        writebacks[0] = tagged Valid dstVal;
+        writebacks[1] = (need_fprc) ? tagged Valid defaultFPRC : tagged Invalid;
+
+        // Return the result to the functional partition.
+        forwardWritebacks(req, writebacks);
+
     endrule
 
 
@@ -1870,3 +2458,4 @@ module [HASIM_MODULE] mkISA_Datapath
                                                 writebackQ.lastInGroup()));
     endrule
 endmodule
+

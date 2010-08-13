@@ -69,12 +69,13 @@ ISA_MEMOP_TYPE
 // encapsulating every addressable register in the system. This should pack into an efficient
 // number of bits, so you may want to define a custom instance of bits.
 
-typedef 67 ISA_NUM_REGS;
+typedef 68 ISA_NUM_REGS;
 
 typedef union tagged {
     Bit#(5) ArchReg;
     Bit#(5) FPReg;
     void ControlReg;
+    void FPControlReg;
     void LockReg;
     void LockAddrReg;
 } ISA_REG_INDEX deriving (Eq);
@@ -85,8 +86,9 @@ instance Bits#(ISA_REG_INDEX, 7);
                    tagged ArchReg .v : return {2'b00, v};
                    tagged FPReg .v   : return {2'b01, v};
                    tagged ControlReg : return {7'b1000000};
-                   tagged LockReg    : return {7'b1000001};
-                   tagged LockAddrReg: return {7'b1000010};
+                   tagged FPControlReg : return {7'b1000001};
+                   tagged LockReg    : return {7'b1000010};
+                   tagged LockAddrReg: return {7'b1000011};
                endcase;
     endfunction
 
@@ -98,6 +100,8 @@ instance Bits#(ISA_REG_INDEX, 7);
         else if (x[1:0] == 0)
             return tagged ControlReg;
         else if (x[1:0] == 1)
+            return tagged FPControlReg;
+        else if (x[1:0] == 2)
             return tagged LockReg;
         else
             return tagged LockAddrReg;
@@ -122,8 +126,10 @@ instance Literal#(ISA_REG_INDEX);
         else if (x == 64)
             return tagged ControlReg;
         else if (x == 65)
-            return tagged LockReg;
+            return tagged FPControlReg;
         else if (x == 66)
+            return tagged LockReg;
+        else if (x == 67)
             return tagged LockAddrReg;
         else 
             return error("ISA_REG_INDEX: Literal out of bounds: " + integerToString(x));

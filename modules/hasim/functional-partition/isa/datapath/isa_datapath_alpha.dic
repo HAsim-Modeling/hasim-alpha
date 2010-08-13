@@ -19,3 +19,28 @@
 def ASSERTIONS.ISA_DATAPATH_ALPHA.UNEXPECTED_OPCODE    "FUNCP ALU: Unexpected opcode";
 
 def STATS.ISA_DATAPATH_ALPHA.REGOP_EMULATED_INSTRS     "FUNCP: Emulated Register-Only Instructions";
+
+
+def STREAMS.MESSAGE.FPADDREQ     "FP Datapath: FP Add/Sub Src A:  0x%x%x\n";
+def STREAMS.MESSAGE.FPADDRSP     "FP Datapath: FP Add/Sub Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPMULREQ     "FP Datapath: FP Mul     Src A:  0x%x%x\n";
+def STREAMS.MESSAGE.FPMULRSP     "FP Datapath: FP Mul     Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPDIVREQ     "FP Datapath: FP Div     Src A:  0x%x%x\n";
+def STREAMS.MESSAGE.FPDIVRSP     "FP Datapath: FP Div     Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPSQRTREQ    "FP Datapath: FP Sqrt    Src:    0x%x%x\n";
+def STREAMS.MESSAGE.FPSQRTRSP    "FP Datapath: FP Sqrt    Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPCMPREQ     "FP Datapath: FP Cmp     Src A:  0x%x%x\n";
+def STREAMS.MESSAGE.FPCMPRSP     "FP Datapath: FP Cmp     Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTSTOTREQ "FP Datapath: FP Cvt S T Src:    0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTSTOTRSP "FP Datapath: FP Cvt S T Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTQTOTREQ "FP Datapath: FP Cvt Q T Src:    0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTQTOTRSP "FP Datapath: FP Cvt Q T Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTTTOSREQ "FP Datapath: FP Cvt T S Src:    0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTTTOSRSP "FP Datapath: FP Cvt T S Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTQTOSREQ "FP Datapath: FP Cvt Q S Src:    0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTQTOSRSP "FP Datapath: FP Cvt Q S Result: 0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTTTOQREQ "FP Datapath: FP Cvt T Q Src:    0x%x%x\n";
+def STREAMS.MESSAGE.FPCVTTTOQRSP "FP Datapath: FP Cvt T Q Result: 0x%x%x\n";
+def STREAMS.MESSAGE.OPERANDB     "FP Datapath: FP         Src B:  0x%x%x\n";
+def STREAMS.MESSAGE.INSTRUCTION  "FP Datapath: FP         Inst:   0x%x\n";
+def STREAMS.MESSAGE.EMULATED     "FP Datapath: Emulating unsupported instruction: inst: 0x%x\n";

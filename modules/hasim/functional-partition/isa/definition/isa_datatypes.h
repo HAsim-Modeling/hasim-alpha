@@ -45,8 +45,9 @@ class ISA_REG_INDEX_CLASS
     void SetArchReg(UINT32 r) { regIdx = (r & 0x1f); }
     void SetFPReg(UINT32 r) { regIdx = 0x20 | (r & 0x1f); }
     void SetControlReg() { regIdx = 0x40; }
-    void SetLockreg() { regIdx = 0x41; }
-    void SetLockAddrReg() { regIdx = 0x42; }
+    void SetFPControlReg() { regIdx = 0x41; }
+    void SetLockreg() { regIdx = 0x42; }
+    void SetLockAddrReg() { regIdx = 0x43; }
 
     // Queries
     bool IsArchReg() const { return ((regIdx & 0x60) == 0); }
@@ -64,12 +65,13 @@ class ISA_REG_INDEX_CLASS
     };
 
     bool IsControlReg() const { return (regIdx == 0x40); }
-    bool IsLockReg() const { return (regIdx == 0x41); }
-    bool IsLockAddrReg() const { return (regIdx == 0x42); }
+    bool IsFPControlReg() const { return (regIdx == 0x41); }
+    bool IsLockReg() const { return (regIdx == 0x42); }
+    bool IsLockAddrReg() const { return (regIdx == 0x43); }
 
     bool IsIllegalReg() const
     {
-        return ! (IsArchReg() || IsFPReg() || IsControlReg() || IsLockReg() || IsLockAddrReg());
+        return ! (IsArchReg() || IsFPReg() || IsControlReg() || IsFPControlReg() || IsLockReg() || IsLockAddrReg());
     }
 
   private:

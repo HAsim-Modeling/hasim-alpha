@@ -2367,3 +2367,35 @@ Directory config/pm/hasim-alpha/alpha-ooo
 * Coming soon: more interesting OOO single-issue variants.
 
 Michael P.
+
+----------
+pellauer    Date: Fri Aug 13 14:07:26 EDT 2010  CSN: CSN-hasim-alpha-156
+                  Fri Aug 13 18:07:26 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_mesh_acp.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          155 
+
+Directory config/bm/alpha
+ splash-2.cfx              Locally Modified          155 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.awb    Locally Modified          155 
+ isa_datapath_alpha.bsv    Locally Modified          155 
+ isa_datapath_alpha.dic    Locally Modified          155 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.h           Locally Modified          155 
+ isa_decode_functions.bsv  Locally Modified          155 
+ isa_datatypes.bsv         Locally Modified          155 
+
+
+* Decode floating-point instructions and only emulate those which use
+  rounding modes unsupported by Xilinx.
+  
+* Bugfixes in splash-2 setup.
+
+* Add unpipelined-with-cache-mesh-network for ACP.

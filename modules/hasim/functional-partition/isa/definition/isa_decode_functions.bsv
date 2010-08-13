@@ -15,6 +15,16 @@ typedef Bit#(6) OPCODE;
 typedef Bit#(7) FUNCT;
 typedef Bit#(16) MEM_FUNC;
 typedef Bit#(11) FP_FUNC;
+typedef Bit#(4)  FP_OP;
+typedef Bit#(4)  FP_MODE;
+typedef Bit#(2)  FP_SRC;
+
+FP_SRC fpSrc_S = 2'b00;
+FP_SRC fpSrc_T = 2'b10;
+FP_SRC fpSrc_Q = 2'b11;
+FP_MODE fpMode_IEEE = 4'hb;
+FP_MODE fpMode_VAX = 4'ha;
+
 
 OPCODE call_pal = 'h00;
 OPCODE opc01    = 'h01;
@@ -161,18 +171,37 @@ FUNCT umulh     = 'h30;
 FUNCT mullv     = 'h40;
 FUNCT mulqv     = 'h60;
 
-// opc14 is mostly emulated floating point.
+// opc14 is floating point, VAX modes will be emulated.
 FP_FUNC itofs   = 'h004;
 FP_FUNC itoff   = 'h014;
 FP_FUNC itoft   = 'h024;
+FP_OP   sqrtx   = 'hb;
 
-// opc15 and opc16 are emulated floating point instructions.
+// opc15 is VAX floating point instructions which are emulated 
 
-// opc17 are floating point instructions. Most are emulated.
+// opc16 is IEEE floating point instructions (S and T).
+// All are non-emulated. We case on the FP_OP to ease decoding.
+// Note that dynamic rounding mode /d has an extra source of FPCR.
+// Here x == s || t.
+FP_OP addx   = 'h0;
+FP_OP subx   = 'h1;
+FP_OP mulx   = 'h2;
+FP_OP divx   = 'h3;
+FP_OP cmpxun  = 'h4;
+FP_OP cmpxeq  = 'h5;
+FP_OP cmpxlt  = 'h6;
+FP_OP cmpxle  = 'h7;
+FP_OP cvtxs   = 'hc;
+FP_OP cvtxt   = 'he;
+FP_OP cvtxq   = 'hf;
+
+// opc17 are floating point instructions which are non-emulated.
 FP_FUNC cvtlq   = 'h010;
 FP_FUNC cpys    = 'h020;
 FP_FUNC cpysn   = 'h021;
 FP_FUNC cpyse   = 'h022;
+FP_FUNC mt_fpcr = 'h024;
+FP_FUNC mf_fpcr = 'h025;
 FP_FUNC fcmoveq = 'h02a;
 FP_FUNC fcmovne = 'h02b;
 FP_FUNC fcmovlt = 'h02c;
@@ -228,6 +257,18 @@ endfunction
 
 function FP_FUNC isaGetFPFunc(ISA_INSTRUCTION i);
     return i[15:5];
+endfunction
+
+function FP_OP isaGetFPOp(ISA_INSTRUCTION i);
+    return i[8:5];
+endfunction
+
+function FP_SRC isaGetFPSrc(ISA_INSTRUCTION i);
+    return i[10:9];
+endfunction
+
+function Bool isaIsDefaultFPRounding(ISA_INSTRUCTION i);
+    return i[12:11] == 2'b10;
 endfunction
 
 function MEM_FUNC isaGetMemFunc(ISA_INSTRUCTION i);
@@ -312,6 +353,10 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
                     ret = tagged Valid (tagged FPReg ra);
                 fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
                     ret = tagged Valid (tagged FPReg ra);
+                mt_fpcr:
+                    ret = tagged Valid (tagged FPReg ra); // Actually it's supposed to be in ra, rb, AND rc!
+                mf_fpcr:
+                    ret = tagged Valid (tagged FPControlReg);
             endcase
 
         opc1c:
@@ -431,6 +476,11 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
             endcase
         end
 
+        // For opcode 16, bits 12:11 == 'b11 should mean it gets
+        // its rounding mode from the FPControlReg. However the
+        // reading of this register is very imprecise and must be
+        // controlled by barriers. So we should be able to leave it out,
+        // since dynamic rounding mode will be emulated.
 
         opc17:
         begin
@@ -488,6 +538,10 @@ function Maybe#(ISA_REG_INDEX) isaGetDst0(ISA_INSTRUCTION i);
                     ret = tagged Valid (tagged FPReg rc);
                 fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
                     ret = tagged Valid (tagged FPReg rc);
+                mt_fpcr:
+                    ret = tagged Valid (tagged FPControlReg);
+                mf_fpcr:
+                    ret = tagged Valid (tagged FPReg rc); // Actually it's supposed to be in ra, rb, AND rc!
             endcase
 
         opc1c:
@@ -505,6 +559,7 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
     OPCODE    opcode = isaGetOpcode(i);
     FUNCT      funct = i[11:5];
     MEM_FUNC memFunc = i[15:0];
+    FP_OP      fp_op = i[8:5];
 
     let           ra = i[25:21];
     let           rb = i[20:16];
@@ -519,24 +574,33 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
         stl_c, stq_c:
             ret = tagged Valid (tagged ArchReg ra);
 
-        opc10, opc11, opc12, opc13:
-        begin
-            case (opcode)
-                opc10:
-                begin
-                    case (funct)
-                        addlv, addqv, sublv, subqv: ret = tagged Valid (tagged ControlReg);
-                    endcase
-                end
 
-                opc13:
-                begin
-                    case (funct)
-                        mullv, mulqv: ret = tagged Valid (tagged ControlReg);
-                    endcase
-                end
+        opc10:
+        begin
+            case (funct)
+                addlv, addqv, sublv, subqv: ret = tagged Valid (tagged ControlReg);
             endcase
         end
+
+        opc13:
+        begin
+            case (funct)
+                mullv, mulqv: ret = tagged Valid (tagged ControlReg);
+            endcase
+        end
+
+        opc14:
+        begin
+            case (fp_op)
+                sqrtx: ret = tagged Valid (tagged FPControlReg);
+            endcase
+        end
+
+        opc16:
+        begin
+            ret = tagged Valid (tagged FPControlReg);
+        end
+
     endcase
 
     return ret;
@@ -613,6 +677,7 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
     let           ra = i[25:21];
     let           rb = i[20:16];
     let           rc = i[4:0];
+    FP_OP      fp_op = i[8:5];
 
     return case (opcode)
                lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u: return 1;
@@ -638,12 +703,21 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
                    endcase
                end
 
-               opc14, opc15, opc16: return 1;
+               opc14:
+               begin
+                   case (fp_op)
+                       sqrtx: return 2;
+                       default: return 1;
+                   endcase
+               end
+
+               opc15: return 1;
+               opc16: return 2;
 
                opc17:
                    case (fpFunc)
                        cvtlq, cpys, cpysn, cpyse, cvtql: return 1;
-                       fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt: return 1;
+                       fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt, mt_fpcr, mf_fpcr: return 1;
                        default: return 0;
                    endcase
 
@@ -794,7 +868,19 @@ endfunction
 
 function Bool isaDrainBefore(ISA_INSTRUCTION i);
 
-    return isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
+    OPCODE    opcode = isaGetOpcode(i);
+    MEM_FUNC   funct = i[15:0];
+    return case (opcode)
+        opc18:
+            return case (funct)
+                trapb, excb, mb, wmb: // Barrier instructions drain the pipeline for now. This is a bit conservative.
+                    True;
+                default:
+                    isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
+            endcase;
+        default:
+            isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
+    endcase;
 
 endfunction
 
@@ -808,8 +894,19 @@ endfunction
 
 function Bool isaDrainAfter(ISA_INSTRUCTION i);
 
-    return isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
-
+    OPCODE    opcode = isaGetOpcode(i);
+    MEM_FUNC   funct = i[15:0];
+    return case (opcode)
+        opc18:
+            return case (funct)
+                trapb, excb, mb, wmb: // Barrier instructions drain the pipeline for now. This is a bit conservative.
+                    True;
+                default:
+                    isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
+            endcase;
+        default:
+            isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
+    endcase;
 endfunction
 
 
@@ -835,22 +932,10 @@ function Bool isaEmulateInstruction(ISA_INSTRUCTION i);
                call_pal, opc02, opc03, opc04, opc05, opc07: return True;
                pal19, pal1d, pal1e, pal1f: return True;
 
-               // Floating point
+               // VAX floating point loads/stores
                ldf, ldg, stf, stg: return True;
 
                opc01: return (memFunc != exit);
-
-               // Some of opc17 is just FP register bit manipulation.  The
-               // other functions are emulated.
-               opc17: 
-                   case (fpFunc)
-                       cvtlq, cpys, cpysn, cpyse, cvtql:
-                           return False;
-                       fcmoveq, fcmovne, fcmovlt, fcmovge, fcmovle, fcmovgt:
-                           return False;
-                       default:
-                           return True;
-                   endcase
 
                // Most of opc18 functions have no functional side effects
                // and can be treated as NOPs.

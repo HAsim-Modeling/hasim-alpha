@@ -9,3 +9,5 @@
 
 %param SYNTH_BOUNDARY mkISA_Datapath "Name of synthesis boundary"
 %param HASIM_ISA_DP_LOGFILE "hasim_isa_dp.out" "Name of ISA Datapath logfile"
+
+%param --dynamic DEBUG_FP 0 "Display floating-point debugging messages? (Bool)"
