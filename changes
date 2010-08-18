@@ -2399,3 +2399,14 @@ Directory modules/hasim/functional-partition/isa/definition
 * Bugfixes in splash-2 setup.
 
 * Add unpipelined-with-cache-mesh-network for ACP.
+
+----------
+mcadler     Date: Wed Aug 18 12:20:58 EDT 2010  CSN: CSN-hasim-alpha-157
+                  Wed Aug 18 16:20:58 UTC 2010
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_acp.apm     Locally Modified          156 
+
+Update the ACP version of the in-order model to be similar to the EXE and HTG
+variants.
