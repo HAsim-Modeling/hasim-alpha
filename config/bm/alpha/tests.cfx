@@ -27,7 +27,7 @@ for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
 
         $gcfg->add(name => $bm_name,
                    tree => [ "user_mode" ],
-                   setup => "tools/scripts/bmark/setup-bmark $bm_name --group tests/$dir --isa alpha --binary ${bmark}.alpha.bin --contexts=${num_contexts}",
+                   setup => "tools/scripts/bmark/setup-hasim-bmark $bm_name --group tests/$dir --isa alpha --binary ${bmark}.alpha.bin --contexts=${num_contexts}",
                    feeder => "m5",
                    feedflags => "m5_configs/se.py --hasim-sim --cmd ${bmark}.alpha.bin --num-cpus=${num_contexts}",
                   );

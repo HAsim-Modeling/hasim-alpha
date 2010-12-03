@@ -2410,3 +2410,19 @@ Directory config/pm/hasim-alpha/alpha-inorder
 
 Update the ACP version of the in-order model to be similar to the EXE and HTG
 variants.
+
+----------
+mpellaue    Date: Fri Dec  3 15:15:06 EST 2010  CSN: CSN-hasim-alpha-158
+                  Fri Dec  3 20:15:06 UTC 2010
+
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified          157 
+ 6_375.cfx                 Locally Modified          157 
+ splash-2.cfx              Locally Modified          157 
+ SPEC.cfx                  Locally Modified          157 
+
+
+Change benchmark setup to use hasim-specific setup script.
+
+Michael P.
