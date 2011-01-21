@@ -3,12 +3,14 @@
 SaveParameters=0
 Description=SMT Alpha Simulation
 File=alpha_smt_exe
-Version=2.1
+Version=2.2
 Name=SMT Alpha Simulation
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
+RootName=HW/SW Hybrid Project Foundation
+RootProvides=model
 
 [Model]
 DefaultAttributes=hasim inorder smt alpha simulation
@@ -16,7 +18,7 @@ model=HW/SW Hybrid Project Foundation
 
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
-Packagehint=platforms
+Packagehint=leap
 
 [Functional Partition Version 3]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
@@ -56,14 +58,14 @@ Packagehint=hasim-models
 
 [Soft Connections Library]
 File=config/pm/hasim/submodels/common/soft-connections-lib.apm
-Packagehint=hasim
+Packagehint=leap
 
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
 
 [HW/SW Hybrid Project Foundation]
 File=modules/project/project-hybrid.awb
-Packagehint=platforms
+Packagehint=leap
 
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
@@ -75,7 +77,7 @@ Packagehint=hasim
 
 [Soft Connections Hybrid Application Environment]
 File=modules/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
-Packagehint=platforms
+Packagehint=leap
 
 [Model Services]
 File=config/pm/hasim/submodels/common/hasim-model-services.apm
@@ -93,7 +95,7 @@ connected_application=HAsim Performance Model
 
 [Hybrid Project Common Utilities]
 File=config/pm/hasim/submodels/common/project-common-default.apm
-Packagehint=hasim
+Packagehint=leap
 
 [Single Chip Timing Partition/Requires]
 hasim_modellib=HAsim Modeling Library
@@ -102,7 +104,7 @@ hasim_memory=Null Memory
 
 [Platform Services]
 File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
-Packagehint=hasim
+Packagehint=leap
 
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
@@ -123,9 +125,6 @@ Packagehint=hasim
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-
-[Soft Connections Library/Params]
-CON_CWIDTH=64
 
 [Default HAsim Common Library/Params]
 CONTEXT_ID_BITS=2

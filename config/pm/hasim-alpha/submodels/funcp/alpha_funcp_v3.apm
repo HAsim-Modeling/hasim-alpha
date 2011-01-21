@@ -3,11 +3,14 @@
 SaveParameters=0
 Description=Alpha  Functional Model
 File=alpha_funcp_v3
-Version=2.1
+Version=2.2
 Name=Alpha Functional Model
 Type=HAsim
 Class=Asim::Model
-DefaultBenchmark=0
+DefaultBenchmark=
+RootName=Functional Partition Version 3
+RootProvides=hasim_funcp
+DefaultRunOpts=
 
 [Model]
 DefaultAttributes=alpha hybrid hasim

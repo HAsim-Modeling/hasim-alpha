@@ -2426,3 +2426,52 @@ Directory config/bm/alpha
 Change benchmark setup to use hasim-specific setup script.
 
 Michael P.
+
+----------
+mpellaue    Date: Fri Jan 21 12:46:51 EST 2011  CSN: CSN-hasim-alpha-159
+                  Fri Jan 21 17:46:51 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          158 
+ alpha_superscalar_ooo_htg.apm Locally Modified          158 
+ alpha_single_issue_ooo_exe.apm Locally Modified          158 
+ alpha_single_issue_ooo_htg.apm Locally Modified          158 
+ alpha_superscalar_inorder_exe.apm Locally Modified          158 
+ alpha_superscalar_inorder_htg.apm Locally Modified          158 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_mesh_exe.apm Locally Modified          158 
+ alpha_unpipelined_with_cache_mesh_acp.apm Locally Modified          158 
+ alpha_unpipelined_with_cache_exe.apm Locally Modified          158 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          158 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          158 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          158 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_ring_acp.apm Locally Modified          158 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          158 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          158 
+ alpha_inorder_dm_wt_crossbar_acp_16.apm Locally Modified          158 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          158 
+ alpha_inorder_dm_wt_ring_acp_16.apm Locally Modified          158 
+ alpha_inorder_dm_wt_mesh_exe.apm Locally Modified          158 
+ alpha_inorder_dm_wt_mesh_acp.apm Locally Modified          158 
+ alpha_inorder_dm_wt_ring_exe.apm Locally Modified          158 
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Modified          158 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          158 
+ alpha_inorder_htg.apm     Locally Modified          158 
+ alpha_inorder_acp.apm     Locally Modified          158 
+
+Directory config/pm/hasim-alpha/alpha-smt
+ alpha_smt_exe.apm         Locally Modified          158 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified          158 
+
+
+* Update .apm files to v2.2 using "awb-shell update model"

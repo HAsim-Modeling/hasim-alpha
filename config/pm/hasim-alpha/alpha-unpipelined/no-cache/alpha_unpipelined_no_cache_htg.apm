@@ -3,12 +3,14 @@
 SaveParameters=0
 Description=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 File=alpha_unpipelined_no_cache_htg
-Version=2.1
+Version=2.2
 Name=Unpipelined Alpha Model - HTG Virtex 5 PCIe
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
+RootName=HW/SW Hybrid Project Foundation
+RootProvides=model
 
 [Model]
 DefaultAttributes=unpipelined alpha hybrid hasim
@@ -16,7 +18,7 @@ model=HW/SW Hybrid Project Foundation
 
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/fpgaenv-hybrid-htg-v5-pcie.apm
-Packagehint=platforms
+Packagehint=leap
 
 [Functional Partition Version 3]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
@@ -47,19 +49,18 @@ Packagehint=hasim-models
 
 [Soft Connections Library]
 File=config/pm/hasim/submodels/common/soft-connections-lib.apm
-Packagehint=hasim
+Packagehint=leap
 
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
 
 [HW/SW Hybrid Project Foundation]
 File=modules/project/project-hybrid.awb
-Packagehint=platforms
+Packagehint=leap
 
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
 Packagehint=hasim-models
-
 
 [HAsim Modeling Library]
 File=modules/hasim/util/modellib/hasim-modellib.awb
@@ -67,7 +68,7 @@ Packagehint=hasim
 
 [Soft Connections Hybrid Application Environment]
 File=modules/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
-Packagehint=platforms
+Packagehint=leap
 
 [Model Services]
 File=config/pm/hasim/submodels/common/hasim-model-services.apm
@@ -85,7 +86,7 @@ connected_application=HAsim Performance Model
 
 [Hybrid Project Common Utilities]
 File=config/pm/hasim/submodels/common/project-common-default.apm
-Packagehint=hasim
+Packagehint=leap
 
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
@@ -94,7 +95,7 @@ hasim_chip=Single Core Chip
 
 [Platform Services]
 File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
-Packagehint=hasim
+Packagehint=leap
 
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb

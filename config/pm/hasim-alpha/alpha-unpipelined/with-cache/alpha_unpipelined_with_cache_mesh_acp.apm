@@ -3,12 +3,14 @@
 SaveParameters=0
 Description=Unpipelined Alpha with Cache Mesh
 File=alpha_unpipelined_with_cache_mesh_acp
-Version=2.1
+Version=2.2
 Name=ACP Unpipelined Alpha with Cache Mesh
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
+RootName=HW/SW Hybrid Project Foundation
+RootProvides=model
 
 [Model]
 DefaultAttributes=hasim unpipelined cache alpha acp
@@ -16,7 +18,7 @@ model=HW/SW Hybrid Project Foundation
 
 [FPGA Environment]
 File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
-Packagehint=platform-acp
+Packagehint=platforms-acp
 
 [Functional Partition Version 3]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
@@ -44,14 +46,14 @@ Packagehint=hasim-models
 
 [Soft Connections Library]
 File=config/pm/hasim/submodels/common/soft-connections-lib.apm
-Packagehint=hasim
+Packagehint=leap
 
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
 
 [HW/SW Hybrid Project Foundation]
 File=modules/project/project-hybrid.awb
-Packagehint=platforms
+Packagehint=leap
 
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
@@ -63,7 +65,7 @@ Packagehint=hasim
 
 [Soft Connections Hybrid Application Environment]
 File=modules/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
-Packagehint=platforms
+Packagehint=leap
 
 [Model Services]
 File=config/pm/hasim/submodels/common/hasim-model-services.apm
@@ -81,7 +83,7 @@ connected_application=HAsim Performance Model
 
 [Hybrid Project Common Utilities]
 File=config/pm/hasim/submodels/common/project-common-default.apm
-Packagehint=hasim
+Packagehint=leap
 
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
@@ -90,7 +92,7 @@ hasim_chip=Multi-Core Chip
 
 [Platform Services]
 File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
-Packagehint=hasim
+Packagehint=leap
 
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
