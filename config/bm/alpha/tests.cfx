@@ -19,7 +19,7 @@ my @bmarks = ("bitops_tests/bitops_tests",
               "memory_tests/memory_tests_unaligned",
              );
 	      
-for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
+for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
     foreach my $bm (@bmarks) {
         my ($dir, $bmark) = split('/', $bm);
 

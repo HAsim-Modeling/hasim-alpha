@@ -759,7 +759,12 @@ module [HASIM_MODULE] mkISA_Datapath
             default:
             begin
                 except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
-                debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
+                debugLog.record($format("[0x%x]   Marked CMP instr ILLEGAL", addr));
+
+                // Return something so destination register appears written.
+                // Without this, downstream instructions may deadlock.
+                // Use one of the computations above to avoid adding more code.
+                writebacks[0] = tagged Valid zeroExtend(pack(src0 == src1));
             end
         endcase
 
@@ -816,7 +821,10 @@ module [HASIM_MODULE] mkISA_Datapath
             default:
             begin
                 except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
-                debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
+                debugLog.record($format("[0x%x]   Marked CMOV instr ILLEGAL", addr));
+
+                // Return something to avoid deadlock.  (See dpCMP() above.)
+                writebacks[0] = tagged Valid `IMPL_VER;
             end
         endcase
 
@@ -962,7 +970,10 @@ module [HASIM_MODULE] mkISA_Datapath
             default:
             begin
                 except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
-                debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
+                debugLog.record($format("[0x%x]   Marked BITOPS instr ILLEGAL", addr));
+
+                // Return something to avoid deadlock.  (See dpCMP() above.)
+                writebacks[0] = tagged Valid signExtend(src0[7:0]);
             end
         endcase
 
@@ -1629,7 +1640,10 @@ module [HASIM_MODULE] mkISA_Datapath
             default:
             begin
                 except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
-                debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
+                debugLog.record($format("[0x%x]   Marked SHIFT instr ILLEGAL", addr));
+
+                // Return something to avoid deadlock.  (See dpCMP() above.)
+                writebacks[0] = tagged Valid (src0 >> src1[5:0]);
             end
         endcase
 
@@ -1861,7 +1875,10 @@ module [HASIM_MODULE] mkISA_Datapath
             default:
             begin
                 except = FUNCP_ISA_EXCEPT_ILLEGAL_INSTR;
-                debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
+                debugLog.record($format("[0x%x]   Marked FPCMOV instr ILLEGAL", addr));
+
+                // Return something to avoid deadlock.  (See dpCMP() above.)
+                writebacks[0] = tagged Valid ((src0IsFPZero) ? src1 : src2);
             end
         endcase
 

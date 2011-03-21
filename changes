@@ -2475,3 +2475,27 @@ Directory config/pm/hasim-alpha/submodels/funcp
 
 
 * Update .apm files to v2.2 using "awb-shell update model"
+
+----------
+mcadler     Date: Mon Mar 21 18:24:54 EDT 2011  CSN: CSN-hasim-alpha-160
+                  Mon Mar 21 22:24:54 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_mesh_exe.apm Locally Modified          159 
+ alpha_unpipelined_with_cache_mesh_acp.apm Locally Modified          159 
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified          159 
+ SPEC.cfx                  Locally Modified          159 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          159 
+
+- Instructions that trigger exceptions were not writing their destination
+  registers.  This caused downstream instructions to deadlock attempting to
+  read registers in getResults if the downstream instructions were dispatched
+  before the timing model triggers a rewind.  All instructions that trigger
+  exceptions now also write some value to their destination.
+
+- Support up to 64 contexts for Alpha benchmarks.

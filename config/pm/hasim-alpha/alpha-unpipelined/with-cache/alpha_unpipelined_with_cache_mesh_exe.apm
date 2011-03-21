@@ -121,7 +121,7 @@ File=modules/hasim/timing-models/uncore/uncore-with-interconnect.awb
 Packagehint=hasim-models
 
 [Uncore with Interconnect/Requires]
-hasim_last_level_cache=Writeback No Coherence Last Level Cache
+hasim_last_level_cache=Null Last Level Cache
 hasim_interconnect=Mesh Interconnect
 hasim_memory_controller=Latency-Delay Controller
 
@@ -130,10 +130,6 @@ chip_base_types=Chip Base Types
 hasim_core=Pipeline and Caches
 hasim_uncore=Uncore with Interconnect
 
-[Writeback No Coherence Last Level Cache]
-File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
-Packagehint=hasim-models
-
 [Latency-Delay Controller]
 File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb
 Packagehint=hasim-models
@@ -141,13 +137,6 @@ Packagehint=hasim-models
 [Multi-Core Chip]
 File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
 Packagehint=hasim-models
-
-[Set Associative Last Level Cache Alg]
-File=modules/hasim/timing-models/caches/last-level-caches/alg/llc-set-associative.awb
-Packagehint=hasim-models
-
-[Writeback No Coherence Last Level Cache/Requires]
-hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
 
 [Null Memory]
 File=modules/hasim/timing-models/memory/memory-null.awb
@@ -163,10 +152,12 @@ NUM_CPUS=16
 [Functional Partition Version 3/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=11
 MAX_NUM_CONTEXTS=16
+FUNCP_PVT_CACHE_ENTRIES=8192
+FUNCP_PVT_TLB_ENTRIES=2048
 
 [Default HAsim Common Library/Params]
 CONTEXT_ID_BITS=4
-TOKEN_ID_BITS=3
+TOKEN_ID_BITS=4
 
 [Split (Instruction and Data) No TLBs]
 File=config/pm/hasim-models/l1-caches/l1_caches_no_tlbs.apm
@@ -178,4 +169,11 @@ MESH_WIDTH=4
 
 [Mesh Interconnect]
 File=modules/hasim/timing-models/uncore/interconnects/torus/icn-mesh.awb
+Packagehint=hasim-models
+
+[Platform Services/Params]
+SCRATCHPAD_STD_PVT_CACHE_ENTRIES=4096
+
+[Null Last Level Cache]
+File=modules/hasim/timing-models/caches/last-level-caches/null/last-level-cache-null.awb
 Packagehint=hasim-models

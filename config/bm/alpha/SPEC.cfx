@@ -33,7 +33,7 @@ my @spec2k_skip = (
     'test_253.perlbmk',         # no fork() syscall in m5 user mode
 );
 
-for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
+for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
     foreach my $size (sort keys %{CPU2000_data::spec2k}) {
         my %group = %{${CPU2000_data::spec2k}{$size}};
         foreach my $name (sort keys %group) {
@@ -98,7 +98,7 @@ my @spec2006_skip = (
     '482.sphinx3',              # getrlimit syscall: unimplemented resource 2
 );
 
-for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
+for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
     foreach my $size (sort keys %{CPU2006_data::spec2006}) {
         my %group = %{${CPU2006_data::spec2006}{$size}};
         foreach my $name (sort keys %group) {
