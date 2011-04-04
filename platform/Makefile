@@ -6,6 +6,7 @@ all:
 	# Add some links for building.  libelf links are to make sure awb-resolver
 	# always gets a unique path
 	ln -fs ../libelf/libelf.a m5/build/ALPHA_SE/libelf.a
+	ln -fs ../gzstream/libgzstream.a m5/build/ALPHA_SE/libgzstream.a
 	rm -f m5/build/ALPHA_SE/include
 	@echo Done
 
