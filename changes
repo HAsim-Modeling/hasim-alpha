@@ -2512,3 +2512,15 @@ Directory platform
  Makefile                  Locally Modified          160 
 
 New m5 builds/requires libgzstream.a
+
+----------
+mpellaue    Date: Wed Apr  6 15:43:02 EDT 2011  CSN: CSN-hasim-alpha-162
+                  Wed Apr  6 19:43:02 UTC 2011
+
+
+Directory experiments/hasim-alpha/nightly
+ nightly.models            Locally Modified          161 
+ nightly.benchmarks        Locally Modified          161 
+
+
+* Removing obsolete alpha_single_issue_ooo from nightly regressions.

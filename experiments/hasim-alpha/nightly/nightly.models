@@ -6,5 +6,4 @@
 
 alpha_unpipelined_no_cache_exe   config/pm/hasim-alpha/alpha-unpipelined/no-cache/alpha_unpipelined_no_cache_exe.apm --bluesim="-m 10000000"
 alpha_inorder_exe                config/pm/hasim-alpha/alpha-inorder/alpha_inorder_exe.apm                           --bluesim="-m 10000000"
-alpha_single_issue_ooo_exe       config/pm/hasim-alpha/alpha-ooo/alpha_single_issue_ooo_exe.apm                      --bluesim="-m 10000000"
 alpha_superscalar_ooo_exe        config/pm/hasim-alpha/alpha-ooo/alpha_superscalar_ooo_exe.apm                       --bluesim="-m 10000000"
