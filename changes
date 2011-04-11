@@ -2524,3 +2524,17 @@ Directory experiments/hasim-alpha/nightly
 
 
 * Removing obsolete alpha_single_issue_ooo from nightly regressions.
+
+----------
+mcadler     Date: Sun Apr 10 21:47:45 EDT 2011  CSN: CSN-hasim-alpha-163
+                  Mon Apr 11 01:47:45 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          162 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          162 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_acp.apm     Locally Modified          162 
+
+awb file location changes.
