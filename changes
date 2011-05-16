@@ -2538,3 +2538,19 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_acp.apm     Locally Modified          162 
 
 awb file location changes.
+
+----------
+mcadler     Date: Mon May 16 15:29:06 EDT 2011  CSN: CSN-hasim-alpha-164
+                  Mon May 16 19:29:06 UTC 2011
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.awb    Locally Modified          163 
+ isa_datapath_alpha.bsv    Locally Modified          163 
+
+Optionally send a stream of executed instructions addresses and inputs to the
+host for debugging.  The code is always enabled and the data stream is turned
+on using the dynamic parameter DEBUG_ISA_DP.
+
+This is primarily useful for debugging problems on FPGAs, where debug files
+aren't available.

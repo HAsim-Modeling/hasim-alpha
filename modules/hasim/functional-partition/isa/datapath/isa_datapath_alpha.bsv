@@ -36,6 +36,7 @@ import Vector::*;
 `include "asim/provides/isa_emulator.bsh"
 
 `include "asim/rrr/remote_client_stub_ISA_REGOP_EMULATOR.bsh"
+`include "asim/rrr/remote_client_stub_ISA_DP_DEBUG.bsh"
 `include "asim/dict/STATS_ISA_DATAPATH_ALPHA.bsh"
 `include "asim/dict/ASSERTIONS_ISA_DATAPATH_ALPHA.bsh"
 `include "asim/dict/PARAMS_HASIM_ISA_DATAPATH.bsh"
@@ -189,6 +190,14 @@ module [HASIM_MODULE] mkISA_Datapath
   //interface:
               ();
 
+    // ***** Dynamic parameters *****
+    PARAMETER_NODE paramNode <- mkDynamicParameterNode();
+    Param#(1) debugISADP <- mkDynamicParameter(`PARAMS_HASIM_ISA_DATAPATH_DEBUG_ISA_DP, paramNode);
+    function Bool enableISADebug = (debugISADP != 0);
+
+    // Debug RRR client
+    ClientStub_ISA_DP_DEBUG debugClient <- mkClientStub_ISA_DP_DEBUG();
+
     // ***** Soft Connections *****
 
     // Connection to the functional partition.
@@ -225,10 +234,21 @@ module [HASIM_MODULE] mkISA_Datapath
     // Response queue to guarantee ordered resonses among multpile queues
     FIFO#(TOKEN_INDEX) dpResponseQ <- mkFIFO();
 
-    function ActionValue#(FUNCP_ISA_DATAPATH_SRCVALS) getRegSources();
+    function ActionValue#(FUNCP_ISA_DATAPATH_SRCVALS) getRegSources(FUNCP_ISA_DATAPATH_REQ req);
     actionvalue
         let req_srcs = link_fp_srcvals.receive();
         link_fp_srcvals.deq();
+
+        if (enableISADebug())
+        begin
+            debugClient.makeRequest_noteInstr(
+               contextIdToRRR(tokContextId(req.token)),
+               req.instruction,
+               req.instAddress,
+               req_srcs.srcValues[0],
+               req_srcs.srcValues[1]);
+        end
+
         return req_srcs;
     endactionvalue
     endfunction
@@ -631,7 +651,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -722,7 +742,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -790,7 +810,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -858,7 +878,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -911,7 +931,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -1016,7 +1036,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -1151,7 +1171,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
 
@@ -1247,7 +1267,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -1373,7 +1393,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         if (isaGetMemFunc(dp.req.instruction) == exit)
         begin
@@ -1406,7 +1426,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         debugLog.record($format("[0x%x]   Marked instr ILLEGAL", addr));
 
@@ -1430,7 +1450,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -1527,7 +1547,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         debugLog.record($format("[0x%x] NOP", addr));
 
@@ -1551,7 +1571,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -1669,7 +1689,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -1738,7 +1758,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
 
@@ -1779,7 +1799,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
 
@@ -1849,7 +1869,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
@@ -1979,7 +1999,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
         
@@ -2020,7 +2040,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
         
@@ -2056,7 +2076,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
         
@@ -2092,7 +2112,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
         
@@ -2129,7 +2149,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
         
@@ -2170,7 +2190,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
 
@@ -2207,7 +2227,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
 
@@ -2244,7 +2264,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
 
@@ -2282,7 +2302,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
 
@@ -2320,7 +2340,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         FP_INPUT inp;
 
@@ -2360,7 +2380,7 @@ module [HASIM_MODULE] mkISA_Datapath
     //
     // ====================================================================
 
-    // Emulation RRR Stubs
+    // Emulation RRR client
     ClientStub_ISA_REGOP_EMULATOR emulClient <- mkClientStub_ISA_REGOP_EMULATOR();
 
     // Internal communication with details of emulation requests
@@ -2382,7 +2402,7 @@ module [HASIM_MODULE] mkISA_Datapath
         let addr = dp.req.instAddress;
 
         // Get sources from physical register file
-        let reg_srcs <- getRegSources();
+        let reg_srcs <- getRegSources(dp.req);
 
         Bit#(64) src0 = reg_srcs.srcValues[0];
         Bit#(64) src1 = reg_srcs.srcValues[1];
