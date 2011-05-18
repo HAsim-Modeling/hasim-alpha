@@ -16,8 +16,6 @@ RootProvides=model
 DefaultAttributes=unpipelined alpha hybrid hasim
 model=HW/SW Hybrid Project Foundation
 
-
-
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
@@ -41,7 +39,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
 
@@ -61,7 +58,6 @@ Packagehint=hasim
 File=modules/leap/build-support/project/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
 Packagehint=leap
 
-
 [HW/SW Hybrid Project Foundation/Requires]
 project_common=Default Hybrid Project Common Utilities
 fpgaenv=Hybrid ACP M2 Compute Environment (Nallatech)
@@ -72,12 +68,10 @@ platform_services=Standard Platform Services
 soft_connections_lib=Standard Soft Connections Lib
 connected_application=HAsim Performance Model
 
-
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
 hasim_chip=Single Core Chip
-
 
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
@@ -94,11 +88,8 @@ hasim_model_services=Default HAsim Model Services
 File=modules/hasim/model/hasim-model.awb
 Packagehint=hasim
 
-
-
 [Chip Base Types/Params]
 NUM_CPUS=8
-
 
 [Hasim Unpipelined Pipeline]
 File=modules/hasim/timing-models/pipeline/unpipelined/no-cache/unpipelined-pipeline.awb
@@ -129,7 +120,7 @@ Packagehint=hasim
 
 [Hybrid ACP M2 Compute Environment (Nallatech)]
 File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
-Packagehint=platforms-acp
+Packagehint=leap-platforms-acp
 
 [Alpha Functional Model/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=10
