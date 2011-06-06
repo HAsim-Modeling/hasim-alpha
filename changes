@@ -2564,3 +2564,16 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
  alpha_unpipelined_no_cache_acp.apm Locally Modified          164 
 
 Update package dependence.
+
+----------
+mcadler     Date: Mon Jun  6 17:15:13 EDT 2011  CSN: CSN-hasim-alpha-166
+                  Mon Jun  6 21:15:13 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          165 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          165 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          165 
+
+- Switch unpipelined model to use the new build pipeline.
+- HTG model no longer fits, even after reducing to only 2 contexts.

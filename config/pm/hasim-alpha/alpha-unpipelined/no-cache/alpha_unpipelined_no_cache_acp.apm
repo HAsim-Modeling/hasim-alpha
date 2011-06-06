@@ -9,12 +9,12 @@ Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
-RootName=HW/SW Hybrid Project Foundation
+RootName=HW/SW Hybrid Pipeline Build
 RootProvides=model
 
 [Model]
 DefaultAttributes=unpipelined alpha hybrid hasim
-model=HW/SW Hybrid Project Foundation
+model=HW/SW Hybrid Pipeline Build
 
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
@@ -42,10 +42,6 @@ Packagehint=hasim-models
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
 
-[HW/SW Hybrid Project Foundation]
-File=modules/leap/build-support/project/project-hybrid.awb
-Packagehint=leap
-
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
 Packagehint=hasim-models
@@ -53,20 +49,6 @@ Packagehint=hasim-models
 [HAsim Modeling Library]
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
-
-[Soft Connections Hybrid Application Environment]
-File=modules/leap/build-support/project/application-env/hybrid/soft-connections/application-env-hybrid-soft-conn.awb
-Packagehint=leap
-
-[HW/SW Hybrid Project Foundation/Requires]
-project_common=Default Hybrid Project Common Utilities
-fpgaenv=Hybrid ACP M2 Compute Environment (Nallatech)
-application_env=Soft Connections Hybrid Application Environment
-
-[Soft Connections Hybrid Application Environment/Requires]
-platform_services=Standard Platform Services
-soft_connections_lib=Standard Soft Connections Lib
-connected_application=HAsim Performance Model
 
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
@@ -118,10 +100,6 @@ TOKEN_ID_BITS=2
 File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
-[Hybrid ACP M2 Compute Environment (Nallatech)]
-File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
-Packagehint=leap-platforms-acp
-
 [Alpha Functional Model/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=10
 
@@ -133,10 +111,36 @@ Packagehint=hasim-alpha
 File=config/pm/hasim/submodels/common/hasim-model-services.apm
 Packagehint=hasim
 
-[Standard Soft Connections Lib]
-File=config/pm/hasim/submodels/common/soft-connections-lib.apm
-Packagehint=leap
-
 [Default Hybrid Project Common Utilities]
 File=config/pm/hasim/submodels/common/project-common-default.apm
 Packagehint=leap
+
+[HW/SW Hybrid Pipeline Build]
+File=modules/leap/build-support/project/project-pipeline.awb
+Packagehint=leap
+
+[HW/SW Hybrid Pipeline Build/Requires]
+project_common=Default Hybrid Project Common Utilities
+fpgaenv=Hybrid ACP M2 Compute Environment (Nallatech)
+application_env=Soft Services Hybrid Application Environment
+
+[Soft Services Submodel]
+File=config/pm/hasim/submodels/common/soft-services.apm
+Packagehint=leap
+
+[Soft Services Hybrid Application Environment]
+File=modules/leap/build-support/project/application-env/hybrid/soft-services/application-env-hybrid-soft-service.awb
+Packagehint=leap
+
+[Soft Services Hybrid Application Environment/Requires]
+platform_services=Standard Platform Services
+soft_services=Soft Services Submodel
+connected_application=HAsim Performance Model
+
+
+[Hybrid ACP M2 Compute Environment (Nallatech)]
+File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
+Packagehint=leap-platforms-acp
+
+[Hybrid ACP M2 Compute Environment (Nallatech)/Params]
+XST_INSERT_IOBUF=0
