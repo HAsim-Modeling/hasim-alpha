@@ -538,24 +538,25 @@ module [HASIM_MODULE] mkISA_Datapath
                             pipeline = `SYNTH_ISA_DP_PIPE_FP_DIV;
                         cmpxun, cmpxeq, cmpxlt, cmpxle:
                             pipeline = `SYNTH_ISA_DP_PIPE_FP_CMP;
-                        cvtxs:
-                            case (isaGetFPSrc(req.instruction))
-                                fpSrc_T:
-                                    pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_S;
-                                fpSrc_Q:
-                                    pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_S;
-                                default:
-                                    // We should never get here, but just in case...
-                                    pipeline = ISA_DP_PIPE_FP_EMUL;
-                            endcase
-                        cvtxt:
+                        cvtxx:
                             case (isaGetFPFunc(req.instruction))
-                                11'h2ac, 11'h6ac: // cvtst has a non-standard encoding.
+                                // cvtst has a non-standard encoding.
+                                11'h2ac, 11'h6ac:
                                     pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_S_TO_T;
                                 default:
-                                    pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_T;
+                                    case (isaGetFPSrc(req.instruction))
+                                        fpSrc_T:
+                                            pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_S;
+                                        fpSrc_Q:
+                                            pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_S;
+                                        default:
+                                            // We should never get here, but just in case...
+                                            pipeline = ISA_DP_PIPE_FP_EMUL;
+                                    endcase
                             endcase
-                        cvtxq:
+                        cvtqt:
+                            pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_Q_TO_T;
+                        cvttq:
                             pipeline = `SYNTH_ISA_DP_PIPE_FP_CVT_T_TO_Q;
                         default:
                             // We should never get here, but just in case...
@@ -2176,7 +2177,8 @@ module [HASIM_MODULE] mkISA_Datapath
         // Marshall up the writebacks, exception handling depends on mode.
         ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
-        writebacks[0] = tagged Valid outp.result;
+        // Move result from bit 0 to bit 62, where Alpha expects it
+        writebacks[0] = tagged Valid pack({ 1'b0, outp.result[0], 62'b0 });
         writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
 
         // Return the result to the functional partition.

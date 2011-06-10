@@ -191,9 +191,9 @@ FP_OP cmpxun  = 'h4;
 FP_OP cmpxeq  = 'h5;
 FP_OP cmpxlt  = 'h6;
 FP_OP cmpxle  = 'h7;
-FP_OP cvtxs   = 'hc;
-FP_OP cvtxt   = 'he;
-FP_OP cvtxq   = 'hf;
+FP_OP cvtxx   = 'hc;      // cvtxs and cvtst
+FP_OP cvtqt   = 'he;
+FP_OP cvttq   = 'hf;
 
 // opc17 are floating point instructions which are non-emulated.
 FP_FUNC cvtlq   = 'h010;

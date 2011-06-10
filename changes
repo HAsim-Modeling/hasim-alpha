@@ -2577,3 +2577,19 @@ Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
 
 - Switch unpipelined model to use the new build pipeline.
 - HTG model no longer fits, even after reducing to only 2 contexts.
+
+----------
+mcadler     Date: Thu Jun  9 23:26:19 EDT 2011  CSN: CSN-hasim-alpha-167
+                  Fri Jun 10 03:26:19 UTC 2011
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          166 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified          166 
+
+- FP comparison was storing the result in the wrong bit of the destination
+  register.
+- cvtst was decoded incorrectly, using FP_OP of 0xe instead of the correct
+  FP_OP of 0xc.
