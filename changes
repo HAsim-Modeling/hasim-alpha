@@ -2593,3 +2593,23 @@ Directory modules/hasim/functional-partition/isa/definition
   register.
 - cvtst was decoded incorrectly, using FP_OP of 0xe instead of the correct
   FP_OP of 0xc.
+
+----------
+mcadler     Date: Thu Jul  7 16:58:31 EDT 2011  CSN: CSN-hasim-alpha-168
+                  Thu Jul  7 20:58:31 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          167 
+ alpha_superscalar_ooo_htg.apm Locally Modified          167 
+ alpha_single_issue_ooo_exe.apm Locally Modified          167 
+ alpha_single_issue_ooo_htg.apm Locally Modified          167 
+ alpha_superscalar_inorder_exe.apm Locally Modified          167 
+ alpha_superscalar_inorder_htg.apm Locally Modified          167 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          167 
+ alpha_inorder_htg.apm     Locally Modified          167 
+ alpha_inorder_acp.apm     Locally Modified          167 
+
+Switch to build pipeline.
