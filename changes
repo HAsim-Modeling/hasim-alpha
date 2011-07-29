@@ -2613,3 +2613,24 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_acp.apm     Locally Modified          167 
 
 Switch to build pipeline.
+
+----------
+mcadler     Date: Fri Jul 29 19:41:31 EDT 2011  CSN: CSN-hasim-alpha-169
+                  Fri Jul 29 23:41:31 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_ring_acp.apm Locally Removed           168 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          168 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          168 
+ alpha_inorder_dm_wt_ring_exe_16.apm Locally Added               - 
+ alpha_inorder_dm_wt_crossbar_acp_16.apm Locally Modified          168 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          168 
+ alpha_inorder_dm_wt_ring_acp_16.apm Locally Modified          168 
+ alpha_inorder_dm_wt_mesh_exe.apm Locally Modified          168 
+ alpha_inorder_dm_wt_mesh_acp.apm Locally Modified          168 
+ alpha_inorder_dm_wt_ring_exe.apm Locally Removed           168 
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Modified          168 
+
+- Convert to build pipeline for in order models.
+- Rename ring EXE model to be consistent with ACP naming.
