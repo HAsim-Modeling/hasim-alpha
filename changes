@@ -2634,3 +2634,15 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 
 - Convert to build pipeline for in order models.
 - Rename ring EXE model to be consistent with ACP naming.
+
+----------
+mcadler     Date: Fri Aug 12 15:25:25 EDT 2011  CSN: CSN-hasim-alpha-170
+                  Fri Aug 12 19:25:25 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Added               0 
+ alpha_inorder_dm_wt_mesh_exe.apm Locally Removed           169 
+
+Change the mesh Bluesim version name to include the mesh size, making it clearer
+what you get.  Default size is now 4 x 4.

@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Alpha Grid Network Simulation
-File=alpha_inorder_dm_wt_mesh_exe
+Description=Inorder Alpha Direct Writethrough Caches Mesh Simulation
+File=alpha_inorder_dm_wt_mesh_exe_16
 Version=2.2
-Name=Inorder Alpha Grid Network Simulation
+Name=Inorder Alpha Writethrough Caches Mesh Simulation 16
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
@@ -16,8 +16,6 @@ RootProvides=model
 DefaultAttributes=hasim inorder alpha simulation
 model=HW/SW Hybrid Pipeline Build
 
-
-
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
@@ -26,20 +24,16 @@ Packagehint=hasim-alpha
 File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
 Packagehint=hasim-models
 
-
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
 hasim_l1_caches=Direct Mapped, Writethrough
-
 
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
-
 
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
@@ -49,16 +43,10 @@ Packagehint=hasim-models
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
 
-
-
-
-
-
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
 hasim_chip=Multi-Core Chip
-
 
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
@@ -74,7 +62,6 @@ hasim_model_services=Default HAsim Model Services
 [HAsim Performance Model]
 File=modules/hasim/model/hasim-model.awb
 Packagehint=hasim
-
 
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
@@ -105,10 +92,8 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
-
 [Chip Base Types/Params]
 NUM_CPUS=16
-
 
 [Mesh Interconnect]
 File=modules/hasim/timing-models/uncore/interconnects/torus/icn-mesh.awb
@@ -190,3 +175,7 @@ Packagehint=leap
 platform_services=Standard Platform Services
 soft_services=Soft Services Submodel
 connected_application=HAsim Performance Model
+
+[Mesh Interconnect/Params]
+MESH_HEIGHT=4
+MESH_WIDTH=4
