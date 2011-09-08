@@ -115,7 +115,7 @@ Packagehint=hasim-models
 hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
 
 [Standard Platform Services]
-File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
+File=config/pm/leap/submodels/platform-services/standard-platform-services.apm
 Packagehint=leap
 
 [HAsim Common Default Configuration/Params]
@@ -131,7 +131,7 @@ File=modules/leap/build-support/project/project-pipeline.awb
 Packagehint=leap
 
 [Hybrid Simulation FPGA Environment]
-File=config/pm/hasim/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
+File=config/pm/leap/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
 Packagehint=leap
 
 [HW/SW Hybrid Pipeline Build/Requires]
@@ -148,7 +148,7 @@ FUNCP_PHYSICAL_REG_INDEX_BITS=11
 MAX_NUM_CONTEXTS=16
 
 [Soft Services Submodel]
-File=config/pm/hasim/submodels/common/soft-services.apm
+File=config/pm/leap/submodels/common/soft-services.apm
 Packagehint=leap
 
 [Alpha Functional Model]
@@ -164,11 +164,11 @@ File=config/pm/hasim-models/l1-caches/l1_caches.apm
 Packagehint=hasim-models
 
 [Default Hybrid Project Common Utilities]
-File=config/pm/hasim/submodels/common/project-common-default.apm
+File=config/pm/leap/submodels/common/project-common-default.apm
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment]
-File=modules/leap/build-support/project/application-env/hybrid/soft-services/application-env-hybrid-soft-service.awb
+File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment/Requires]
@@ -179,3 +179,6 @@ connected_application=HAsim Performance Model
 [Mesh Interconnect/Params]
 MESH_HEIGHT=4
 MESH_WIDTH=4
+
+[Standard Platform Services/Params]
+SCRATCHPAD_STD_PVT_CACHE_ENTRIES=4096

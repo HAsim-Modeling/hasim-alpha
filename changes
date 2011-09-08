@@ -2646,3 +2646,20 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 
 Change the mesh Bluesim version name to include the mesh size, making it clearer
 what you get.  Default size is now 4 x 4.
+
+----------
+mcadler     Date: Thu Sep  8 17:10:16 EDT 2011  CSN: CSN-hasim-alpha-171
+                  Thu Sep  8 21:10:16 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          170 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          170 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          170 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          170 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          170 
+
+- Use 4K private caches on scratchpads in the mesh model.
+- Update APM file paths.

@@ -16,8 +16,6 @@ RootProvides=model
 DefaultAttributes=hasim inorder alpha acp
 model=HW/SW Hybrid Pipeline Build
 
-
-
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
@@ -26,20 +24,16 @@ Packagehint=hasim-alpha
 File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
 Packagehint=hasim-models
 
-
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
 hasim_l1_caches=Direct Mapped, Writethrough
-
 
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
-
 
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
@@ -49,16 +43,10 @@ Packagehint=hasim-models
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
 
-
-
-
-
-
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
 hasim_modellib=HAsim Modeling Library
 hasim_chip=Multi-Core Chip
-
 
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
@@ -74,7 +62,6 @@ hasim_model_services=Default HAsim Model Services
 [HAsim Performance Model]
 File=modules/hasim/model/hasim-model.awb
 Packagehint=hasim
-
 
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
@@ -105,11 +92,8 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
-
 [Chip Base Types/Params]
 NUM_CPUS=16
-
-
 
 [Writeback No Coherence Last Level Cache]
 File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
@@ -135,7 +119,7 @@ MESH_HEIGHT=4
 MESH_WIDTH=4
 
 [Standard Platform Services]
-File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
+File=config/pm/leap/submodels/platform-services/standard-platform-services.apm
 Packagehint=leap
 
 [HAsim Common Default Configuration/Params]
@@ -156,7 +140,7 @@ fpgaenv=Hybrid ACP M2 Compute Environment (Nallatech)
 application_env=Soft Services Hybrid Application Environment
 
 [Hybrid ACP M2 Compute Environment (Nallatech)]
-File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
+File=config/pm/leap/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
 Packagehint=leap-platforms-acp
 
 [Hybrid ACP M2 Compute Environment (Nallatech)/Params]
@@ -172,7 +156,7 @@ File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
 
 [Soft Services Submodel]
-File=config/pm/hasim/submodels/common/soft-services.apm
+File=config/pm/leap/submodels/common/soft-services.apm
 Packagehint=leap
 
 [Alpha Functional Model]
@@ -188,14 +172,17 @@ File=config/pm/hasim-models/l1-caches/l1_caches.apm
 Packagehint=hasim-models
 
 [Default Hybrid Project Common Utilities]
-File=config/pm/hasim/submodels/common/project-common-default.apm
+File=config/pm/leap/submodels/common/project-common-default.apm
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment]
-File=modules/leap/build-support/project/application-env/hybrid/soft-services/application-env-hybrid-soft-service.awb
+File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment/Requires]
 platform_services=Standard Platform Services
 soft_services=Soft Services Submodel
 connected_application=HAsim Performance Model
+
+[Standard Platform Services/Params]
+SCRATCHPAD_STD_PVT_CACHE_ENTRIES=4096
