@@ -117,6 +117,7 @@ Packagehint=hasim-models
 [Mesh Interconnect/Params]
 MESH_HEIGHT=4
 MESH_WIDTH=4
+MESH_MEM_CTRL_LOC=5
 
 [Standard Platform Services]
 File=config/pm/leap/submodels/platform-services/standard-platform-services.apm
