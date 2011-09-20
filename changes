@@ -2673,3 +2673,15 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
  alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          171 
 
 Pick a default memory controller location near the center of the mesh.
+
+----------
+mcadler     Date: Tue Sep 20 15:46:45 EDT 2011  CSN: CSN-hasim-alpha-173
+                  Tue Sep 20 19:46:45 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_magic_acp_64.apm Locally Added               0 
+ alpha_inorder_magic_exe_16.apm Locally Added               0 
+ alpha_inorder_magic_acp_16.apm Locally Added               0 
+
+Add magic memory inorder models (unconnected cores).
