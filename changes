@@ -2697,3 +2697,15 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 
 Add 64 and 128 node varients of the mesh model (Bluesim), sometimes useful for
 debugging.
+
+----------
+mcadler     Date: Wed Dec  7 11:49:25 EST 2011  CSN: CSN-hasim-alpha-175
+                  Wed Dec  7 16:49:25 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          174 
+ alpha_inorder_htg.apm     Locally Modified          174 
+ alpha_inorder_acp.apm     Locally Modified          174 
+
+Update some stale models.

@@ -43,7 +43,6 @@ Packagehint=hasim-models
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
 
-
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
 Packagehint=hasim-models
@@ -51,9 +50,6 @@ Packagehint=hasim-models
 [HAsim Modeling Library]
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
-
-
-
 
 [Single Chip Timing Partition/Requires]
 hasim_memory=Null Memory
@@ -87,7 +83,7 @@ File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
 [Standard Platform Services]
-File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
+File=config/pm/leap/submodels/platform-services/standard-platform-services.apm
 Packagehint=leap
 
 [HAsim Common Default Configuration]
@@ -95,7 +91,7 @@ File=config/pm/hasim/submodels/common/hasim_common.apm
 Packagehint=hasim
 
 [Hybrid ACP M2 Compute Environment (Nallatech)]
-File=config/pm/hasim/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
+File=config/pm/leap/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
 Packagehint=leap-platforms-acp
 
 [Inorder Pipeline, 2-bit branch predictor]
@@ -114,9 +110,8 @@ Packagehint=hasim
 File=config/pm/hasim-models/l1-caches/null_l1_caches.apm
 Packagehint=hasim-models
 
-
 [Default Hybrid Project Common Utilities]
-File=config/pm/hasim/submodels/common/project-common-default.apm
+File=config/pm/leap/submodels/common/project-common-default.apm
 Packagehint=leap
 
 [HW/SW Hybrid Pipeline Build]
@@ -130,13 +125,14 @@ application_env=Soft Services Hybrid Application Environment
 
 [Hybrid ACP M2 Compute Environment (Nallatech)/Params]
 XST_INSERT_IOBUF=0
+MAPPER_OPTIONS="-cm balanced -global_opt on"
 
 [Soft Services Submodel]
-File=config/pm/hasim/submodels/common/soft-services.apm
+File=config/pm/leap/submodels/common/soft-services.apm
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment]
-File=modules/leap/build-support/project/application-env/hybrid/soft-services/application-env-hybrid-soft-service.awb
+File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment/Requires]

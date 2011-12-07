@@ -16,8 +16,6 @@ RootProvides=model
 DefaultAttributes=hasim inorder alpha simulation
 model=HW/SW Hybrid Pipeline Build
 
-
-
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
 Packagehint=hasim-alpha
@@ -25,7 +23,6 @@ Packagehint=hasim-alpha
 [Pipeline and Caches]
 File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
 Packagehint=hasim-models
-
 
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
@@ -39,15 +36,12 @@ chip_base_types=Chip Base Types
 File=modules/hasim/timing-models/chip/single-core-chip.awb
 Packagehint=hasim-models
 
-
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
 Packagehint=hasim-models
 
-
 [HAsim Modeling Library/Requires]
 hasim_cache_algorithms=Cache Modeling Algorithms
-
 
 [Cache Modeling Algorithms]
 File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
@@ -57,16 +51,10 @@ Packagehint=hasim-models
 File=modules/hasim/util/modellib/hasim-modellib.awb
 Packagehint=hasim
 
-
-
-
-
-
 [Single Chip Timing Partition/Requires]
 hasim_modellib=HAsim Modeling Library
 hasim_chip=Single Core Chip
 hasim_memory=Null Memory
-
 
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
@@ -83,7 +71,6 @@ hasim_model_services=Default HAsim Model Services
 File=modules/hasim/model/hasim-model.awb
 Packagehint=hasim
 
-
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
 
@@ -96,7 +83,7 @@ File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
 [Standard Platform Services]
-File=config/pm/hasim/submodels/platform-services/standard-platform-services.apm
+File=config/pm/leap/submodels/platform-services/standard-platform-services.apm
 Packagehint=leap
 
 [HAsim Common Default Configuration]
@@ -108,7 +95,7 @@ File=modules/leap/build-support/project/project-pipeline.awb
 Packagehint=leap
 
 [Hybrid Simulation FPGA Environment]
-File=config/pm/hasim/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
+File=config/pm/leap/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
 Packagehint=leap
 
 [HW/SW Hybrid Pipeline Build/Requires]
@@ -125,7 +112,7 @@ File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
 Packagehint=hasim-alpha
 
 [Soft Services Submodel]
-File=config/pm/hasim/submodels/common/soft-services.apm
+File=config/pm/leap/submodels/common/soft-services.apm
 Packagehint=leap
 
 [Default HAsim Model Services]
@@ -137,11 +124,11 @@ File=config/pm/hasim-models/l1-caches/null_l1_caches.apm
 Packagehint=hasim-models
 
 [Default Hybrid Project Common Utilities]
-File=config/pm/hasim/submodels/common/project-common-default.apm
+File=config/pm/leap/submodels/common/project-common-default.apm
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment]
-File=modules/leap/build-support/project/application-env/hybrid/soft-services/application-env-hybrid-soft-service.awb
+File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment/Requires]
