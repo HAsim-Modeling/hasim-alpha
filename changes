@@ -2709,3 +2709,13 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_acp.apm     Locally Modified          174 
 
 Update some stale models.
+
+----------
+mcadler     Date: Mon Dec 19 12:21:02 EST 2011  CSN: CSN-hasim-alpha-176
+                  Mon Dec 19 17:21:02 UTC 2011
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          175 
+
+Clean up after moving modules.
