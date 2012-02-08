@@ -2729,3 +2729,15 @@ Directory platform/m5
  m5-alpha-se.awb           Locally Modified          176 
 
 Update m5 library paths.
+
+----------
+mcadler     Date: Wed Feb  8 01:09:47 EST 2012  CSN: CSN-hasim-alpha-178
+                  Wed Feb  8 06:09:47 UTC 2012
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          177 
+ alpha_inorder_htg.apm     Locally Modified          177 
+ alpha_inorder_acp.apm     Locally Modified          177 
+
+Update stale model configuration.
