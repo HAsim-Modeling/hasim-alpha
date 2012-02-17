@@ -85,9 +85,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
-[Standard Platform Services]
-File=config/pm/leap/submodels/platform-services/standard-platform-services.apm
-Packagehint=leap
 
 [HAsim Common Default Configuration/Params]
 TOKEN_ID_BITS=2
@@ -116,9 +113,6 @@ MAX_NUM_CONTEXTS=2
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
 Packagehint=hasim-alpha
 
-[Soft Services Submodel]
-File=config/pm/leap/submodels/common/soft-services.apm
-Packagehint=leap
 
 [Default HAsim Model Services]
 File=config/pm/hasim/submodels/common/hasim-model-services.apm
@@ -133,6 +127,4 @@ File=modules/leap/build-support/project/application-env/soft-services/applicatio
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment/Requires]
-platform_services=Standard Platform Services
-soft_services=Soft Services Submodel
 connected_application=HAsim Performance Model
