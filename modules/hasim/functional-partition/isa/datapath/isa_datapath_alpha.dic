@@ -18,9 +18,6 @@
 
 def ASSERTIONS.ISA_DATAPATH_ALPHA.UNEXPECTED_OPCODE    "FUNCP ALU: Unexpected opcode";
 
-def STATS.ISA_DATAPATH_ALPHA.REGOP_EMULATED_INSTRS     "FUNCP: Emulated Register-Only Instructions";
-
-
 def STREAMS.MESSAGE.FPADDREQ     "FP Datapath: FP Add/Sub Src A:  0x%x%x\n";
 def STREAMS.MESSAGE.FPADDRSP     "FP Datapath: FP Add/Sub Result: 0x%x%x\n";
 def STREAMS.MESSAGE.FPMULREQ     "FP Datapath: FP Mul     Src A:  0x%x%x\n";

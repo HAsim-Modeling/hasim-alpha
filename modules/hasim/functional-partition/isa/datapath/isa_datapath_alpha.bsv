@@ -37,7 +37,6 @@ import Vector::*;
 
 `include "asim/rrr/remote_client_stub_ISA_REGOP_EMULATOR.bsh"
 `include "asim/rrr/remote_client_stub_ISA_DP_DEBUG.bsh"
-`include "asim/dict/STATS_ISA_DATAPATH_ALPHA.bsh"
 `include "asim/dict/ASSERTIONS_ISA_DATAPATH_ALPHA.bsh"
 `include "asim/dict/PARAMS_HASIM_ISA_DATAPATH.bsh"
 
@@ -217,7 +216,9 @@ module [HASIM_MODULE] mkISA_Datapath
 
     // ***** Statistics *****
 
-    STAT statISAEmul <- mkStatCounter(`STATS_ISA_DATAPATH_ALPHA_REGOP_EMULATED_INSTRS);
+    STAT statISAEmul <-
+        mkStatCounter(statName("ISA_DATAPATH_ALPHA_REGOP_EMULATED_INSTRS",
+                               "FUNCP: Emulated Register-Only Instructions"));
 
 
     // ***** Local state *****
