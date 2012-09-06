@@ -15,6 +15,7 @@ my @bmarks = ("bitops_tests/bitops_tests",
               "fp/fp_simple_double",
               "fp/fp_simple_float",
               "hello/hello",
+              "loop_inf_null/loop_inf_null",
               "memory_tests/memory_tests_aligned",
               "memory_tests/memory_tests_unaligned",
              );

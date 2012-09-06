@@ -2774,3 +2774,16 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
  alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          180 
 
 Update model configuration.
+
+----------
+mcadler     Date: Thu Sep  6 16:00:07 EDT 2012  CSN: CSN-hasim-alpha-182
+                  Thu Sep  6 20:00:07 UTC 2012
+
+
+Directory config/bm/alpha
+ tests.cfx                 Locally Modified          181 
+
+Add a trivial infinite loop test (loop_inf_null) with only a branch for
+testing simulator performance.  The program has only one instruction in
+it.  Specify a cycle count in the simulator if you want the simulator to
+exit.
