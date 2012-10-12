@@ -119,9 +119,6 @@ MESH_HEIGHT=4
 MESH_WIDTH=4
 MESH_MEM_CTRL_LOC=5
 
-[Standard Platform Services]
-File=config/pm/leap/submodels/platform-services/standard-platform-services.apm
-Packagehint=leap
 
 [HAsim Common Default Configuration/Params]
 CONTEXT_ID_BITS=4
@@ -145,7 +142,6 @@ File=config/pm/leap/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
 Packagehint=leap-platforms-acp
 
 [Hybrid ACP M2 Compute Environment (Nallatech)/Params]
-XST_INSERT_IOBUF=0
 MODEL_CLOCK_FREQ=50
 
 [Alpha Functional Model/Params]
@@ -156,9 +152,6 @@ MAX_NUM_CONTEXTS=16
 File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
 
-[Soft Services Submodel]
-File=config/pm/leap/submodels/common/soft-services.apm
-Packagehint=leap
 
 [Alpha Functional Model]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
@@ -181,9 +174,5 @@ File=modules/leap/build-support/project/application-env/soft-services/applicatio
 Packagehint=leap
 
 [Soft Services Hybrid Application Environment/Requires]
-platform_services=Standard Platform Services
-soft_services=Soft Services Submodel
 connected_application=HAsim Performance Model
 
-[Standard Platform Services/Params]
-SCRATCHPAD_STD_PVT_CACHE_ENTRIES=4096
