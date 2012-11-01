@@ -2800,3 +2800,13 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
  alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          182 
 
 Update stale models.
+
+----------
+mcadler     Date: Thu Nov  1 07:56:52 EDT 2012  CSN: CSN-hasim-alpha-184
+                  Thu Nov  1 11:56:52 UTC 2012
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          183 
+
+Update config (packages moved).
