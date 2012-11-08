@@ -2810,3 +2810,13 @@ Directory config/pm/hasim-alpha/alpha-ooo
  alpha_superscalar_ooo_exe.apm Locally Modified          183 
 
 Update config (packages moved).
+
+----------
+mcadler     Date: Thu Nov  8 16:27:26 EST 2012  CSN: CSN-hasim-alpha-185
+                  Thu Nov  8 21:27:26 UTC 2012
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_ml605.apm   Locally Added               0 
+
+Add inorder model for ML605.
