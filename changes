@@ -2820,3 +2820,15 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_ml605.apm   Locally Added               0 
 
 Add inorder model for ML605.
+
+----------
+mcadler     Date: Mon Jan  7 13:58:30 EST 2013  CSN: CSN-hasim-alpha-186
+                  Mon Jan  7 18:58:30 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          185 
+ alpha_inorder_vc707.apm   Locally Added               0 
+
+- Increase alpha_inorder_exe to 8 contexts.
+- Add VC707 inorder model (64 contexts).
