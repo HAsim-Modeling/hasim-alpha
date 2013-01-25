@@ -2832,3 +2832,21 @@ Directory config/pm/hasim-alpha/alpha-inorder
 
 - Increase alpha_inorder_exe to 8 contexts.
 - Add VC707 inorder model (64 contexts).
+
+----------
+mcadler     Date: Thu Jan 24 20:54:52 EST 2013  CSN: CSN-hasim-alpha-187
+                  Fri Jan 25 01:54:52 UTC 2013
+
+
+Directory platform/m5
+ m5-alpha-se.awb           Locally Removed           186 
+ m5-alpha.awb              Locally Added               - 
+
+Directory platform
+ Makefile                  Locally Modified          186 
+
+Directory config/pm/hasim-alpha/submodels/funcp
+ alpha_funcp_v3.apm        Locally Modified          186 
+
+gem5 merged full-system and user-mode into a single build.  ALPHA_SE is now
+just ALPHA.

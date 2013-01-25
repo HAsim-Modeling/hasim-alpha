@@ -1,7 +1,7 @@
 %AWB_START
 
-%name m5 Alpha User-Mode Simulator
-%desc m5 Alpha User-Mode Simulator
+%name m5 Alpha Simulator
+%desc m5 Alpha Simulator
 %provides m5_simulator
 
 %attributes hasim m5
@@ -15,9 +15,9 @@
 # We do this to avoid modifying m5, making it easier to upgrade to new versions.
 # 
 
-%param M5_BUILD_DIR "platform/m5/build/ALPHA_SE"        "m5 Build directory"
-%library platform/m5/build/ALPHA_SE/libgem5_opt.a
-%include platform/m5/build/ALPHA_SE
+%param M5_BUILD_DIR "platform/m5/build/ALPHA"        "m5 Build directory"
+%library platform/m5/build/ALPHA/libgem5_opt.a
+%include platform/m5/build/ALPHA
 
 %library platform/m5/build/libelf/libelf.a
 %library platform/m5/build/gzstream/libgzstream.a

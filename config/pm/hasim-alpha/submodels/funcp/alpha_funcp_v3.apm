@@ -96,15 +96,12 @@ FUNCP_ISA_V_ADDR_SIZE=64
 isa_emulator_impl=m5 ISA Emulator Implementation
 
 [m5 HAsim Base Class/Requires]
-m5_simulator=m5 Alpha User-Mode Simulator
+m5_simulator=m5 Alpha Simulator
 
 [m5 Hybrid Memory]
 File=modules/hasim/functional/memory/m5-memory.awb
 Packagehint=m5
 
-[m5 Alpha User-Mode Simulator]
-File=platform/m5/m5-alpha-se.awb
-Packagehint=hasim-alpha
 
 [m5 HAsim Base Class]
 File=modules/hasim/functional/hasim-base/m5-hasim-base.awb
@@ -144,3 +141,7 @@ Packagehint=hasim
 [Functional Partition Register State Base Types]
 File=modules/hasim/functional-partition/register-state/base-types/regstate-base-types.awb
 Packagehint=hasim
+
+[m5 Alpha Simulator]
+File=platform/m5/m5-alpha.awb
+Packagehint=hasim-alpha
