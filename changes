@@ -2850,3 +2850,24 @@ Directory config/pm/hasim-alpha/submodels/funcp
 
 gem5 merged full-system and user-mode into a single build.  ALPHA_SE is now
 just ALPHA.
+
+----------
+mcadler     Date: Fri Feb  1 15:03:57 EST 2013  CSN: CSN-hasim-alpha-188
+                  Fri Feb  1 20:03:57 UTC 2013
+
+
+Directory platform
+ Makefile                  Locally Modified          187 
+
+Directory config/bm/alpha
+ splash-2.cfx              Locally Modified          187 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.awb    Locally Modified          187 
+ isa_datapath_alpha.bsv    Locally Modified          187 
+
+- Correct specification of some Splash-2 workloads.  Still work to be done here.
+
+- Reorganize the Alpha data path for load locked and store conditional
+  instructions.  No behavioral changes, yet.  Our implementation is currently
+  incorrect since the lock is never cleared by memory activity.

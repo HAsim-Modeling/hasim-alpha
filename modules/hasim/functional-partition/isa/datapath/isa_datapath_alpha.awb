@@ -10,5 +10,5 @@
 %param SYNTH_BOUNDARY mkISA_Datapath "Name of synthesis boundary"
 %param HASIM_ISA_DP_LOGFILE "hasim_isa_dp.out" "Name of ISA Datapath logfile"
 
+%param ISA_NATIVE_FPGA_FP        1 "Enable FPGA native floating point"
 %param --dynamic DEBUG_ISA_DP    0 "Emit ISA datapath debug log? (Bool)"
-%param --dynamic DEBUG_ISA_DP_FP 0 "Display floating-point debugging messages? (Bool)"

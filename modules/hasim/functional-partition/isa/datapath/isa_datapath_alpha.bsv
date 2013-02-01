@@ -73,6 +73,7 @@ typedef enum
     ISA_DP_PIPE_ILLEGAL,
     ISA_DP_PIPE_LOGICAL,
     ISA_DP_PIPE_MEMADDR,
+    ISA_DP_PIPE_MEMLOCK,
     ISA_DP_PIPE_MUL,
     ISA_DP_PIPE_NOP,
     ISA_DP_PIPE_SHIFT,
@@ -86,6 +87,12 @@ ISA_DP_PIPE
 // and simulation, where we do not, and must emulate more.
 
 `ifdef SYNTH
+  `ifndef ISA_NATIVE_FPGA_FP_Z
+    `define ISE_NATIVE_FPGA_FP_ENABLED
+  `endif
+`endif
+
+`ifdef ISE_NATIVE_FPGA_FP_ENABLED
   `define SYNTH_ISA_DP_PIPE_FP_ADD ISA_DP_PIPE_FP_ADD
   `define SYNTH_ISA_DP_PIPE_FP_MUL ISA_DP_PIPE_FP_MUL
   `define SYNTH_ISA_DP_PIPE_FP_DIV ISA_DP_PIPE_FP_DIV
@@ -414,18 +421,22 @@ module [HASIM_MODULE] mkISA_Datapath
 
             ldbu, ldl, ldq, ldwu,
             ldq_u,
-            ldl_l, ldq_l,
             ldt, lds:
             begin
                 pipeline = ISA_DP_PIPE_MEMADDR;
             end
 
-            stl_c, stq_c,
             stb, stl, stq, stw,
             stq_u,
             stt, sts:
             begin
                 pipeline = ISA_DP_PIPE_MEMADDR;
+            end
+
+            ldl_l, ldq_l,
+            stl_c, stq_c:
+            begin
+                pipeline = ISA_DP_PIPE_MEMLOCK;
             end
 
             beq, bge, bgt, blbc, blbs, ble, blt, bne,
@@ -1482,21 +1493,6 @@ module [HASIM_MODULE] mkISA_Datapath
                 debugLog.record($format("[0x%x] LDQ_U [0x%x]", addr, effective_addr));
             end
 
-            ldl_l, ldq_l:
-            begin
-                writebacks[1] = tagged Valid 1;
-                writebacks[2] = tagged Valid effective_addr;
-                debugLog.record($format("[0x%x] LD_L [0x%x]", addr, effective_addr));
-            end
-
-            stl_c, stq_c:
-            begin
-                writebacks[0] = tagged Valid src1;
-                writebacks[1] = tagged Valid src2;
-                writebacks[2] = tagged Valid 0;
-                debugLog.record($format("[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
-            end
-
             stb, stl, stq, stw,
             stt:
             begin
@@ -1522,6 +1518,61 @@ module [HASIM_MODULE] mkISA_Datapath
             default:
             begin
                 debugLog.record($format("[0x%x] Unexpected OPCODE in MEMADDR pipeline", addr));
+                assertUnexpectedOpcode(False);
+            end
+        endcase
+
+        // Effective address for timing partition
+        FUNCP_ISA_EXECUTION_RESULT timep_result = REffectiveAddr(effective_addr);
+
+        // Return the result to the functional partition.
+        dpResponseQ.deq();
+        link_fp.makeResp(initISADatapathRspOp(timep_result));
+        forwardWritebacks(dp.req, writebacks);
+    endrule
+
+
+    rule dpMEMLOCK ((dpQ.first().pipe == ISA_DP_PIPE_MEMLOCK) && readyToRespondStd());
+        let dp = dpQ.first();
+        dpQ.deq();
+
+        let addr = dp.req.instAddress;
+
+        // Get sources from physical register file
+        let reg_srcs <- getRegSources(dp.req);
+
+        Bit#(64) src0 = reg_srcs.srcValues[0];
+        Bit#(64) src1 = reg_srcs.srcValues[1];
+        Bit#(64) src2 = reg_srcs.srcValues[2];
+
+        OPCODE opcode = isaGetOpcode(dp.req.instruction);
+        let mem_disp = isaGetMemDisp(dp.req.instruction);
+
+        // The writebacks that are sent to the register file.
+        ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
+
+        // The effective address for Loads/Stores
+        ISA_ADDRESS effective_addr = src0 + mem_disp;
+
+        case (opcode)
+            ldl_l, ldq_l:
+            begin
+                writebacks[1] = tagged Valid 1;
+                writebacks[2] = tagged Valid effective_addr;
+                debugLog.record($format("[0x%x] LD_L [0x%x]", addr, effective_addr));
+            end
+
+            stl_c, stq_c:
+            begin
+                writebacks[0] = tagged Valid src1;
+                writebacks[1] = tagged Valid src2;
+                writebacks[2] = tagged Valid 0;
+                debugLog.record($format("[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
+            end
+
+            default:
+            begin
+                debugLog.record($format("[0x%x] Unexpected OPCODE in MEMLOCK pipeline", addr));
                 assertUnexpectedOpcode(False);
             end
         endcase
@@ -2397,7 +2448,7 @@ module [HASIM_MODULE] mkISA_Datapath
     //     operation.  The destination register will be written when the
     //     result comes back from software.
     //
-    (* descending_urgency = "dpFPEmulReq, dpFPCMOV, dpToFP, dpFromFP, dpIntOnFP, dpSHIFT, dpNOP, dpMEMADDR, dpILLEGAL, dpCONTROL, dpMULResult, dpBRANCH, dpBITOPS_SLOW_Sum, dpBITOPS, dpLOGICAL, dpCMOV, dpCMP, dpADD" *)
+    (* descending_urgency = "dpFPEmulReq, dpFPCMOV, dpToFP, dpFromFP, dpIntOnFP, dpSHIFT, dpNOP, dpMEMADDR, dpMEMLOCK, dpILLEGAL, dpCONTROL, dpMULResult, dpBRANCH, dpBITOPS_SLOW_Sum, dpBITOPS, dpLOGICAL, dpCMOV, dpCMP, dpADD" *)
     rule dpFPEmulReq ((dpQ.first().pipe == ISA_DP_PIPE_FP_EMUL) && readyToRespondStd());
         let dp = dpQ.first();
         dpQ.deq();

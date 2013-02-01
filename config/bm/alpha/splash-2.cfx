@@ -26,7 +26,7 @@ for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
                tree => [ "splash2","kernels"],
                setup => "tools/scripts/bmark/setup-hasim-bmark CHOLESKY --group splash2/codes/kernels/cholesky --binary CHOLESKY --linkto ${bmdir}/../splash2/codes/kernels/cholesky/inputs/tk23.O  --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("CHOLESKY", ${num_contexts}, "-p${num_contexts} ", "", "CHOLESKY.out", "CHOLESKY.err"),
+               feedflags => m5_cmd("CHOLESKY", ${num_contexts}, "-p${num_contexts} ", "tk23.O", "CHOLESKY.out", "CHOLESKY.err"),
               );
 
     $bm_name = sprintf("%s_%03dt", "FFT", $num_contexts);
@@ -66,7 +66,7 @@ for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
                tree => [ "splash2","apps"],
                setup => "tools/scripts/bmark/setup-hasim-bmark BARNES --group splash2/codes/apps/barnes --binary BARNES --linkto ${bmdir}/../splash2/codes/apps/barnes/input.p${num_contexts} --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("BARNES", ${num_contexts}, "-p${num_contexts}", "input.p${num_contexts}", "BARNES.out", "BARNES.err"),
+               feedflags => m5_cmd("BARNES", ${num_contexts}, "", "input.p${num_contexts}", "BARNES.out", "BARNES.err"),
               );
 
     $bm_name = sprintf("%s_%03dt", "FMM", $num_contexts);
@@ -105,9 +105,9 @@ for (my $num_contexts = 1; $num_contexts <= 16; $num_contexts *= 2) {
     $bm_name = sprintf("%s_%03dt", "RAYTRACE", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","apps"],
-               setup => "tools/scripts/bmark/setup-hasim-bmark RAYTRACE --group splash2/codes/apps/raytrace --binary RAYTRACE --linkto ${bmdir}/../splash2/codes/apps/raytrace/inputs/teapot.env --isa alpha --contexts=${num_contexts}",
+               setup => "tools/scripts/bmark/setup-hasim-bmark RAYTRACE --group splash2/codes/apps/raytrace --binary RAYTRACE --linkto ${bmdir}/../splash2/codes/apps/raytrace/inputs --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("RAYTRACE", ${num_contexts}, "-p${num_contexts} teapot.env", "", "RAYTRACE.out", "RAYTRACE.err"),
+               feedflags => m5_cmd("RAYTRACE", ${num_contexts}, "-p${num_contexts} inputs/teapot.env", "", "RAYTRACE.out", "RAYTRACE.err"),
               );
 
     $bm_name = sprintf("%s_%03dt", "WATER_NSQUARED", $num_contexts);
@@ -162,7 +162,7 @@ sub m5_cmd($$$$$$) {
     my $output = shift;
     my $errout = shift;
 
-    my $cmd = "m5_configs/se_smt.py --hasim-sim";
+    my $cmd = "m5_configs/se.py --shared-mem --hasim-sim";
     $cmd .= " --num-cpus=${num_contexts}";
     $cmd .= " --cmd=${program}";
     $cmd .= " \\\"--options=${args}\\\"" if ($args ne '');
