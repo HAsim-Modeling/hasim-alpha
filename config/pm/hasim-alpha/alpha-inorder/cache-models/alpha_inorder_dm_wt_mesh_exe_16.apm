@@ -169,4 +169,5 @@ connected_application=HAsim Performance Model
 [Mesh Interconnect/Params]
 MESH_HEIGHT=4
 MESH_WIDTH=4
+MESH_MEM_CTRL_LOC=5
 

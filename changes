@@ -2871,3 +2871,40 @@ Directory modules/hasim/functional-partition/isa/datapath
 - Reorganize the Alpha data path for load locked and store conditional
   instructions.  No behavioral changes, yet.  Our implementation is currently
   incorrect since the lock is never cleared by memory activity.
+
+----------
+mcadler     Date: Wed Feb 13 09:19:11 EST 2013  CSN: CSN-hasim-alpha-189
+                  Wed Feb 13 14:19:11 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          188 
+ alpha_inorder_dm_wt_mesh_acp.apm Locally Removed           188 
+
+Directory config/bm/alpha
+ splash-2.cfx              Locally Modified          188 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          188 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.h           Locally Modified          188 
+ isa_decode_functions.bsv  Locally Modified          188 
+ isa_datatypes.bsv         Locally Modified          188 
+ isa_derived_types.bsv     Locally Modified          188 
+
+- Fix load locked / store conditional implementation:
+
+  - Register write for ST_C now delayed to the store pipeline stage.  The
+    execute stage no longer computes it.
+
+  - Remove the lock_flag and lock_pa registers from the Alpha definition.
+    They are no longer renamed registers.  Instead, they are internal to
+    the memory subsystem.  No more three destination instructions.
+
+  - Update ISA definition to describe the stages at which destination registers
+    are written in a general way.  This can now be used for loads, too,
+    replacing special cases code in timing models.
+
+
+- Reduce Splash-2 workload configuration to those workloads that currently work.

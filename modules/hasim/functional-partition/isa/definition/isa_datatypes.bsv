@@ -36,7 +36,7 @@ typedef 3 ISA_MAX_SRCS;
 
 // The maximum number of destination registers an instruction can write.
 
-typedef 3 ISA_MAX_DSTS;
+typedef 2 ISA_MAX_DSTS;
 
 
 // ISA_MEMOP_TYPE
@@ -69,15 +69,13 @@ ISA_MEMOP_TYPE
 // encapsulating every addressable register in the system. This should pack into an efficient
 // number of bits, so you may want to define a custom instance of bits.
 
-typedef 68 ISA_NUM_REGS;
+typedef 66 ISA_NUM_REGS;
 
 typedef union tagged {
     Bit#(5) ArchReg;
     Bit#(5) FPReg;
     void ControlReg;
     void FPControlReg;
-    void LockReg;
-    void LockAddrReg;
 } ISA_REG_INDEX deriving (Eq);
 
 instance Bits#(ISA_REG_INDEX, 7);
@@ -87,8 +85,6 @@ instance Bits#(ISA_REG_INDEX, 7);
                    tagged FPReg .v   : return {2'b01, v};
                    tagged ControlReg : return {7'b1000000};
                    tagged FPControlReg : return {7'b1000001};
-                   tagged LockReg    : return {7'b1000010};
-                   tagged LockAddrReg: return {7'b1000011};
                endcase;
     endfunction
 
@@ -99,19 +95,15 @@ instance Bits#(ISA_REG_INDEX, 7);
             return tagged FPReg x[4:0];
         else if (x[1:0] == 0)
             return tagged ControlReg;
-        else if (x[1:0] == 1)
-            return tagged FPControlReg;
-        else if (x[1:0] == 2)
-            return tagged LockReg;
         else
-            return tagged LockAddrReg;
+            return tagged FPControlReg;
     endfunction
 endinstance
 
 instance Bounded#(ISA_REG_INDEX);
 
     function ISA_REG_INDEX minBound() = tagged ArchReg 0;
-    function ISA_REG_INDEX maxBound() = tagged LockAddrReg;
+    function ISA_REG_INDEX maxBound() = tagged FPControlReg;
 
 endinstance
 
@@ -127,10 +119,6 @@ instance Literal#(ISA_REG_INDEX);
             return tagged ControlReg;
         else if (x == 65)
             return tagged FPControlReg;
-        else if (x == 66)
-            return tagged LockReg;
-        else if (x == 67)
-            return tagged LockAddrReg;
         else 
             return error("ISA_REG_INDEX: Literal out of bounds: " + integerToString(x));
         

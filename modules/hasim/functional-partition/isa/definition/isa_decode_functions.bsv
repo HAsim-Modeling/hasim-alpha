@@ -449,9 +449,6 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc2(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        stl_c, stq_c:
-            ret = tagged Valid (tagged LockReg);
-
         opc10:
         begin
             case (funct)
@@ -568,12 +565,10 @@ function Maybe#(ISA_REG_INDEX) isaGetDst1(ISA_INSTRUCTION i);
     Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
 
     case (opcode)
-        ldl_l, ldq_l:
-            ret = tagged Valid (tagged LockReg);
-
         stl_c, stq_c:
+        begin
             ret = tagged Valid (tagged ArchReg ra);
-
+        end
 
         opc10:
         begin
@@ -609,31 +604,6 @@ endfunction
 
 
 
-function Maybe#(ISA_REG_INDEX) isaGetDst2(ISA_INSTRUCTION i);
-    OPCODE    opcode = isaGetOpcode(i);
-    FUNCT      funct = i[11:5];
-    MEM_FUNC memFunc = i[15:0];
-
-    let           ra = i[25:21];
-    let           rb = i[20:16];
-    let           rc = i[4:0];
-
-    Maybe#(ISA_REG_INDEX) ret = tagged Invalid;
-
-    case (opcode)
-        ldl_l, ldq_l:
-            ret = tagged Valid (tagged LockAddrReg);
-
-         stl_c, stq_c:
-            ret = tagged Valid (tagged LockReg);
-    endcase
-
-    return ret;
-
-endfunction
-
-
-
 // isaGetDst
 
 
@@ -645,7 +615,6 @@ function Maybe#(ISA_REG_INDEX) isaGetDst(ISA_INSTRUCTION i, Integer n);
     let ret = case (n)
                    0: return isaGetDst0(i);
                    1: return isaGetDst1(i);
-                   2: return isaGetDst2(i);
                    default: return tagged Invalid; 
               endcase;
 
@@ -682,8 +651,8 @@ function Integer isaGetNumDsts(ISA_INSTRUCTION i);
     return case (opcode)
                lda, ldah, ldbu, ldl, ldq, ldwu, ldq_u: return 1;
                ldt, lds: return 1;
-               ldl_l, ldq_l: return 3;
-               stl_c, stq_c: return 3;
+               ldl_l, ldq_l: return 1;
+               stl_c, stq_c: return 2;
                br, bsr, jmp: return 1;
                opc10:
                begin
@@ -750,6 +719,28 @@ function Bool isaIsLoad(ISA_INSTRUCTION i);
 endfunction
 
 
+// isaIsLoadLocked
+
+// Returns true if the given instruction is a load locked.
+
+function Bool isaIsLoadLocked(ISA_INSTRUCTION i);
+
+    OPCODE    opcode = isaGetOpcode(i);
+    FUNCT      funct = i[11:5];
+    MEM_FUNC memFunc = i[15:0];
+
+    let           ra = i[25:21];
+    let           rb = i[20:16];
+    let           rc = i[4:0];
+
+    return case (opcode)
+               ldl_l, ldq_l: return True;
+               default: return False; 
+           endcase;
+
+endfunction
+
+
 // isaIsStore
 
 // Returns true if the given instruction is a store.
@@ -768,6 +759,28 @@ function Bool isaIsStore(ISA_INSTRUCTION i);
                stl_c, stq_c, stb, stl, stq, stw, stq_u: return True;
                stt, sts: return True;
                default: return False;
+           endcase;
+
+endfunction
+
+
+// isaIsStoreCond
+
+// Returns index of destination if the given instruction is a store conditional.
+
+function Maybe#(Integer) isaIsStoreCond(ISA_INSTRUCTION i);
+
+    OPCODE    opcode = isaGetOpcode(i);
+    FUNCT      funct = i[11:5];
+    MEM_FUNC memFunc = i[15:0];
+
+    let           ra = i[25:21];
+    let           rb = i[20:16];
+    let           rc = i[4:0];
+
+    return case (opcode)
+               stl_c, stq_c: return tagged Valid 1;
+               default: return tagged Invalid;
            endcase;
 
 endfunction
@@ -973,4 +986,61 @@ function ISA_ADDRESS predPcJumpImm(ISA_ADDRESS addr, ISA_INSTRUCTION inst);
     let    opcode = inst[31:26];
     let branchImm = inst[20:0];
     return addr + 4 + (signExtend(branchImm) << 2);
+endfunction
+
+
+//
+// Generate masks of destinations written at different pipeline stages
+//
+
+//
+// Load's first destination is written at load.
+//
+function ISA_INST_DSTS_MASK isaWrittenAtLD(ISA_INSTRUCTION i);
+    ISA_INST_DSTS_MASK mask = replicate(False);
+
+    if (isaIsLoad(i))
+    begin
+        mask[0] = True;
+    end
+
+    return mask;
+endfunction
+
+//
+// Only store conditional writes a register at store.
+//
+function ISA_INST_DSTS_MASK isaWrittenAtST(ISA_INSTRUCTION i);
+
+    OPCODE    opcode = isaGetOpcode(i);
+    FUNCT      funct = i[11:5];
+    MEM_FUNC memFunc = i[15:0];
+
+    let           ra = i[25:21];
+    let           rb = i[20:16];
+    let           rc = i[4:0];
+
+    ISA_INST_DSTS_MASK mask = replicate(False);
+
+    if ((opcode == stl_c) || (opcode == stq_c))
+    begin
+        mask[1] = True;
+    end
+
+    return mask;
+endfunction
+
+//
+// Everything else is written at execute.  The mask here doesn't bother to decode the
+// instruction.  It must be used in combination with the valid bits returned during
+// a full decode.
+//
+function ISA_INST_DSTS_MASK isaWrittenAtEXE(ISA_INSTRUCTION i);
+    ISA_INST_DSTS_MASK all_valid = replicate(True);
+
+    let mask_ld = isaWrittenAtLD(i);
+    let mask_st = isaWrittenAtST(i);
+
+    // Return everything not written at load or store.
+    return unpack(pack(all_valid) ^ (pack(mask_ld) | pack(mask_st)));
 endfunction

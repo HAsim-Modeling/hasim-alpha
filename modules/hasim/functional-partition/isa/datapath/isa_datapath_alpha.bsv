@@ -1537,6 +1537,7 @@ module [HASIM_MODULE] mkISA_Datapath
         dpQ.deq();
 
         let addr = dp.req.instAddress;
+        let tok = dp.req.token;
 
         // Get sources from physical register file
         let reg_srcs <- getRegSources(dp.req);
@@ -1557,17 +1558,19 @@ module [HASIM_MODULE] mkISA_Datapath
         case (opcode)
             ldl_l, ldq_l:
             begin
-                writebacks[1] = tagged Valid 1;
-                writebacks[2] = tagged Valid effective_addr;
-                debugLog.record($format("[0x%x] LD_L [0x%x]", addr, effective_addr));
+                debugLog.record(fshow(tok.index) + $format(": [0x%x] LD_L [0x%x]", addr, effective_addr));
+
+                // No response for loads (read is later)
             end
 
             stl_c, stq_c:
             begin
+                // Store data is passed as the first writeback (it is handled
+                // specially by the getResults pipeline.)  The write of the
+                // lock result to a register is delayed until the memory stage.
                 writebacks[0] = tagged Valid src1;
-                writebacks[1] = tagged Valid src2;
-                writebacks[2] = tagged Valid 0;
-                debugLog.record($format("[0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
+
+                debugLog.record(fshow(tok.index) + $format(": [0x%x] ST_C [0x%x] <- 0x%x", addr, effective_addr, src1));
             end
 
             default:
