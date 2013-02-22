@@ -30,6 +30,7 @@ import Vector::*;
 `include "asim/provides/fpga_components.bsh"
 `include "asim/provides/soft_connections.bsh"
 `include "asim/provides/common_services.bsh"
+`include "asim/provides/debug_scan_service.bsh"
 
 `include "asim/provides/hasim_isa.bsh"
 `include "asim/provides/funcp_interface.bsh"
@@ -237,10 +238,39 @@ module [HASIM_MODULE] mkISA_Datapath
     Wire#(Bool) src0IsFPZero <- mkWire();
 
     // Queue coming out of initial decode step
-    FIFO#(ISA_DP_QUEUE) dpQ <- mkFIFO();
+    FIFOF#(ISA_DP_QUEUE) dpQ <- mkFIFOF();
     
     // Response queue to guarantee ordered resonses among multpile queues
     FIFO#(TOKEN_INDEX) dpResponseQ <- mkFIFO();
+
+
+    // ***** More debugging *****
+
+    DEBUG_SCAN_FIELD_LIST dbg_list = List::nil;
+    dbg_list <- addDebugScanField(dbg_list, "link_fp.reqNotEmpty", link_fp.reqNotEmpty);
+    dbg_list <- addDebugScanField(dbg_list, "link_fp_srcvals.notEmpty", link_fp_srcvals.notEmpty);
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.notEmpty", dpQ.notEmpty);
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.notFull", dpQ.notFull);
+
+    // Expose head of dpQ
+    Wire#(ISA_DP_QUEUE) dpQdbg <- mkDWire(unpack(0));
+    (* fire_when_enabled *)
+    rule dpQdbgWrite (True);
+        dpQdbg <= dpQ.first();
+    endrule
+
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.pipe", dpQdbg.pipe);
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.instruction", dpQdbg.req.instruction);
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.instAddress", dpQdbg.req.instAddress);
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.context_id", tokContextId(dpQdbg.req.token));
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.token_id", tokTokenId(dpQdbg.req.token));
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.token_dummy", tokIsDummy(dpQdbg.req.token));
+    dbg_list <- addDebugScanField(dbg_list, "dpQ.token_poisoned", tokIsPoisoned(dpQdbg.req.token));
+
+    let dbgNode <- mkDebugScanNode("FUNCP Alpha ISA DP", dbg_list);
+
+
+    // ***** Functions on operands *****
 
     function ActionValue#(FUNCP_ISA_DATAPATH_SRCVALS) getRegSources(FUNCP_ISA_DATAPATH_REQ req);
     actionvalue

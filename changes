@@ -2908,3 +2908,13 @@ Directory modules/hasim/functional-partition/isa/definition
 
 
 - Reduce Splash-2 workload configuration to those workloads that currently work.
+
+----------
+mcadler     Date: Fri Feb 22 15:56:19 EST 2013  CSN: CSN-hasim-alpha-190
+                  Fri Feb 22 20:56:19 UTC 2013
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          189 
+
+Add debugging info.
