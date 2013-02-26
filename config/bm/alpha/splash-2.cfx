@@ -102,6 +102,14 @@ for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
 ##               feedflags => m5_cmd("OCEAN", ${num_contexts}, "-p${num_contexts}", "", "OCEAN_NONCONTIG.out", "OCEAN_NONCONTIG.err"),
 ##              );
 
+    $bm_name = sprintf("%s_%03dt", "RADIOSITY", $num_contexts);
+    $gcfg->add(name => $bm_name,
+               tree => [ "splash2","apps"],
+               setup => "tools/scripts/bmark/setup-hasim-bmark RADIOSITY --group splash2-modified/splash2/codes/apps/radiosity --binary RADIOSITY --isa alpha --contexts=${num_contexts}",
+               feeder => "m5",
+               feedflags => m5_cmd("RADIOSITY", ${num_contexts}, "-p ${num_contexts} -batch -room", "", "RADIOSITY.out", "RADIOSITY.err"),
+              );
+
     $bm_name = sprintf("%s_%03dt", "RAYTRACE", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","apps"],

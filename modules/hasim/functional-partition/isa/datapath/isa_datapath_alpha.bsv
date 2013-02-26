@@ -2071,7 +2071,7 @@ module [HASIM_MODULE] mkISA_Datapath
         if (isaGetFPSrc(inst) == fpSrc_S)
         begin
             // Cast to single, then extend the result to a 64-bit format.
-            return toDouble(roundToSingle(orig));
+            return fpSingleInDouble(roundToSingle(orig));
         end
         else
         begin
@@ -2287,7 +2287,6 @@ module [HASIM_MODULE] mkISA_Datapath
 
         fpCvtStoD.makeReq(inp);
         fpCvtStoTQ.enq(dp.req);
-
     endrule
 
     rule dpFPCvtStoTRsp (True);
@@ -2306,7 +2305,6 @@ module [HASIM_MODULE] mkISA_Datapath
         dpResponseQ.deq();
         link_fp.makeResp(initISADatapathRspOp(tagged RNop));
         forwardWritebacks(req, writebacks);
-
     endrule
 
     rule dpFPCvtQtoTReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_Q_TO_T && readyToRespondStd());
@@ -2324,7 +2322,6 @@ module [HASIM_MODULE] mkISA_Datapath
 
         fpCvtItoD.makeReq(inp);
         fpCvtQtoTQ.enq(dp.req);
-        
     endrule
 
     rule dpFPCvtQtoTRsp (True);
@@ -2343,7 +2340,6 @@ module [HASIM_MODULE] mkISA_Datapath
         dpResponseQ.deq();
         link_fp.makeResp(initISADatapathRspOp(tagged RNop));
         forwardWritebacks(req, writebacks);
-
     endrule
 
     rule dpFPCvtTtoSReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_T_TO_S && readyToRespondStd());
@@ -2361,7 +2357,6 @@ module [HASIM_MODULE] mkISA_Datapath
 
         fpCvtDtoS.makeReq(inp);
         fpCvtTtoSQ.enq(dp.req);
-        
     endrule
 
     rule dpFPCvtTtoSRsp (True);
@@ -2374,14 +2369,13 @@ module [HASIM_MODULE] mkISA_Datapath
         ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
         // The result is in the lower 32-bits. Gotta store it in Alpha format.
-        writebacks[0] = tagged Valid toDouble(truncate(outp.result));
+        writebacks[0] = tagged Valid fpSingleInDouble(truncate(outp.result));
         writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
         link_fp.makeResp(initISADatapathRspOp(tagged RNop));
         forwardWritebacks(req, writebacks);
-
     endrule
 
     rule dpFPCvtQtoSReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_Q_TO_S && readyToRespondStd());
@@ -2399,7 +2393,6 @@ module [HASIM_MODULE] mkISA_Datapath
 
         fpCvtItoS.makeReq(inp);
         fpCvtQtoSQ.enq(dp.req);
-
     endrule
 
     rule dpFPCvtQtoSRsp (True);
@@ -2412,14 +2405,13 @@ module [HASIM_MODULE] mkISA_Datapath
         ISA_RESULT_VALUES writebacks = replicate(tagged Invalid);
 
         // The result is in the lower 32-bits. Gotta store it in Alpha format.
-        writebacks[0] = tagged Valid toDouble(truncate(outp.result));
+        writebacks[0] = tagged Valid fpSingleInDouble(truncate(outp.result));
         writebacks[1] = tagged Valid makeFPRC(req.instruction, outp);
 
         // Return the result to the functional partition.
         dpResponseQ.deq();
         link_fp.makeResp(initISADatapathRspOp(tagged RNop));
         forwardWritebacks(req, writebacks);
-
     endrule
 
     rule dpFPCvtTtoQReq (dpQ.first().pipe == ISA_DP_PIPE_FP_CVT_T_TO_Q && readyToRespondStd());
@@ -2437,7 +2429,6 @@ module [HASIM_MODULE] mkISA_Datapath
 
         fpCvtDtoI.makeReq(inp);
         fpCvtTtoQQ.enq(dp.req);
-
     endrule
 
     rule dpFPCvtTtoQRsp (True);
@@ -2456,7 +2447,6 @@ module [HASIM_MODULE] mkISA_Datapath
         dpResponseQ.deq();
         link_fp.makeResp(initISADatapathRspOp(tagged RNop));
         forwardWritebacks(req, writebacks);
-
     endrule
 
 `endif

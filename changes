@@ -2918,3 +2918,17 @@ Directory modules/hasim/functional-partition/isa/datapath
  isa_datapath_alpha.bsv    Locally Modified          189 
 
 Add debugging info.
+
+----------
+mcadler     Date: Tue Feb 26 07:27:06 EST 2013  CSN: CSN-hasim-alpha-191
+                  Tue Feb 26 12:27:06 UTC 2013
+
+
+Directory config/bm/alpha
+ splash-2.cfx              Locally Modified          190 
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          190 
+
+Changed the names of functions mapping single precision values to double
+precision registers to make them clearer.
