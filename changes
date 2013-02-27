@@ -2932,3 +2932,14 @@ Directory modules/hasim/functional-partition/isa/datapath
 
 Changed the names of functions mapping single precision values to double
 precision registers to make them clearer.
+
+----------
+mcadler     Date: Wed Feb 27 09:24:15 EST 2013  CSN: CSN-hasim-alpha-192
+                  Wed Feb 27 14:24:15 UTC 2013
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          191 
+
+Moved Alpha-specific functions for storing single float as double here from
+platforms.

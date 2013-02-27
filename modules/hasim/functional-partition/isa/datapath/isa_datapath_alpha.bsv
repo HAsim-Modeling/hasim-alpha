@@ -375,6 +375,45 @@ module [HASIM_MODULE] mkISA_Datapath
     endfunction
 
 
+    //
+    // Helper function for storing 32-bit singles in 64-bit format.
+    //
+    function Bit#(12) fpSingleInDoubleExp(Bit#(32) s);
+        Bit#(1) sign = s[31];
+        Bit#(1) start = s[30];
+        Bit#(7) rest = s[29:23];
+        Bit#(8) exp = s[30:23];
+
+        Bit#(11) new_exp;
+
+        case (exp)
+            8'b11111111:   new_exp = 11'b11111111111;
+            8'b00000000:   new_exp = 11'b00000000000;
+            default:
+                if (start == 0)
+                    new_exp = {4'b0111, rest};
+                else
+                    new_exp = {4'b1000, rest};
+        endcase
+
+        return {sign, new_exp};
+    endfunction
+
+    //
+    // Single precision stored as double, Alpha-ISA style.
+    //
+    function Bit#(64) fpSingleInDouble(Bit#(32) s);
+        return {fpSingleInDoubleExp(s), s[22:0], 29'b0};
+    endfunction
+
+    //
+    // Reverse fpSingleInDouble (single as double back to 32-bit single).
+    //
+    function Bit#(32) fpUndoSingleInDouble(Bit#(64) d);
+        return {d[63:62], d[58:29]};
+    endfunction
+
+
     // ====================================================================
     //
     // Writeback helper data and functions.
@@ -1533,8 +1572,7 @@ module [HASIM_MODULE] mkISA_Datapath
             sts:
             begin
                 // Convert T to S
-                Bit#(32) single_fp = { src1[63:62],   // Sign bit and high exponent bit
-                                       src1[58:29] }; // Rest of exponent and fraction
+                Bit#(32) single_fp = fpUndoSingleInDouble(src1);
                 writebacks[0] = tagged Valid zeroExtend(single_fp);
                 debugLog.record($format("[0x%x] STS [0x%x] <- 0x%x", addr, effective_addr, single_fp));
             end
@@ -1792,7 +1830,7 @@ module [HASIM_MODULE] mkISA_Datapath
         case (funct)
             cvtlq:
             begin
-                d = signExtend({ src0[63:62], src0[58:29] });
+                d = signExtend(fpUndoSingleInDouble(src0));
             end
 
             cpys:
@@ -1858,8 +1896,7 @@ module [HASIM_MODULE] mkISA_Datapath
         case (funct)
             ftois:
             begin
-                Bit#(32) s = signExtend(src0[63]);
-                Bit#(64) d = { s, src0[63:62], src0[58:29] };
+                Bit#(64) d = signExtend(fpUndoSingleInDouble(src0));
                 writebacks[0] = tagged Valid d;
             end
 
@@ -2017,7 +2054,7 @@ module [HASIM_MODULE] mkISA_Datapath
     FP_ACCEL fpCvtStoD <- mkFPAcceleratorCvtStoD();
     FP_ACCEL fpCvtItoD <- mkFPAcceleratorCvtItoD();
     FP_ACCEL fpCvtDtoS <- mkFPAcceleratorCvtDtoS();
-    FP_ACCEL fpCvtItoS <- mkFPAcceleratorCvtItoS(); // TEMP: Xilinx ItoS core is bugged. Use ItoD and round.
+    FP_ACCEL fpCvtItoS <- mkFPAcceleratorCvtItoS();
     FP_ACCEL fpCvtDtoI <- mkFPAcceleratorCvtDtoI();
 
     FIFO#(FUNCP_ISA_DATAPATH_REQ) fpAddQ     <- mkFIFO();
@@ -2282,7 +2319,7 @@ module [HASIM_MODULE] mkISA_Datapath
         FP_INPUT inp;
 
         // This has 1 architectural source, but ra is ignored.
-        inp.operandA = reg_srcs.srcValues[1];
+        inp.operandA = zeroExtend(fpUndoSingleInDouble(reg_srcs.srcValues[1]));
         inp.operandB = reg_srcs.srcValues[0];
 
         fpCvtStoD.makeReq(inp);
@@ -2572,4 +2609,3 @@ module [HASIM_MODULE] mkISA_Datapath
                                                 writebackQ.lastInGroup()));
     endrule
 endmodule
-
