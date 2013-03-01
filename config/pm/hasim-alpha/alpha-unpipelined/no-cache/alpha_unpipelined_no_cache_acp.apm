@@ -71,7 +71,7 @@ File=modules/hasim/model/hasim-model.awb
 Packagehint=hasim
 
 [Chip Base Types/Params]
-NUM_CPUS=8
+MAX_NUM_CPUS=8
 
 [Hasim Unpipelined Pipeline]
 File=modules/hasim/timing-models/pipeline/unpipelined/no-cache/unpipelined-pipeline.awb

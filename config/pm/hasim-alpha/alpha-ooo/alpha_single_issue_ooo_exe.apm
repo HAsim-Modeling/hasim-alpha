@@ -88,7 +88,7 @@ hasim_interconnect=Mesh Interconnect
 hasim_memory_controller=Latency-Delay Controller
 
 [Chip Base Types/Params]
-NUM_CPUS=8
+MAX_NUM_CPUS=8
 
 [Multi-Core Chip/Requires]
 chip_base_types=Chip Base Types

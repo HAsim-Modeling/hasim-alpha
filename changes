@@ -2943,3 +2943,41 @@ Directory modules/hasim/functional-partition/isa/datapath
 
 Moved Alpha-specific functions for storing single float as double here from
 platforms.
+
+----------
+mcadler     Date: Fri Mar  1 14:03:28 EST 2013  CSN: CSN-hasim-alpha-193
+                  Fri Mar  1 19:03:28 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_single_issue_ooo_exe.apm Locally Modified          192 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/with-cache
+ alpha_unpipelined_with_cache_mesh_exe.apm Locally Modified          192 
+ alpha_unpipelined_with_cache_mesh_acp.apm Locally Modified          192 
+ alpha_unpipelined_with_cache_exe.apm Locally Modified          192 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          192 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          192 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_magic_acp_64.apm Locally Modified          192 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          192 
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          192 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          192 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Modified          192 
+ alpha_inorder_dm_wt_ring_exe_16.apm Locally Modified          192 
+ alpha_inorder_dm_wt_crossbar_acp_16.apm Locally Modified          192 
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          192 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          192 
+ alpha_inorder_dm_wt_ring_acp_16.apm Locally Modified          192 
+ alpha_inorder_magic_exe_16.apm Locally Modified          192 
+ alpha_inorder_magic_acp_16.apm Locally Modified          192 
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Modified          192 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          192 
+ alpha_inorder_vc707.apm   Locally Modified          192 
+
+Changed AWB parameter NUM_CPUS to MAX_NUM_CPUS.

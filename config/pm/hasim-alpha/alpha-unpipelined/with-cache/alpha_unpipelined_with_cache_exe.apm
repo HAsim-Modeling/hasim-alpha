@@ -162,7 +162,7 @@ File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
 [Chip Base Types/Params]
-NUM_CPUS=16
+MAX_NUM_CPUS=16
 
 [Functional Partition Version 3/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=11

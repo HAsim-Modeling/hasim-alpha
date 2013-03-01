@@ -97,7 +97,7 @@ File=modules/hasim/timing-models/uncore/interconnects/ring/icn-ring.awb
 Packagehint=hasim-models
 
 [Chip Base Types/Params]
-NUM_CPUS=16
+MAX_NUM_CPUS=16
 
 [Latency-Delay Controller]
 File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-controller-latency-delay.awb

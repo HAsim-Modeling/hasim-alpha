@@ -131,7 +131,7 @@ CONTEXT_ID_BITS=3
 TOKEN_ID_BITS=6
 
 [Chip Base Types/Params]
-NUM_CPUS=8
+MAX_NUM_CPUS=8
 
 [Alpha Functional Model/Params]
 FUNCP_TLB_PVT_ENTRIES=4096

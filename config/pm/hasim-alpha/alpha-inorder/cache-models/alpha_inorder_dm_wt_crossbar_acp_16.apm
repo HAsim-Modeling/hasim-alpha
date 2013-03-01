@@ -111,7 +111,7 @@ Packagehint=hasim-models
 
 
 [Chip Base Types/Params]
-NUM_CPUS=16
+MAX_NUM_CPUS=16
 
 
 

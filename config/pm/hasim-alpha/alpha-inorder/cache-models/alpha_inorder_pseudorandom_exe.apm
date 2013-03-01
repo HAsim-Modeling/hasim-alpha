@@ -126,7 +126,7 @@ hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
 
 
 [Chip Base Types/Params]
-NUM_CPUS=16
+MAX_NUM_CPUS=16
 
 
 [Standard Platform Services]

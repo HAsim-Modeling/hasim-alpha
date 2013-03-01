@@ -127,7 +127,7 @@ CONTEXT_ID_BITS=6
 TOKEN_ID_BITS=6
 
 [Chip Base Types/Params]
-NUM_CPUS=64
+MAX_NUM_CPUS=64
 
 [Alpha Functional Model/Params]
 FUNCP_PHYSICAL_REG_INDEX_BITS=13

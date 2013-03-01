@@ -75,7 +75,7 @@ Packagehint=hasim-models
 hasim_pipeline=Hasim Unpipelined Pipeline
 
 [Chip Base Types/Params]
-NUM_CPUS=8
+MAX_NUM_CPUS=8
 
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
