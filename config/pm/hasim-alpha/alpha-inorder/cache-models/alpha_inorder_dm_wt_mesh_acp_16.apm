@@ -79,6 +79,7 @@ hasim_memory_controller=Latency-Delay Controller
 chip_base_types=Chip Base Types
 hasim_core=Pipeline and Caches
 hasim_uncore=Uncore with Interconnect
+hasim_chip_topology=Standard Topology Manager
 
 [Multi-Core Chip]
 File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
@@ -119,7 +120,6 @@ MESH_HEIGHT=4
 MESH_WIDTH=4
 MESH_MEM_CTRL_LOC=5
 
-
 [HAsim Common Default Configuration/Params]
 CONTEXT_ID_BITS=4
 TOKEN_ID_BITS=6
@@ -152,7 +152,6 @@ MAX_NUM_CONTEXTS=16
 File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
 
-
 [Alpha Functional Model]
 File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
 Packagehint=hasim-alpha
@@ -176,3 +175,6 @@ Packagehint=leap
 [Soft Services Hybrid Application Environment/Requires]
 connected_application=HAsim Performance Model
 
+[Standard Topology Manager]
+File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models

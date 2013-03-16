@@ -2981,3 +2981,48 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_vc707.apm   Locally Modified          192 
 
 Changed AWB parameter NUM_CPUS to MAX_NUM_CPUS.
+
+----------
+mcadler     Date: Sat Mar 16 11:13:07 EDT 2013  CSN: CSN-hasim-alpha-194
+                  Sat Mar 16 15:13:07 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          193 
+ alpha_superscalar_ooo_htg.apm Locally Modified          193 
+ alpha_single_issue_ooo_exe.apm Locally Modified          193 
+ alpha_single_issue_ooo_htg.apm Locally Modified          193 
+ alpha_superscalar_inorder_exe.apm Locally Modified          193 
+ alpha_superscalar_inorder_htg.apm Locally Modified          193 
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_acp.apm Locally Modified          193 
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          193 
+ alpha_unpipelined_no_cache_htg.apm Locally Modified          193 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_magic_acp_64.apm Locally Modified          193 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          193 
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          193 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          193 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Modified          193 
+ alpha_inorder_dm_wt_ring_exe_16.apm Locally Modified          193 
+ alpha_inorder_dm_wt_crossbar_acp_16.apm Locally Modified          193 
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          193 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          193 
+ alpha_inorder_dm_wt_ring_acp_16.apm Locally Modified          193 
+ alpha_inorder_magic_exe_16.apm Locally Modified          193 
+ alpha_inorder_magic_acp_16.apm Locally Modified          193 
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Modified          193 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          193 
+ alpha_inorder_htg.apm     Locally Modified          193 
+ alpha_inorder_acp.apm     Locally Modified          193 
+ alpha_inorder_ml605.apm   Locally Modified          193 
+ alpha_inorder_vc707.apm   Locally Modified          193 
+
+Directory config/pm/hasim-alpha/alpha-smt
+ alpha_smt_exe.apm         Locally Modified          193 
+
+Add topology manager to timing models.

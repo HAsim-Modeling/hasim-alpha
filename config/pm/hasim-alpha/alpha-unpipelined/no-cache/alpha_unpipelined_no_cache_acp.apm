@@ -30,6 +30,7 @@ hasim_pipeline=Hasim Unpipelined Pipeline
 [Single Core Chip/Requires]
 hasim_core=Cacheless Core
 chip_base_types=Chip Base Types
+hasim_chip_topology=Standard Topology Manager
 
 [Single Core Chip]
 File=modules/hasim/timing-models/chip/single-core-chip.awb
@@ -88,7 +89,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
-
 [HAsim Common Default Configuration/Params]
 CONTEXT_ID_BITS=3
 TOKEN_ID_BITS=2
@@ -121,7 +121,6 @@ project_common=Default Hybrid Project Common Utilities
 fpgaenv=Hybrid ACP M2 Compute Environment (Nallatech)
 application_env=Soft Services Hybrid Application Environment
 
-
 [Soft Services Hybrid Application Environment]
 File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
 Packagehint=leap
@@ -133,6 +132,6 @@ connected_application=HAsim Performance Model
 File=config/pm/leap/submodels/fpgaenv/fpgaenv-acp-m2c-nallatech.apm
 Packagehint=leap-platforms-acp
 
-[Hybrid ACP M2 Compute Environment (Nallatech)/Params]
-XST_INSERT_IOBUF=0
-MAPPER_OPTIONS="-cm balanced -global_opt on"
+[Standard Topology Manager]
+File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models

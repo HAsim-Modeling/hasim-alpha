@@ -79,6 +79,7 @@ hasim_memory_controller=Latency-Delay Controller
 chip_base_types=Chip Base Types
 hasim_core=Pipeline and Caches
 hasim_uncore=Uncore with Interconnect
+hasim_chip_topology=Standard Topology Manager
 
 [Multi-Core Chip]
 File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
@@ -171,3 +172,6 @@ MESH_HEIGHT=4
 MESH_WIDTH=4
 MESH_MEM_CTRL_LOC=5
 
+[Standard Topology Manager]
+File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models

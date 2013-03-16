@@ -31,6 +31,7 @@ hasim_l1_caches=Null L1 caches
 [Single Core Chip/Requires]
 hasim_core=Pipeline and Caches
 chip_base_types=Chip Base Types
+hasim_chip_topology=Standard Topology Manager
 
 [Single Core Chip]
 File=modules/hasim/timing-models/chip/single-core-chip.awb
@@ -139,3 +140,6 @@ FUNCP_TLB_PVT_ENTRIES=8192
 File=config/pm/leap/submodels/fpgaenv/fpgaenv-hybrid-vc707-pcie.apm
 Packagehint=leap
 
+[Standard Topology Manager]
+File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models
