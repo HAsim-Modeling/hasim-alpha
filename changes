@@ -3026,3 +3026,18 @@ Directory config/pm/hasim-alpha/alpha-smt
  alpha_smt_exe.apm         Locally Modified          193 
 
 Add topology manager to timing models.
+
+----------
+mcadler     Date: Tue Mar 19 08:55:13 EDT 2013  CSN: CSN-hasim-alpha-195
+                  Tue Mar 19 12:55:13 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          194 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          194 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Modified          194 
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          194 
+
+Set MAX_NUM_MEM_CTRLS to a value that would permit up to one memory controller
+at each node on the edge of two sides of a mesh.  The true number can be
+set at run time.

@@ -95,6 +95,7 @@ Packagehint=hasim-models
 
 [Chip Base Types/Params]
 MAX_NUM_CPUS=16
+MAX_NUM_MEM_CTRLS=8
 
 [Writeback No Coherence Last Level Cache]
 File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
