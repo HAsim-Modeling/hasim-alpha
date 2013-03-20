@@ -172,7 +172,6 @@ connected_application=HAsim Performance Model
 [Mesh Interconnect/Params]
 MESH_HEIGHT=8
 MESH_WIDTH=8
-MESH_MEM_CTRL_LOC=31
 
 [Standard Topology Manager]
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb

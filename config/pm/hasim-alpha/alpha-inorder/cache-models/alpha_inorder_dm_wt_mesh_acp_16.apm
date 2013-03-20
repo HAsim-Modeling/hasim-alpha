@@ -119,7 +119,6 @@ Packagehint=hasim-models
 [Mesh Interconnect/Params]
 MESH_HEIGHT=4
 MESH_WIDTH=4
-MESH_MEM_CTRL_LOC=5
 
 [HAsim Common Default Configuration/Params]
 CONTEXT_ID_BITS=4

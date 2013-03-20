@@ -3041,3 +3041,16 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 Set MAX_NUM_MEM_CTRLS to a value that would permit up to one memory controller
 at each node on the edge of two sides of a mesh.  The true number can be
 set at run time.
+
+----------
+mcadler     Date: Wed Mar 20 11:31:29 EDT 2013  CSN: CSN-hasim-alpha-196
+                  Wed Mar 20 15:31:29 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          195 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          195 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Modified          195 
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          195 
+
+Mesh model memory controller location(s) now determined algorithmically.
