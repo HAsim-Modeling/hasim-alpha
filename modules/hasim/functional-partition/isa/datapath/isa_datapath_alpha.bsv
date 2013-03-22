@@ -2240,7 +2240,8 @@ module [HASIM_MODULE] mkISA_Datapath
         FP_INPUT inp;
         
         // Architecturally, this has two sources, but one is ignored.
-        inp.operandA = reg_srcs.srcValues[0];
+        // The true source is Fb.
+        inp.operandA = reg_srcs.srcValues[1];
         inp.operandB = reg_srcs.srcValues[1];
 
         fpSqrt.makeReq(inp);

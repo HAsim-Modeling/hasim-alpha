@@ -3054,3 +3054,19 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
  alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          195 
 
 Mesh model memory controller location(s) now determined algorithmically.
+
+----------
+mcadler     Date: Fri Mar 22 14:27:26 EDT 2013  CSN: CSN-hasim-alpha-197
+                  Fri Mar 22 18:27:26 UTC 2013
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          196 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_decode_functions.bsv  Locally Modified          196 
+
+- Passed the wrong operands to Gem5 for Alpha sqrt instruction.
+
+- Stop treating Alpha trapb as drain before/after (very expensive) since we
+  don't raise traps anyway.

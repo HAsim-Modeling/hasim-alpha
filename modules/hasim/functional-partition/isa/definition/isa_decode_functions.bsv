@@ -339,7 +339,8 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc0(ISA_INSTRUCTION i);
                 itofs, itoff, itoft:
                     ret = tagged Valid (tagged ArchReg ra);
                 default:
-                    ret = tagged Valid (tagged FPReg rb);
+                    // sqrt reads useless ra (must be set to R31)
+                    ret = tagged Valid (tagged FPReg ra);
             endcase
 
         opc15, opc16:
@@ -409,6 +410,16 @@ function Maybe#(ISA_REG_INDEX) isaGetSrc1(ISA_INSTRUCTION i);
                     if(!useLit)
                         ret = tagged Valid (tagged ArchReg rb);
                 end
+            endcase
+        end
+
+        opc14:
+        begin
+            case (fpFunc)
+                itofs, itoff, itoft:
+                    ret = tagged Invalid;
+                default:
+                    ret = tagged Valid (tagged FPReg rb);
             endcase
         end
 
@@ -886,8 +897,11 @@ function Bool isaDrainBefore(ISA_INSTRUCTION i);
     return case (opcode)
         opc18:
             return case (funct)
-                trapb, excb, mb, wmb: // Barrier instructions drain the pipeline for now. This is a bit conservative.
+                mb, wmb: // Barrier instructions drain the pipeline for now. This is a bit conservative.
                     True;
+                trapb, excb:
+                    // We don't handle traps anyway in user mode, so just ignore.
+                    False;
                 default:
                     isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
             endcase;
@@ -912,8 +926,11 @@ function Bool isaDrainAfter(ISA_INSTRUCTION i);
     return case (opcode)
         opc18:
             return case (funct)
-                trapb, excb, mb, wmb: // Barrier instructions drain the pipeline for now. This is a bit conservative.
+                mb, wmb: // Barrier instructions drain the pipeline for now. This is a bit conservative.
                     True;
+                trapb, excb:
+                    // We don't handle traps anyway in user mode, so just ignore.
+                    False;
                 default:
                     isaEmulateInstruction(i); // For now we drain before and after every emulated instruction.
             endcase;
