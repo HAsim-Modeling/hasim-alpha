@@ -3070,3 +3070,17 @@ Directory modules/hasim/functional-partition/isa/definition
 
 - Stop treating Alpha trapb as drain before/after (very expensive) since we
   don't raise traps anyway.
+
+----------
+mcadler     Date: Wed Apr 10 13:09:22 EDT 2013  CSN: CSN-hasim-alpha-198
+                  Wed Apr 10 17:09:22 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_exe.apm Locally Modified          197 
+
+Directory config/bm/alpha
+ parsec.cfx                Locally Added               0 
+
+- Add some Parsec Alpha user-mode workloads
+- Change unpipelined exe model to support 64 threads.

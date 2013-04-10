@@ -1,0 +1,165 @@
+: # -*-Perl-*-
+eval 'exec perl -w "$0" ${1+"$@"}'
+   if 0;
+
+use Asim;
+use strict;
+use POSIX;
+
+
+sub m5_cmd($$$$$$);
+
+my $bmdir;
+$bmdir = `awb-resolver -config=benchmarkdir`;
+chomp($bmdir);
+$bmdir .= '/hasim/alpha/parsec-3.0/pkgs';
+
+my $gcfg = Asim::GenCFG->new();
+
+##
+## Parsec 3.0
+##
+
+my %args;
+
+for (my $num_contexts = 1; $num_contexts <= 1024; $num_contexts *= 2) {
+
+    ## canneal
+
+    %args = (sm => "10000 2000 inputs/100000.nets 32",
+             md => "15000 2000 inputs/200000.nets 64",
+             lg => "15000 2000 inputs/400000.nets 128");
+    if ($num_contexts <= 4) {
+        $args{tst} = "5 100 inputs/10.nets 1";
+    }
+
+    foreach my $wrk (sort keys %args) {
+        my $a = $args{$wrk};
+
+        my $bm_name = sprintf("%s_%s_%04dt", "canneal", $wrk, $num_contexts);
+        $gcfg->add(name => $bm_name,
+                   tree => [ "parsec","kernels"],
+                   setup => "tools/scripts/bmark/setup-hasim-bmark canneal --group parsec-3.0/pkgs/kernels/canneal/inst/alpha-linux.gcc/bin --binary canneal --linkto ${bmdir}/kernels/canneal/inputs  --isa alpha --contexts=${num_contexts}",
+                   feeder => "m5",
+                   feedflags => m5_cmd("canneal", ${num_contexts}, "${num_contexts} ${a}", "", "canneal.out", "canneal.err"),
+                  );
+    }
+
+
+    ## dedup
+
+    ##
+    ## Dedup has 2 fixed threads and three pools of threads that
+    ## are governed by the threads argument.  Figure out the threads argument
+    ## and the true number of threads.
+    ##
+    my $f_thr = POSIX::floor(($num_contexts - 2) / 3);
+    my $f_true_thr = 3 * $f_thr + 2;
+
+    %args = (sm => "-c -p -v -t ${f_thr} -i inputs/sm/media.dat -o output.dat.ddp",
+             md => "-c -p -v -t ${f_thr} -i inputs/md/media.dat -o output.dat.ddp",
+             lg => "-c -p -v -t ${f_thr} -i inputs/lg/media.dat -o output.dat.ddp");
+    if ($num_contexts <= 8) {
+        $args{tst} = "-c -p -v -t ${f_thr} -i inputs/test.dat -o output.dat.ddp";
+    }
+
+    if ($f_thr > 0) {
+        foreach my $wrk (sort keys %args) {
+            my $a = $args{$wrk};
+
+            my $bm_name = sprintf("%s_%s_%04dt", "dedup", $wrk, $f_true_thr);
+            $gcfg->add(name => $bm_name,
+                       tree => [ "parsec","kernels"],
+                       setup => "tools/scripts/bmark/setup-hasim-bmark dedup --group parsec-3.0/pkgs/kernels/dedup/inst/alpha-linux.gcc/bin --binary dedup --linkto ${bmdir}/kernels/dedup/inputs  --isa alpha --contexts=${f_true_thr}",
+                       feeder => "m5",
+                       feedflags => m5_cmd("dedup", ${f_true_thr}, "${a}", "", "dedup.out", "dedup.err"),
+                      );
+        }
+    }
+
+
+    ## blackscholes
+
+    %args = (sm => "4K", md => "16K", lg => "64K");
+    if ($num_contexts <= 4) {
+        $args{tst} = "4";
+    }
+
+    foreach my $wrk (sort keys %args) {
+        my $fn = $args{$wrk};
+
+        my $bm_name = sprintf("%s_%s_%04dt", "blackscholes", $wrk, $num_contexts);
+        $gcfg->add(name => $bm_name,
+                   tree => [ "parsec","apps"],
+                   setup => "tools/scripts/bmark/setup-hasim-bmark blackscholes --group parsec-3.0/pkgs/apps/blackscholes/inst/alpha-linux.gcc/bin --binary blackscholes --linkto ${bmdir}/apps/blackscholes/inputs  --isa alpha --contexts=${num_contexts}",
+                   feeder => "m5",
+                   feedflags => m5_cmd("blackscholes", ${num_contexts}, "${num_contexts} inputs/in_${fn}.txt prices_out.txt", "", "blackscholes.out", "blackscholes.err"),
+                  );
+    }
+
+
+    ## ferret
+
+    %args = (sm => "inputs/sm/corel lsh inputs/sm/queries 10 20",
+             md => "inputs/md/corel lsh inputs/md/queries 10 20",
+             lg => "inputs/lg/corel lsh inputs/lg/queries 10 20");
+    if ($num_contexts <= 8) {
+        $args{tst} = "inputs/tst/corel lsh inputs/tst/queries 5 5";
+    }
+
+    ##
+    ## Ferret has 4 fixed threads and another pair of thread pools that
+    ## are governed by the threads argument.  Figure out the threads argument
+    ## and the true number of threads.
+    ##
+    $f_thr = POSIX::floor(($num_contexts - 4) / 2);
+    $f_true_thr = 2 * $f_thr + 4;
+
+    ## ***** Ferret currently broken *****
+    if ($f_thr > 0 && 0) {
+        foreach my $wrk (sort keys %args) {
+            my $a = $args{$wrk};
+
+            my $bm_name = sprintf("%s_%s_%04dt", "ferret", $wrk, $f_true_thr);
+            $gcfg->add(name => $bm_name,
+                       tree => [ "parsec","apps"],
+                       setup => "tools/scripts/bmark/setup-hasim-bmark ferret --group parsec-3.0/pkgs/apps/ferret/inst/alpha-linux.gcc/bin --binary ferret --linkto ${bmdir}/apps/ferret/inputs  --isa alpha --contexts=${f_true_thr}",
+                       feeder => "m5",
+                       feedflags => m5_cmd("ferret", ${f_true_thr}, "${a} ${f_thr} output_${wrk}.txt", "", "ferret.out", "ferret.err"),
+                      );
+        }
+    }
+}
+
+
+$gcfg->action(@ARGV);
+
+
+##
+## m5_cmd(program, num_contexts, args, input, output, error) --
+##
+##  Construct an m5 command line.
+##
+sub m5_cmd($$$$$$) {
+    my $program = shift;
+    my $num_contexts = shift;
+    my $args = shift;
+    my $input = shift;
+    my $output = shift;
+    my $errout = shift;
+
+    my $cmd = "m5_configs/se.py --shared-mem --hasim-sim";
+    $cmd .= " --num-cpus=${num_contexts}";
+    $cmd .= " --cmd=${program}";
+    $cmd .= " \\\"--options=${args}\\\"" if ($args ne '');
+    $cmd .= " --input=${input}" if ($input ne '');
+    $cmd .= " --output=${output}" if ($output ne '');
+    if ($errout ne '') {
+        $cmd .= " --errout=${errout}";
+    }
+    elsif ($output ne '') {
+        $cmd .= " --errout=${output}";
+    }
+
+    return $cmd;
+}
