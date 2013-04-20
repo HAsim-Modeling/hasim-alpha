@@ -109,7 +109,7 @@ Packagehint=hasim-models
 
 [Pipeline and Caches/Requires]
 hasim_pipeline=Single ALU/fetch out-of-order pipeline
-hasim_l1_caches=Direct Mapped, Writethrough
+hasim_private_caches=Direct Mapped, Writethrough Private Caches
 
 [Pipeline and Caches]
 File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
@@ -151,9 +151,6 @@ Packagehint=hasim
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/single-issue-out-of-order.apm
 Packagehint=hasim-models
 
-[Direct Mapped, Writethrough]
-File=config/pm/hasim-models/l1-caches/l1_caches.apm
-Packagehint=hasim-models
 
 [Default Hybrid Project Common Utilities]
 File=config/pm/leap/submodels/common/project-common-default.apm
@@ -168,4 +165,8 @@ connected_application=HAsim Performance Model
 
 [Standard Topology Manager]
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models
+
+[Direct Mapped, Writethrough Private Caches]
+File=config/pm/hasim-models/private-caches/private-caches.apm
 Packagehint=hasim-models

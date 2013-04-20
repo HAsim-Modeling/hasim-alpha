@@ -26,7 +26,7 @@ Packagehint=hasim-models
 
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
-hasim_l1_caches=Direct Mapped, Writethrough
+hasim_private_caches=Direct Mapped, Writethrough Private Caches
 
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
@@ -154,9 +154,6 @@ Packagehint=hasim-alpha
 File=config/pm/hasim/submodels/common/hasim-model-services.apm
 Packagehint=hasim
 
-[Direct Mapped, Writethrough]
-File=config/pm/hasim-models/l1-caches/l1_caches.apm
-Packagehint=hasim-models
 
 [Default Hybrid Project Common Utilities]
 File=config/pm/leap/submodels/common/project-common-default.apm
@@ -171,4 +168,8 @@ connected_application=HAsim Performance Model
 
 [Standard Topology Manager]
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models
+
+[Direct Mapped, Writethrough Private Caches]
+File=config/pm/hasim-models/private-caches/private-caches.apm
 Packagehint=hasim-models

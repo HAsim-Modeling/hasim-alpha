@@ -26,7 +26,7 @@ Packagehint=hasim-models
 
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
-hasim_l1_caches=Pseudo-Random L1 caches
+hasim_private_caches=Pseudo-Random Private caches
 
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
@@ -160,13 +160,14 @@ Packagehint=leap
 File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
 Packagehint=leap
 
-[Pseudo-Random L1 caches]
-File=config/pm/hasim-models/l1-caches/pseudorandom_l1_caches.apm
-Packagehint=hasim-models
 
 [Soft Services Hybrid Application Environment/Requires]
 connected_application=HAsim Performance Model
 
 [Standard Topology Manager]
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models
+
+[Pseudo-Random Private caches]
+File=config/pm/hasim-models/private-caches/pseudorandom-private-caches.apm
 Packagehint=hasim-models

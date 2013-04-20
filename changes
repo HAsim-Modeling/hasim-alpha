@@ -3084,3 +3084,41 @@ Directory config/bm/alpha
 
 - Add some Parsec Alpha user-mode workloads
 - Change unpipelined exe model to support 64 threads.
+
+----------
+mcadler     Date: Sat Apr 20 08:48:52 EDT 2013  CSN: CSN-hasim-alpha-199
+                  Sat Apr 20 12:48:52 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_single_issue_ooo_exe.apm Locally Modified          198 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_magic_acp_64.apm Locally Modified          198 
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Modified          198 
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          198 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          198 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Modified          198 
+ alpha_inorder_dm_wt_ring_exe_16.apm Locally Modified          198 
+ alpha_inorder_dm_wt_crossbar_acp_16.apm Locally Modified          198 
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          198 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          198 
+ alpha_inorder_dm_wt_ring_acp_16.apm Locally Modified          198 
+ alpha_inorder_magic_exe_16.apm Locally Modified          198 
+ alpha_inorder_magic_acp_16.apm Locally Modified          198 
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Modified          198 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_exe.apm     Locally Modified          198 
+ alpha_inorder_htg.apm     Locally Modified          198 
+ alpha_inorder_acp.apm     Locally Modified          198 
+ alpha_inorder_ml605.apm   Locally Modified          198 
+ alpha_inorder_vc707.apm   Locally Modified          198 
+
+Directory config/pm/hasim-alpha/alpha-smt
+ alpha_smt_exe.apm         Locally Modified          198 
+
+Change awb type name from hasim_l1_caches to hasim_private_caches in preparation
+for adding an L2 cache.  The private caches will hold all CPU-private caches
+and, as a group, will have connections up to the CPU and down to the
+uncore.
