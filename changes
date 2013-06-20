@@ -3122,3 +3122,16 @@ Change awb type name from hasim_l1_caches to hasim_private_caches in preparation
 for adding an L2 cache.  The private caches will hold all CPU-private caches
 and, as a group, will have connections up to the CPU and down to the
 uncore.
+
+----------
+mgambhir    Date: Thu Jun 20 15:21:50 EDT 2013  CSN: CSN-hasim-alpha-200
+                  Thu Jun 20 19:21:50 UTC 2013
+
+
+Directory .
+ configure                 Locally Modified          199 
+
+Directory admin/packages
+ hasim-alpha               Locally Modified          199 
+
+- added Sourceurl in admin/packages/hasim-alpha for doxygen documentation
