@@ -3135,3 +3135,25 @@ Directory admin/packages
  hasim-alpha               Locally Modified          199 
 
 - added Sourceurl in admin/packages/hasim-alpha for doxygen documentation
+
+----------
+mcadler     Date: Mon Jul 29 07:54:37 EDT 2013  CSN: CSN-hasim-alpha-201
+                  Mon Jul 29 11:54:37 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-unpipelined/no-cache
+ alpha_unpipelined_no_cache_vc707.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_64_vc707.apm Locally Added               0 
+ alpha_inorder_128_vc707.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_ml605_16.apm Locally Added               0 
+ alpha_inorder_dm_wt_mesh_vc707_16.apm Locally Added               0 
+ alpha_inorder_dm_wt_mesh_vc707_64.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_64_exe.apm  Locally Added               0 
+
+Add VC707 and ML605 configurations.
