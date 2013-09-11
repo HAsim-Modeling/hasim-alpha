@@ -3157,3 +3157,23 @@ Directory config/pm/hasim-alpha/alpha-inorder
  alpha_inorder_64_exe.apm  Locally Added               0 
 
 Add VC707 and ML605 configurations.
+
+----------
+mcadler     Date: Wed Sep 11 15:45:40 EDT 2013  CSN: CSN-hasim-alpha-202
+                  Wed Sep 11 19:45:40 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_single_issue_ooo_exe.apm Locally Modified          201 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_ml605_16.apm Locally Modified          201 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Modified          201 
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          201 
+ alpha_inorder_dm_wt_mesh_vc707_16.apm Locally Modified          201 
+ alpha_inorder_dm_wt_mesh_vc707_64.apm Locally Modified          201 
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Modified          201 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Modified          201 
+
+- New scratchpad parameters.
+- Update models for new interconnect modules.

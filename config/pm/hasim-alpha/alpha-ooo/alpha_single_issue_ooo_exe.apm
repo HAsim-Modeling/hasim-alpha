@@ -151,7 +151,6 @@ Packagehint=hasim
 File=config/pm/hasim-models/pipeline/superscalar-out-of-order/single-issue-out-of-order.apm
 Packagehint=hasim-models
 
-
 [Default Hybrid Project Common Utilities]
 File=config/pm/leap/submodels/common/project-common-default.apm
 Packagehint=leap
@@ -170,3 +169,10 @@ Packagehint=hasim-models
 [Direct Mapped, Writethrough Private Caches]
 File=config/pm/hasim-models/private-caches/private-caches.apm
 Packagehint=hasim-models
+
+[Interconnect Common]
+File=modules/hasim/timing-models/uncore/interconnects/common/icn-common.awb
+Packagehint=hasim-models
+
+[Mesh Interconnect/Requires]
+hasim_interconnect_common=Interconnect Common
