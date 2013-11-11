@@ -3177,3 +3177,15 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 
 - New scratchpad parameters.
 - Update models for new interconnect modules.
+
+----------
+keflemin    Date: Mon Nov 11 11:24:15 EST 2013  CSN: CSN-hasim-alpha-203
+                  Mon Nov 11 16:24:15 UTC 2013
+
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_datatypes.h           Locally Modified          202 
+
+
+Added some new datatype definitions.  These need to exist because some
+RRR files make use of them. 
