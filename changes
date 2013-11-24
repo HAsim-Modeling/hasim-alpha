@@ -3189,3 +3189,19 @@ Directory modules/hasim/functional-partition/isa/definition
 
 Added some new datatype definitions.  These need to exist because some
 RRR files make use of them. 
+
+----------
+mcadler     Date: Sun Nov 24 09:08:22 EST 2013  CSN: CSN-hasim-alpha-204
+                  Sun Nov 24 14:08:22 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_superscalar_ooo_exe.apm Locally Modified          203 
+ alpha_superscalar_ooo_htg.apm Locally Modified          203 
+ alpha_single_issue_ooo_exe.apm Locally Modified          203 
+ alpha_single_issue_ooo_htg.apm Locally Modified          203 
+ alpha_superscalar_inorder_exe.apm Locally Modified          203 
+ alpha_superscalar_inorder_htg.apm Locally Modified          203 
+
+Don't enforce TLB lookup ordering in the old OOO models.  The infrastructure
+doesn't support it.
