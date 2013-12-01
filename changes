@@ -3205,3 +3205,13 @@ Directory config/pm/hasim-alpha/alpha-ooo
 
 Don't enforce TLB lookup ordering in the old OOO models.  The infrastructure
 doesn't support it.
+
+----------
+mcadler     Date: Sat Nov 30 23:26:48 EST 2013  CSN: CSN-hasim-alpha-205
+                  Sun Dec  1 04:26:48 UTC 2013
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          204 
+
+FUNCP_ prefix on all functional partition statistics.

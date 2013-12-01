@@ -225,7 +225,7 @@ module [HASIM_MODULE] mkISA_Datapath
     // ***** Statistics *****
 
     STAT statISAEmul <-
-        mkStatCounter(statName("ISA_DATAPATH_ALPHA_REGOP_EMULATED_INSTRS",
+        mkStatCounter(statName("FUNCP_ISA_DATAPATH_ALPHA_REGOP_EMULATED_INSTRS",
                                "FUNCP: Emulated Register-Only Instructions"));
 
 
