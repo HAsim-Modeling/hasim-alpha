@@ -96,6 +96,7 @@ Packagehint=hasim-models
 [Chip Base Types/Params]
 MAX_NUM_CPUS=128
 MAX_NUM_MEM_CTRLS=16
+NUM_EXTRA_OCN_STATIONS=16
 
 [Mesh Interconnect]
 File=modules/hasim/timing-models/uncore/interconnects/torus/icn-mesh.awb

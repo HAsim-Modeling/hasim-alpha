@@ -2,7 +2,7 @@
 [Global]
 SaveParameters=0
 Description=Inorder Alpha Simulation
-File=alpha_inorder_64_exe
+File=alpha_inorder_exe_64
 Version=2.2
 Name=Inorder Alpha Simulation
 Type=HAsim

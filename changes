@@ -3215,3 +3215,25 @@ Directory modules/hasim/functional-partition/isa/datapath
  isa_datapath_alpha.bsv    Locally Modified          204 
 
 FUNCP_ prefix on all functional partition statistics.
+
+----------
+mcadler     Date: Thu Dec 26 22:36:10 EST 2013  CSN: CSN-hasim-alpha-206
+                  Fri Dec 27 03:36:10 UTC 2013
+
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_128_vc707.apm Locally Removed           205 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Modified          205 
+ alpha_inorder_dm_wt_mesh_vc707_64.apm Locally Modified          205 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Modified          205 
+
+Directory config/pm/hasim-alpha/alpha-inorder
+ alpha_inorder_64_exe.apm  Locally Removed           205 
+ alpha_inorder_exe_64.apm  Locally Added               - 
+
+- Take advantage of new NUM_EXTRA_OCN_STATIONS so memory controllers can be at
+  the top and bottom of a mesh without having to fill each row with controllers.
+
+- A bit of clean up.
