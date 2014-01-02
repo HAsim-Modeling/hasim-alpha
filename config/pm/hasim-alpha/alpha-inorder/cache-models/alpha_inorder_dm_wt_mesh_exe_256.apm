@@ -2,9 +2,9 @@
 [Global]
 SaveParameters=0
 Description=Inorder Alpha Direct Writethrough Caches Mesh Simulation
-File=alpha_inorder_dm_wt_mesh_exe_128
+File=alpha_inorder_dm_wt_mesh_exe_256
 Version=2.2
-Name=Inorder Alpha Writethrough Caches Mesh Simulation 128
+Name=Inorder Alpha Writethrough Caches Mesh Simulation 256
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
@@ -94,7 +94,7 @@ File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
 Packagehint=hasim-models
 
 [Chip Base Types/Params]
-MAX_NUM_CPUS=128
+MAX_NUM_CPUS=256
 MAX_NUM_MEM_CTRLS=16
 NUM_EXTRA_OCN_STATIONS=16
 
@@ -118,8 +118,9 @@ Packagehint=hasim-models
 hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
 
 [HAsim Common Default Configuration/Params]
-CONTEXT_ID_BITS=7
+CONTEXT_ID_BITS=8
 TOKEN_ID_BITS=6
+CONTEXT_ID_BITS_RRR=16
 
 [HAsim Common Default Configuration]
 File=config/pm/hasim/submodels/common/hasim_common.apm
@@ -143,8 +144,8 @@ File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
 
 [Alpha Functional Model/Params]
-FUNCP_PHYSICAL_REG_INDEX_BITS=14
-MAX_NUM_CONTEXTS=128
+FUNCP_PHYSICAL_REG_INDEX_BITS=16
+MAX_NUM_CONTEXTS=256
 FUNCP_PVT_CACHE_ENTRIES=8192
 
 [Alpha Functional Model]
@@ -167,8 +168,8 @@ Packagehint=leap
 connected_application=HAsim Performance Model
 
 [Mesh Interconnect/Params]
-MESH_HEIGHT=11
-MESH_WIDTH=11
+MESH_HEIGHT=16
+MESH_WIDTH=16
 
 [Standard Topology Manager]
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb

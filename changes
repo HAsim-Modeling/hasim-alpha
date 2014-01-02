@@ -3237,3 +3237,16 @@ Directory config/pm/hasim-alpha/alpha-inorder
   the top and bottom of a mesh without having to fill each row with controllers.
 
 - A bit of clean up.
+
+----------
+mcadler     Date: Wed Jan  1 21:29:03 EST 2014  CSN: CSN-hasim-alpha-207
+                  Thu Jan  2 02:29:03 UTC 2014
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_mesh_exe_128.apm Locally Removed           206 
+ alpha_inorder_dm_wt_mesh_exe_256.apm Locally Added               - 
+
+Add a 256 core model with the same settings as the dual VC707 version.
+This copy starts incredibly slowly because of the large mesh payload
+heap scratchpad intialization, but it does run.
