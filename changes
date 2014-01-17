@@ -3250,3 +3250,15 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
 Add a 256 core model with the same settings as the dual VC707 version.
 This copy starts incredibly slowly because of the large mesh payload
 heap scratchpad intialization, but it does run.
+
+----------
+mcadler     Date: Fri Jan 17 16:39:08 EST 2014  CSN: CSN-hasim-alpha-208
+                  Fri Jan 17 21:39:08 UTC 2014
+
+
+Directory config/bm/alpha
+ splash-2.cfx              Locally Modified          207 
+ parsec.cfx                Locally Modified          207 
+
+- Workloads with more threads.
+- Generate more model parameters automatically.  (E.g. physical memory size.)

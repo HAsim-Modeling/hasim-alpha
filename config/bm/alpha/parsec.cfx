@@ -16,6 +16,8 @@ $bmdir .= '/hasim/alpha/parsec-3.0/pkgs';
 
 my $gcfg = Asim::GenCFG->new();
 
+my $genflags = "--param SKEW_CONTEXTS=0";
+
 ##
 ## Parsec 3.0
 ##
@@ -42,6 +44,7 @@ for (my $num_contexts = 1; $num_contexts <= 1024; $num_contexts *= 2) {
                    setup => "tools/scripts/bmark/setup-hasim-bmark canneal --group parsec-3.0/pkgs/kernels/canneal/inst/alpha-linux.gcc/bin --binary canneal --linkto ${bmdir}/kernels/canneal/inputs  --isa alpha --contexts=${num_contexts}",
                    feeder => "m5",
                    feedflags => m5_cmd("canneal", ${num_contexts}, "${num_contexts} ${a}", "", "canneal.out", "canneal.err"),
+                   genflags => ${genflags},
                   );
     }
 
@@ -73,6 +76,7 @@ for (my $num_contexts = 1; $num_contexts <= 1024; $num_contexts *= 2) {
                        setup => "tools/scripts/bmark/setup-hasim-bmark dedup --group parsec-3.0/pkgs/kernels/dedup/inst/alpha-linux.gcc/bin --binary dedup --linkto ${bmdir}/kernels/dedup/inputs  --isa alpha --contexts=${f_true_thr}",
                        feeder => "m5",
                        feedflags => m5_cmd("dedup", ${f_true_thr}, "${a}", "", "dedup.out", "dedup.err"),
+                       genflags => ${genflags},
                       );
         }
     }
@@ -94,6 +98,7 @@ for (my $num_contexts = 1; $num_contexts <= 1024; $num_contexts *= 2) {
                    setup => "tools/scripts/bmark/setup-hasim-bmark blackscholes --group parsec-3.0/pkgs/apps/blackscholes/inst/alpha-linux.gcc/bin --binary blackscholes --linkto ${bmdir}/apps/blackscholes/inputs  --isa alpha --contexts=${num_contexts}",
                    feeder => "m5",
                    feedflags => m5_cmd("blackscholes", ${num_contexts}, "${num_contexts} inputs/in_${fn}.txt prices_out.txt", "", "blackscholes.out", "blackscholes.err"),
+                   genflags => ${genflags},
                   );
     }
 
@@ -126,6 +131,7 @@ for (my $num_contexts = 1; $num_contexts <= 1024; $num_contexts *= 2) {
                        setup => "tools/scripts/bmark/setup-hasim-bmark ferret --group parsec-3.0/pkgs/apps/ferret/inst/alpha-linux.gcc/bin --binary ferret --linkto ${bmdir}/apps/ferret/inputs  --isa alpha --contexts=${f_true_thr}",
                        feeder => "m5",
                        feedflags => m5_cmd("ferret", ${f_true_thr}, "${a} ${f_thr} output_${wrk}.txt", "", "ferret.out", "ferret.err"),
+                       genflags => ${genflags},
                       );
         }
     }
@@ -150,6 +156,7 @@ sub m5_cmd($$$$$$) {
 
     my $cmd = "m5_configs/se.py --shared-mem --hasim-sim";
     $cmd .= " --num-cpus=${num_contexts}";
+    $cmd .= " --physmem=16GB";
     $cmd .= " --cmd=${program}";
     $cmd .= " \\\"--options=${args}\\\"" if ($args ne '');
     $cmd .= " --input=${input}" if ($input ne '');

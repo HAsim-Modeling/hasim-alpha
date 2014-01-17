@@ -15,61 +15,69 @@ $bmdir .= '/hasim/alpha/splash2-modified/splash2/codes';
 
 my $gcfg = Asim::GenCFG->new();
 
+my $genflags = "--param SKEW_CONTEXTS=0";
+
 ##
 ## SPEC CPU2000
 ##
 
-for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
+for (my $num_contexts = 1; $num_contexts <= 1024; $num_contexts *= 2) {
 
-    my $bm_name = sprintf("%s_%03dt", "CHOLESKY", $num_contexts);
+    my $bm_name = sprintf("%s_%04dt", "CHOLESKY", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","kernels"],
                setup => "tools/scripts/bmark/setup-hasim-bmark CHOLESKY --group splash2-modified/splash2/codes/kernels/cholesky --binary CHOLESKY --linkto ${bmdir}/kernels/cholesky/inputs  --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
                feedflags => m5_cmd("CHOLESKY", ${num_contexts}, "-p${num_contexts} -t", "inputs/tk29.O", "CHOLESKY.out", "CHOLESKY.err"),
+               genflags => ${genflags},
               );
 
-    $bm_name = sprintf("%s_%03dt", "FFT", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "FFT", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","kernels"],
                setup => "tools/scripts/bmark/setup-hasim-bmark FFT --group splash2-modified/splash2/codes/kernels/fft --binary FFT --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("FFT", ${num_contexts}, "-m16 -p${num_contexts} -l5 -t", "", "FFT.out", "FFT.err"),
+               feedflags => m5_cmd("FFT", ${num_contexts}, "-m20 -p${num_contexts} -l5 -t", "", "FFT.out", "FFT.err"),
+               genflags => ${genflags},
               );
 
-    $bm_name = sprintf("%s_%03dt", "LU_CONTIG", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "LU_CONTIG", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","kernels"],
                setup => "tools/scripts/bmark/setup-hasim-bmark LU_CONTIG --group splash2-modified/splash2/codes/kernels/lu/contiguous_blocks --binary LU --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("LU", ${num_contexts}, "-p${num_contexts} -t", "", "LU_CONTIG.out", "LU_CONTIG.err"),
+               feedflags => m5_cmd("LU", ${num_contexts}, "-n2048 -p${num_contexts} -t", "", "LU_CONTIG.out", "LU_CONTIG.err"),
+               genflags => ${genflags},
               );
 
-    $bm_name = sprintf("%s_%03dt", "LU_NONCONTIG", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "LU_NONCONTIG", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","kernels"],
                setup => "tools/scripts/bmark/setup-hasim-bmark LU_NONCONTIG --group splash2-modified/splash2/codes/kernels/lu/non_contiguous_blocks --binary LU --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("LU", ${num_contexts}, "-p${num_contexts} -t", "", "LU_NONCONTIG.out", "LU_NONCONTIG.err"),
+               feedflags => m5_cmd("LU", ${num_contexts}, "-n2048 -p${num_contexts} -t", "", "LU_NONCONTIG.out", "LU_NONCONTIG.err"),
+               genflags => ${genflags},
               );
 
-    $bm_name = sprintf("%s_%03dt", "RADIX", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "RADIX", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","kernels"],
                setup => "tools/scripts/bmark/setup-hasim-bmark RADIX --group splash2-modified/splash2/codes/kernels/radix --binary RADIX --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("RADIX", ${num_contexts}, "-p${num_contexts} -t", "", "RADIX.out", "RADIX.err"),
+               feedflags => m5_cmd("RADIX", ${num_contexts}, "-n16777216 -m33554432 -p${num_contexts} -t", "", "RADIX.out", "RADIX.err"),
+               genflags => ${genflags},
               );
 
-    $bm_name = sprintf("%s_%03dt", "BARNES", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "BARNES", $num_contexts);
 ##    $gcfg->add(name => $bm_name,
 ##               tree => [ "splash2","apps"],
 ##               setup => "tools/scripts/bmark/setup-hasim-bmark BARNES --group splash2-modified/splash2/codes/apps/barnes --binary BARNES --linkto ${bmdir}/apps/barnes/input.p${num_contexts} --isa alpha --contexts=${num_contexts}",
 ##               feeder => "m5",
 ##               feedflags => m5_cmd("BARNES", ${num_contexts}, "", "input.p${num_contexts}", "BARNES.out", "BARNES.err"),
+##               genflags => ${genflags},
 ##              );
 
-    $bm_name = sprintf("%s_%03dt", "FMM", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "FMM", $num_contexts);
     my $input_name = "";
     if (${num_contexts} == 1)
     {
@@ -84,41 +92,46 @@ for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
 ##               setup => "tools/scripts/bmark/setup-hasim-bmark FMM --group splash2-modified/splash2/codes/apps/fmm --binary FMM --linkto ${bmdir}/apps/fmm/inputs/${input_name} --isa alpha --contexts=${num_contexts}",
 ##               feeder => "m5",
 ##               feedflags => m5_cmd("FMM", ${num_contexts}, "-p${num_contexts}", "${input_name}", "FMM.out", "FMM.err"),
+##               genflags => ${genflags},
 ##              );
 
-    $bm_name = sprintf("%s_%03dt", "OCEAN_CONTIG", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "OCEAN_CONTIG", $num_contexts);
 ##    $gcfg->add(name => $bm_name,
 ##               tree => [ "splash2","apps"],
 ##               setup => "tools/scripts/bmark/setup-hasim-bmark OCEAN_CONTIG --group splash2-modified/splash2/codes/apps/ocean/contiguous_partitions --binary OCEAN --isa alpha --contexts=${num_contexts}",
 ##               feeder => "m5",
 ##               feedflags => m5_cmd("OCEAN", ${num_contexts}, "-p${num_contexts}", "", "OCEAN_CONTIG.out", "OCEAN_CONTIG.err"),
+##               genflags => ${genflags},
 ##              );
 
-    $bm_name = sprintf("%s_%03dt", "OCEAN_NONCONTIG", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "OCEAN_NONCONTIG", $num_contexts);
 ##    $gcfg->add(name => $bm_name,
 ##               tree => [ "splash2","apps"],
 ##               setup => "tools/scripts/bmark/setup-hasim-bmark OCEAN_NONCONTIG --group splash2-modified/splash2/codes/apps/ocean/non_contiguous_partitions --binary OCEAN --isa alpha --contexts=${num_contexts}",
 ##               feeder => "m5",
 ##               feedflags => m5_cmd("OCEAN", ${num_contexts}, "-p${num_contexts}", "", "OCEAN_NONCONTIG.out", "OCEAN_NONCONTIG.err"),
+##               genflags => ${genflags},
 ##              );
 
-    $bm_name = sprintf("%s_%03dt", "RADIOSITY", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "RADIOSITY", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","apps"],
                setup => "tools/scripts/bmark/setup-hasim-bmark RADIOSITY --group splash2-modified/splash2/codes/apps/radiosity --binary RADIOSITY --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("RADIOSITY", ${num_contexts}, "-p ${num_contexts} -batch -room", "", "RADIOSITY.out", "RADIOSITY.err"),
+               feedflags => m5_cmd("RADIOSITY", ${num_contexts}, "-p ${num_contexts} -batch -largeroom", "", "RADIOSITY.out", "RADIOSITY.err"),
+               genflags => ${genflags},
               );
 
-    $bm_name = sprintf("%s_%03dt", "RAYTRACE", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "RAYTRACE", $num_contexts);
     $gcfg->add(name => $bm_name,
                tree => [ "splash2","apps"],
                setup => "tools/scripts/bmark/setup-hasim-bmark RAYTRACE --group splash2-modified/splash2/codes/apps/raytrace --binary RAYTRACE --linkto ${bmdir}/apps/raytrace/inputs --isa alpha --contexts=${num_contexts}",
                feeder => "m5",
-               feedflags => m5_cmd("RAYTRACE", ${num_contexts}, "-p${num_contexts} inputs/teapot.env", "", "RAYTRACE.out", "RAYTRACE.err"),
+               feedflags => m5_cmd("RAYTRACE", ${num_contexts}, "-p${num_contexts} inputs/balls4.env", "", "RAYTRACE.out", "RAYTRACE.err"),
+               genflags => ${genflags},
               );
 
-    $bm_name = sprintf("%s_%03dt", "WATER_NSQUARED", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "WATER_NSQUARED", $num_contexts);
     $input_name = "";
     if (${num_contexts} == 1)
     {
@@ -133,9 +146,10 @@ for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
 ##               setup => "tools/scripts/bmark/setup-hasim-bmark WATER_NSQUARED --group splash2-modified/splash2/codes/apps/water-nsquared --binary WATER-NSQUARED --linkto ${bmdir}/apps/water-nsquared/${input_name} --isa alpha --contexts=${num_contexts}",
 ##               feeder => "m5",
 ##               feedflags => m5_cmd("WATER-NSQUARED", ${num_contexts}, "-p${num_contexts}", "${input_name}", "WATER_NSQUARED.out", "WATER_NSQUARED.err"),
+##               genflags => ${genflags},
 ##              );
 
-    $bm_name = sprintf("%s_%03dt", "WATER_SPATIAL", $num_contexts);
+    $bm_name = sprintf("%s_%04dt", "WATER_SPATIAL", $num_contexts);
     $input_name = "";
     if (${num_contexts} == 1)
     {
@@ -150,6 +164,7 @@ for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
 ##               setup => "tools/scripts/bmark/setup-hasim-bmark WATER_SPATIAL --group splash2-modified/splash2/codes/apps/water-spatial --binary WATER-SPATIAL --linkto ${bmdir}/apps/water-spatial/${input_name} --isa alpha --contexts=${num_contexts}",
 ##               feeder => "m5",
 ##               feedflags => m5_cmd("WATER-SPATIAL", ${num_contexts}, "-p${num_contexts}", "${input_name}", "WATER_SPATIAL.out", "WATER_SPATIAL.err"),
+##               genflags => ${genflags},
 ##              );
 }
 
@@ -172,6 +187,7 @@ sub m5_cmd($$$$$$) {
 
     my $cmd = "m5_configs/se.py --shared-mem --hasim-sim";
     $cmd .= " --num-cpus=${num_contexts}";
+    $cmd .= " --physmem=16GB";
     $cmd .= " --cmd=${program}";
     $cmd .= " \\\"--options=${args}\\\"" if ($args ne '');
     $cmd .= " --input=${input}" if ($input ne '');
