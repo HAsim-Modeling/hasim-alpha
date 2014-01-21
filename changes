@@ -3262,3 +3262,47 @@ Directory config/bm/alpha
 
 - Workloads with more threads.
 - Generate more model parameters automatically.  (E.g. physical memory size.)
+
+----------
+mcadler     Date: Tue Jan 21 10:51:44 EST 2014  CSN: CSN-hasim-alpha-209
+                  Tue Jan 21 15:51:44 UTC 2014
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_directmapped_writethrough_exe.apm Locally Removed           208 
+ alpha_inorder_dm_wt_mesh_ml605_16.apm Locally Removed           208 
+ alpha_inorder_dm_wt_mesh_acp_16.apm Locally Removed           208 
+ alpha_inorder_dm_wt_mesh_vc707_16.apm Locally Removed           208 
+ alpha_inorder_dm_wt_ring_acp_16.apm Locally Removed           208 
+ alpha_inorder_dm_wt_mesh_exe_256.apm Locally Removed           208 
+ alpha_inorder_mesh_sharedLLC_MESI_ml605_0016.apm Locally Added               0 
+ alpha_inorder_mesh_sharedLLC_MESI_acp_0008.apm Locally Added               0 
+ alpha_inorder_dm_wt_mesh_vc707_64.apm Locally Removed           208 
+ alpha_inorder_mesh_sharedLLC_MESI_vc707_0016.apm Locally Added               0 
+ alpha_inorder_mesh_sharedLLC_MESI_vc707_0064.apm Locally Added               0 
+ submodels/                Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
+ app_alpha_inorder_mesh_sharedLLC_MESI_0004.apm Locally Added               0 
+ app_alpha_inorder_mesh_sharedLLC_MESI_0016.apm Locally Added               0 
+ app_alpha_inorder_mesh_sharedLLC_MESI_0008.apm Locally Added               0 
+ timep_inorder_mesh_sharedLLC_MESI.apm Locally Added               0 
+ app_alpha_inorder_mesh_sharedLLC_MESI_0064.apm Locally Added               0 
+ app_alpha_inorder_mesh_sharedLLC_MESI_0256.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_dm_wt_crossbar_acp.apm Locally Removed           208 
+ alpha_inorder_dm_wt_mesh_exe_16.apm Locally Removed           208 
+ alpha_inorder_dm_wt_mesh_exe_64.apm Locally Removed           208 
+ alpha_inorder_dm_wt_ring_exe_16.apm Locally Removed           208 
+ alpha_inorder_dm_wt_crossbar_acp_16.apm Locally Removed           208 
+ alpha_inorder_mesh_sharedLLC_MESI_exe_0016.apm Locally Added               0 
+ alpha_inorder_mesh_sharedLLC_MESI_exe_0008.apm Locally Added               0 
+ alpha_inorder_mesh_sharedLLC_MESI_exe_0064.apm Locally Added               0 
+ alpha_inorder_mesh_sharedLLC_MESI_exe_0256.apm Locally Added               0 
+
+- Clean up standard mesh model.  Now all timing models derive from a single
+  sub-model.  All models of a given size, independent of platform, derive from
+  the same sub-model that depends on the base timing sub-model.
+
+- Drop ring models.  The mesh model can be configured at run time into a ring.
