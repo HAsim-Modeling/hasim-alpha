@@ -20,6 +20,7 @@
 %include platform/m5/build/ALPHA
 
 %library platform/m5/build/libelf/libelf.a
+%library platform/m5/build/libfdt/libfdt.a
 %library platform/m5/build/gzstream/libgzstream.a
 
 %AWB_END

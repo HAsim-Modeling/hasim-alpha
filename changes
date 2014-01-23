@@ -3306,3 +3306,21 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models
   the same sub-model that depends on the base timing sub-model.
 
 - Drop ring models.  The mesh model can be configured at run time into a ring.
+
+----------
+mcadler     Date: Wed Jan 22 19:48:06 EST 2014  CSN: CSN-hasim-alpha-210
+                  Thu Jan 23 00:48:06 UTC 2014
+
+
+Directory platform/m5
+ m5-alpha.awb              Locally Modified          209 
+
+Directory platform
+ Makefile                  Locally Modified          209 
+
+Directory config/bm/alpha
+ splash-2.cfx              Locally Modified          209 
+ parsec.cfx                Locally Modified          209 
+
+- gem5 --physmem argument is now --mem-size.
+- Latest gem5 needs (and builds) libfdt.

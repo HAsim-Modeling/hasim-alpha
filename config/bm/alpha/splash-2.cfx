@@ -187,7 +187,7 @@ sub m5_cmd($$$$$$) {
 
     my $cmd = "m5_configs/se.py --shared-mem --hasim-sim";
     $cmd .= " --num-cpus=${num_contexts}";
-    $cmd .= " --physmem=16GB";
+    $cmd .= " --mem-size=16GB";
     $cmd .= " --cmd=${program}";
     $cmd .= " \\\"--options=${args}\\\"" if ($args ne '');
     $cmd .= " --input=${input}" if ($input ne '');

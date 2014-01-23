@@ -7,6 +7,7 @@ all:
 	# always gets a unique path
 	ln -fs ../libelf/libelf.a m5/build/ALPHA/libelf.a
 	ln -fs ../gzstream/libgzstream.a m5/build/ALPHA/libgzstream.a
+	ln -fs ../libfdt/libfdt.a m5/build/ALPHA/libfdt.a
 	rm -f m5/build/ALPHA/include
 	@echo Done
 
