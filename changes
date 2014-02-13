@@ -3324,3 +3324,17 @@ Directory config/bm/alpha
 
 - gem5 --physmem argument is now --mem-size.
 - Latest gem5 needs (and builds) libfdt.
+
+----------
+mcadler     Date: Thu Feb 13 17:57:19 EST 2014  CSN: CSN-hasim-alpha-211
+                  Thu Feb 13 22:57:19 UTC 2014
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          210 
+
+Directory modules/hasim/functional-partition/isa/definition
+ isa_memory_conversions.bsv Locally Modified          210 
+ isa_derived_types.bsv     Locally Modified          210 
+
+Switch to BSD license.
