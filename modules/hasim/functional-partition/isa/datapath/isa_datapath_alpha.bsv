@@ -100,7 +100,7 @@ ISA_DP_PIPE
 // Some macros to distinguish between synthesis, where we have an on-board FP engine,
 // and simulation, where we do not, and must emulate more.
 
-`ifdef SYNTH
+`ifdef SYNTH_Z
   `ifndef ISA_NATIVE_FPGA_FP_Z
     `define ISE_NATIVE_FPGA_FP_ENABLED
   `endif
@@ -2057,7 +2057,7 @@ module [HASIM_MODULE] mkISA_Datapath
 
     Bit#(64) defaultFPRC = { 1'b0, 3'b0, 2'b10, 2'b00, 1'b0, 1'b0, 1'b0, 1'b0, 3'b0, 49'b0};
 
-`ifdef SYNTH
+`ifndef SYNTH_Z
 
     FP_ACCEL fpAdd    <- mkFPAcceleratorAdd();
     FP_ACCEL fpMul    <- mkFPAcceleratorMul();

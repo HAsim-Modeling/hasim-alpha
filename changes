@@ -3338,3 +3338,14 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_derived_types.bsv     Locally Modified          210 
 
 Switch to BSD license.
+
+----------
+keflemin    Date: Mon Mar 31 19:05:28 EDT 2014  CSN: CSN-hasim-alpha-214
+                  Mon Mar 31 23:05:28 UTC 2014
+
+
+Directory modules/hasim/functional-partition/isa/datapath
+ isa_datapath_alpha.bsv    Locally Modified          213 
+
+
+Changed SYNTH to SYNTH_Z
