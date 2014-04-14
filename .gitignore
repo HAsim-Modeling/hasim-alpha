@@ -1,0 +1,18 @@
+
+# /
+/Makefile
+/config.h
+/config.log
+/config.cache
+/config.status
+/autom4te.cache
+/stamp-h1
+/libtool
+/pkgconfig
+
+# /include/
+/include/config.h
+/include/stamp-h1
+
+# /platform/m5/
+/platform/m5/build
