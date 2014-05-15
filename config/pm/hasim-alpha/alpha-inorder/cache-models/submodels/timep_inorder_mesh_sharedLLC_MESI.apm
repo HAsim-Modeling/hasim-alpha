@@ -16,7 +16,6 @@ RootProvides=hasim_timep
 DefaultAttributes=hasim inorder
 model=Single Chip Timing Partition
 
-
 [Pipeline and Caches]
 File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
 Packagehint=hasim-models
@@ -48,8 +47,6 @@ hasim_chip=Multi-Core Chip
 [Single Chip Timing Partition]
 File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
 Packagehint=hasim
-
-
 
 [Null Memory/Requires]
 memory_base_types=Memory Base Types
@@ -90,23 +87,19 @@ File=modules/hasim/timing-models/uncore/memory-controller/latency-delay/memory-c
 Packagehint=hasim-models
 
 [Writeback No Coherence Last Level Cache]
-File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
+File=modules/hasim/timing-models/caches/protocol/no-coherence/last-level-cache/set-associative/last-level-cache-no-coherence.awb
 Packagehint=hasim-models
 
 [Set Associative Last Level Cache Alg]
-File=modules/hasim/timing-models/caches/last-level-caches/alg/llc-set-associative.awb
+File=modules/hasim/timing-models/caches/cache-algorithms/wrappers/last-level-cache/llc-set-associative.awb
 Packagehint=hasim-models
 
 [Writeback No Coherence Last Level Cache/Requires]
 hasim_last_level_cache_alg=Set Associative Last Level Cache Alg
 
-
-
 [Inorder Pipeline, 2-bit branch predictor]
 File=config/pm/hasim-models/pipeline/inorder/inorder.apm
 Packagehint=hasim-models
-
-
 
 [Standard Topology Manager]
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
