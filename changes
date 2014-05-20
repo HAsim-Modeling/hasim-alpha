@@ -3357,3 +3357,19 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
  timep_inorder_mesh_sharedLLC_MESI.apm Locally Modified          215 
 
 Update for reorganized cache model components.
+
+----------
+mcadler     Date: Tue May 20 16:05:46 EDT 2014  CSN: CSN-hasim-alpha-217
+                  Tue May 20 20:05:46 UTC 2014
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_mesh_sharedLLC_nocoherence_exe_0008.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
+ app_alpha_inorder_mesh_sharedLLC_nocoherence_0008.apm Locally Added               0 
+ timep_inorder_mesh_sharedLLC_nocoherence.apm Locally Added               0 
+
+Define model with multiple cache levels and a shared LLC but with no coherence.
+This is not a legal machine, but the functional model forces correct execution
+despite the optimistic timing result.
