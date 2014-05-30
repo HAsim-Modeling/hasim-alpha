@@ -3373,3 +3373,14 @@ Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
 Define model with multiple cache levels and a shared LLC but with no coherence.
 This is not a legal machine, but the functional model forces correct execution
 despite the optimistic timing result.
+
+----------
+mcadler     Date: Fri May 30 18:45:04 EDT 2014  CSN: CSN-hasim-alpha-218
+                  Fri May 30 22:45:04 UTC 2014
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
+ timep_inorder_mesh_sharedLLC_nocoherence.apm Locally Modified          217 
+ timep_inorder_mesh_sharedLLC_MESI.apm Locally Modified          217 
+
+Minor sub-model name changes.

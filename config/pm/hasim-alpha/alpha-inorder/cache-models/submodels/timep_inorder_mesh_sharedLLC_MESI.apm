@@ -22,7 +22,7 @@ Packagehint=hasim-models
 
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
-hasim_private_caches=Direct Mapped, Writethrough Private Caches
+hasim_private_caches=MESI, Direct Mapped, Writethrough Private Caches
 
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
@@ -105,9 +105,6 @@ Packagehint=hasim-models
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
 Packagehint=hasim-models
 
-[Direct Mapped, Writethrough Private Caches]
-File=config/pm/hasim-models/private-caches/private-caches.apm
-Packagehint=hasim-models
 
 [Interconnect Common]
 File=modules/hasim/timing-models/uncore/interconnects/common/icn-common.awb
@@ -115,3 +112,7 @@ Packagehint=hasim-models
 
 [Mesh Interconnect/Requires]
 hasim_interconnect_common=Interconnect Common
+
+[MESI, Direct Mapped, Writethrough Private Caches]
+File=config/pm/hasim-models/private-caches/MESI-private-caches.apm
+Packagehint=hasim-models
