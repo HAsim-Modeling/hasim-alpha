@@ -94,7 +94,7 @@ File=modules/hasim/timing-models/uncore/interconnects/crossbar/icn-crossbar.awb
 Packagehint=hasim-models
 
 [Writeback No Coherence Last Level Cache]
-File=modules/hasim/timing-models/caches/last-level-caches/set-associative/last-level-cache-no-coherence.awb
+File=modules/hasim/timing-models/caches/protocol/no-coherence/last-level-cache/set-associative/last-level-cache-no-coherence.awb
 Packagehint=hasim-models
 
 [Latency-Delay Controller]
@@ -106,7 +106,7 @@ File=modules/hasim/timing-models/chip/multi-core/multi-core-chip.awb
 Packagehint=hasim-models
 
 [Set Associative Last Level Cache Alg]
-File=modules/hasim/timing-models/caches/last-level-caches/alg/llc-set-associative.awb
+File=modules/hasim/timing-models/caches/cache-algorithms/wrappers/last-level-cache/llc-set-associative.awb
 Packagehint=hasim-models
 
 [Writeback No Coherence Last Level Cache/Requires]
@@ -159,7 +159,6 @@ Packagehint=leap
 [Soft Services Hybrid Application Environment]
 File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
 Packagehint=leap
-
 
 [Soft Services Hybrid Application Environment/Requires]
 connected_application=HAsim Performance Model

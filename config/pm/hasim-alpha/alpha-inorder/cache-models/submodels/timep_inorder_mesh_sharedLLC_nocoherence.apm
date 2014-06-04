@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Mesh with shared LLC and MESI Coherence
-File=timep_inorder_mesh_sharedLLC_MESI
+Description=Inorder Mesh with shared LLC and No Coherence
+File=timep_inorder_mesh_sharedLLC_nocoherence
 Version=2.2
-Name=Inorder Mesh with shared LLC and MESI Coherence
+Name=Inorder Mesh with shared LLC and No Coherence
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
@@ -22,7 +22,7 @@ Packagehint=hasim-models
 
 [Pipeline and Caches/Requires]
 hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
-hasim_private_caches=MESI, Direct Mapped, Writethrough Private Caches
+hasim_private_caches=No Coherence, Direct Mapped, Writethrough Private Caches
 
 [Chip Base Types]
 File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
@@ -113,6 +113,6 @@ Packagehint=hasim-models
 [Mesh Interconnect/Requires]
 hasim_interconnect_common=Interconnect Common
 
-[MESI, Direct Mapped, Writethrough Private Caches]
-File=config/pm/hasim-models/private-caches/MESI-private-caches.apm
+[No Coherence, Direct Mapped, Writethrough Private Caches]
+File=config/pm/hasim-models/private-caches/private-caches.apm
 Packagehint=hasim-models

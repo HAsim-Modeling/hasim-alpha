@@ -3338,3 +3338,49 @@ Directory modules/hasim/functional-partition/isa/definition
  isa_derived_types.bsv     Locally Modified          210 
 
 Switch to BSD license.
+
+----------
+mcadler     Date: Thu May 15 17:32:42 EDT 2014  CSN: CSN-hasim-alpha-216
+                  Thu May 15 21:32:42 UTC 2014
+
+
+Directory config/pm/hasim-alpha/alpha-ooo
+ alpha_single_issue_ooo_exe.apm Locally Modified          215 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_magic_acp_64.apm Locally Removed           215 
+ alpha_inorder_pseudorandom_exe.apm Locally Modified          215 
+ alpha_inorder_magic_exe_16.apm Locally Removed           215 
+ alpha_inorder_magic_acp_16.apm Locally Removed           215 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
+ timep_inorder_mesh_sharedLLC_MESI.apm Locally Modified          215 
+
+Update for reorganized cache model components.
+
+----------
+mcadler     Date: Tue May 20 16:05:46 EDT 2014  CSN: CSN-hasim-alpha-217
+                  Tue May 20 20:05:46 UTC 2014
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models
+ alpha_inorder_mesh_sharedLLC_nocoherence_exe_0008.apm Locally Added               0 
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
+ app_alpha_inorder_mesh_sharedLLC_nocoherence_0008.apm Locally Added               0 
+ timep_inorder_mesh_sharedLLC_nocoherence.apm Locally Added               0 
+
+Define model with multiple cache levels and a shared LLC but with no coherence.
+This is not a legal machine, but the functional model forces correct execution
+despite the optimistic timing result.
+
+----------
+mcadler     Date: Fri May 30 18:45:04 EDT 2014  CSN: CSN-hasim-alpha-218
+                  Fri May 30 22:45:04 UTC 2014
+
+
+Directory config/pm/hasim-alpha/alpha-inorder/cache-models/submodels
+ timep_inorder_mesh_sharedLLC_nocoherence.apm Locally Modified          217 
+ timep_inorder_mesh_sharedLLC_MESI.apm Locally Modified          217 
+
+Minor sub-model name changes.
