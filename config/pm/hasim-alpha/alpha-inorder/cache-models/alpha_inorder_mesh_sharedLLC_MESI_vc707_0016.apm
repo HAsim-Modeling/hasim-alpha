@@ -9,37 +9,36 @@ Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
-RootName=HW/SW Hybrid Pipeline Build
+RootName=HW/SW Hybrid Multifpga Project Foundation
 RootProvides=model
 
 [Model]
 DefaultAttributes=hasim inorder alpha
-model=HW/SW Hybrid Pipeline Build
-
-[HW/SW Hybrid Pipeline Build]
-File=modules/leap/build-support/project/project-pipeline.awb
-Packagehint=leap
-
-[HW/SW Hybrid Pipeline Build/Requires]
-project_common=Default Hybrid Project Common Utilities
-fpgaenv=Hybrid VC707 PCIE FPGA Environment
-application_env=Soft Services Hybrid Application Environment
-
-[Default Hybrid Project Common Utilities]
-File=config/pm/leap/submodels/common/project-common-default.apm
-Packagehint=leap
-
-[Soft Services Hybrid Application Environment]
-File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
-Packagehint=leap
-
-[Soft Services Hybrid Application Environment/Requires]
-connected_application=Inorder Alpha Mesh with shared LLC and MESI Coherence (0016 cores)
-
-[Hybrid VC707 PCIE FPGA Environment]
-File=config/pm/leap/submodels/fpgaenv/fpgaenv-hybrid-vc707-pcie.apm
-Packagehint=leap
+model=HW/SW Hybrid Multifpga Project Foundation
 
 [Inorder Alpha Mesh with shared LLC and MESI Coherence (0016 cores)]
 File=config/pm/hasim-alpha/alpha-inorder/cache-models/submodels/app_alpha_inorder_mesh_sharedLLC_MESI_0016.apm
 Packagehint=hasim-alpha
+
+[HW/SW Hybrid Multifpga Project Foundation]
+File=modules/leap/build-support/project/project-multifpga.awb
+Packagehint=leap-multifpga
+
+[Null FPGA Mapping]
+File=modules/leap/build-support/project/null_mapping.awb
+Packagehint=leap-multifpga
+
+[LIM Compiler Pipeline]
+File=config/pm/leap/submodels/pipelines/build-pipeline-lim.apm
+Packagehint=leap-multifpga
+
+[HW/SW Hybrid Multifpga Project Foundation/Requires]
+fpga_mapping=Null FPGA Mapping
+build_pipeline=LIM Compiler Pipeline
+connected_application=Inorder Alpha Mesh with shared LLC and MESI Coherence (0016 cores)
+environment_description=VC707 HW/SW Environment
+
+
+[VC707 HW/SW Environment]
+File=modules/leap-platforms/fpga-environments/vc707/vc707_hwsw.awb
+Packagehint=leap-multifpga
