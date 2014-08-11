@@ -100,13 +100,13 @@ ISA_DP_PIPE
 // Some macros to distinguish between synthesis, where we have an on-board FP engine,
 // and simulation, where we do not, and must emulate more.
 
-`ifdef SYNTH_Z
+`ifndef SYNTH_Z
   `ifndef ISA_NATIVE_FPGA_FP_Z
-    `define ISE_NATIVE_FPGA_FP_ENABLED
+    `define ISA_NATIVE_FPGA_FP_ENABLED
   `endif
 `endif
 
-`ifdef ISE_NATIVE_FPGA_FP_ENABLED
+`ifdef ISA_NATIVE_FPGA_FP_ENABLED
   `define SYNTH_ISA_DP_PIPE_FP_ADD ISA_DP_PIPE_FP_ADD
   `define SYNTH_ISA_DP_PIPE_FP_MUL ISA_DP_PIPE_FP_MUL
   `define SYNTH_ISA_DP_PIPE_FP_DIV ISA_DP_PIPE_FP_DIV
