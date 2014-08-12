@@ -1,20 +1,20 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Alpha Simulation
-File=alpha_inorder_exe_64
+Description=Inorder Alpha with Magic Memory (0064 cores)
+File=app_alpha_inorder_0064
 Version=2.2
-Name=Inorder Alpha Simulation
+Name=Inorder Alpha with Magic Memory (0064 cores)
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
 DefaultRunOpts=
-RootName=HW/SW Hybrid Pipeline Build
-RootProvides=model
+RootName=HAsim Performance Model
+RootProvides=connected_application
 
 [Model]
 DefaultAttributes=hasim inorder alpha
-model=HW/SW Hybrid Pipeline Build
+model=HAsim Performance Model
 
 [Alpha ISA Definition]
 File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
@@ -100,25 +100,9 @@ File=config/pm/hasim/submodels/common/hasim-model-services.apm
 Packagehint=hasim
 
 
-[Default Hybrid Project Common Utilities]
-File=config/pm/leap/submodels/common/project-common-default.apm
-Packagehint=leap
 
-[HW/SW Hybrid Pipeline Build]
-File=modules/leap/build-support/project/project-pipeline.awb
-Packagehint=leap
 
-[HW/SW Hybrid Pipeline Build/Requires]
-project_common=Default Hybrid Project Common Utilities
-fpgaenv=Hybrid Simulation FPGA Environment
-application_env=Soft Services Hybrid Application Environment
 
-[Soft Services Hybrid Application Environment]
-File=modules/leap/build-support/project/application-env/soft-services/application-env-hybrid-soft-service.awb
-Packagehint=leap
-
-[Soft Services Hybrid Application Environment/Requires]
-connected_application=HAsim Performance Model
 
 [HAsim Common Default Configuration/Params]
 CONTEXT_ID_BITS=6
@@ -133,9 +117,6 @@ FUNCP_PVT_CACHE_ENTRIES=32768
 MAX_NUM_CONTEXTS=64
 FUNCP_TLB_PVT_ENTRIES=8192
 
-[Hybrid Simulation FPGA Environment]
-File=config/pm/leap/submodels/fpgaenv/fpgaenv-hybrid-exe.apm
-Packagehint=leap
 
 [Standard Topology Manager]
 File=modules/hasim/timing-models/chip/topology/std/topology-std.awb

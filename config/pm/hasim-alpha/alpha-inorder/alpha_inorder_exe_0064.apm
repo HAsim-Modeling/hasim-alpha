@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Alpha with Magic Memory (0064 cores) VC707
-File=alpha_inorder_vc707
+Description=Inorder Alpha with Magic Memory (0064 cores) Simulation
+File=alpha_inorder_exe_0064
 Version=2.2
-Name=Inorder Alpha with Magic Memory (0064 cores) VC707
+Name=Inorder Alpha with Magic Memory (0064 cores) Simulation
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
@@ -15,6 +15,10 @@ RootProvides=model
 [Model]
 DefaultAttributes=hasim inorder alpha simulation
 model=HW/SW Hybrid Multifpga Project Foundation
+
+[Simulation HW/SW Environment]
+File=modules/leap-platforms/fpga-environments/sim/sim_hwsw.awb
+Packagehint=leap-multifpga
 
 [HW/SW Hybrid Multifpga Project Foundation]
 File=modules/leap/build-support/project/project-multifpga.awb
@@ -28,7 +32,7 @@ Packagehint=leap-multifpga
 fpga_mapping=Null FPGA Mapping
 build_pipeline=LIM Compiler Pipeline
 connected_application=Inorder Alpha with Magic Memory (0064 cores)
-environment_description=VC707 Dual HW/SW Environment
+environment_description=Simulation HW/SW Environment
 
 [Null FPGA Mapping]
 File=modules/leap/build-support/project/null_mapping.awb
@@ -38,7 +42,3 @@ Packagehint=leap-multifpga
 File=config/pm/hasim-alpha/alpha-inorder/submodels/app_alpha_inorder_0064.apm
 Packagehint=hasim-alpha
 
-
-[VC707 Dual HW/SW Environment]
-File=modules/leap-platforms/fpga-environments/vc707/vc707_dual_hwsw.awb
-Packagehint=leap-multifpga
