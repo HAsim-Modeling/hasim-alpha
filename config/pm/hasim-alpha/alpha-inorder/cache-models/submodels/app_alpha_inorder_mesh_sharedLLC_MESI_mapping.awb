@@ -1,0 +1,9 @@
+%name Inorder Alpha Mesh with shared LLC and MESI Coherence Mapping
+%desc This file describes the mapping of the Alpha MESI coherence model
+
+%attributes tool
+
+%provides fpga_mapping
+
+%sources -t FPGAENV_MAPPING -v PUBLIC app-alpha-inorder-mesh-sharedLLC-MESI-mapping.map
+%sources -t STAT -v PUBLIC app-alpha-inorder-mesh-sharedLLC-MESI-mapping.stats

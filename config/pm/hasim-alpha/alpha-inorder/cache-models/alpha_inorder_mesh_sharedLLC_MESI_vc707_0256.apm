@@ -1,0 +1,45 @@
+
+[Global]
+SaveParameters=0
+Description=Inorder Alpha Mesh with shared LLC and MESI Coherence (0256 cores) Dual VC707
+File=alpha_inorder_mesh_sharedLLC_MESI_vc707_0256
+Version=2.2
+Name=Inorder Alpha Mesh with shared LLC and MESI Coherence (0256 cores) Dual VC707
+Type=HAsim
+Class=Asim::Model
+DefaultBenchmark=
+DefaultRunOpts=
+RootName=HW/SW Hybrid Multifpga Project Foundation
+RootProvides=model
+
+[Model]
+DefaultAttributes=hasim inorder alpha
+model=HW/SW Hybrid Multifpga Project Foundation
+
+[HW/SW Hybrid Multifpga Project Foundation]
+File=modules/leap/build-support/project/project-multifpga.awb
+Packagehint=leap-multifpga
+
+
+[LIM Compiler Pipeline]
+File=config/pm/leap/submodels/pipelines/build-pipeline-lim.apm
+Packagehint=leap-multifpga
+
+[HW/SW Hybrid Multifpga Project Foundation/Requires]
+fpga_mapping=Inorder Alpha Mesh with shared LLC and MESI Coherence Mapping
+build_pipeline=LIM Compiler Pipeline
+connected_application=Inorder Alpha Mesh with shared LLC and MESI Coherence (0256 cores)
+environment_description=VC707 Dual HW/SW Environment (Synplify)
+
+[Inorder Alpha Mesh with shared LLC and MESI Coherence (0256 cores)]
+File=config/pm/hasim-alpha/alpha-inorder/cache-models/submodels/app_alpha_inorder_mesh_sharedLLC_MESI_0256.apm
+Packagehint=hasim-alpha
+
+
+[VC707 Dual HW/SW Environment (Synplify)]
+File=modules/leap-platforms/fpga-environments/vc707/vc707_dual_hwsw_synplify.awb
+Packagehint=leap-multifpga
+
+[Inorder Alpha Mesh with shared LLC and MESI Coherence Mapping]
+File=config/pm/hasim-alpha/alpha-inorder/cache-models/submodels/app_alpha_inorder_mesh_sharedLLC_MESI_mapping.awb
+Packagehint=hasim-alpha
