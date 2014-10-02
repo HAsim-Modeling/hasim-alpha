@@ -2057,7 +2057,7 @@ module [HASIM_MODULE] mkISA_Datapath
 
     Bit#(64) defaultFPRC = { 1'b0, 3'b0, 2'b10, 2'b00, 1'b0, 1'b0, 1'b0, 1'b0, 3'b0, 49'b0};
 
-`ifndef SYNTH_Z
+`ifdef ISA_NATIVE_FPGA_FP_ENABLED
 
     FP_ACCEL fpAdd    <- mkFPAcceleratorAdd();
     FP_ACCEL fpMul    <- mkFPAcceleratorMul();
