@@ -62,11 +62,14 @@ for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
                 $setup .= " --compare=\"${cmp}\"";
             }
 
+            my $m5cmd = m5_cmd("$bm{program}", $num_contexts, $bm{args}, $bm{input}, $bm{output}, $bm{errout});
+            $m5cmd .= " --mem-size=8GB";
+
             $gcfg->add(name => $bmark,
                        tree => [ "cpu2000", $size, $ctx_str, ${CPU2000_data::isFP}{$name} ? "FP" : "INT" ],
                        setup => $setup,
                        feeder => "m5",
-                       feedflags => m5_cmd("$bm{program}", $num_contexts, $bm{args}, $bm{input}, $bm{output}, $bm{errout}),
+                       feedflags => $m5cmd,
                       );
         }
     }
@@ -128,7 +131,7 @@ for (my $num_contexts = 1; $num_contexts <= 64; $num_contexts *= 2) {
             }
 
             my $m5cmd = m5_cmd("$bm{program}", $num_contexts, $bm{args}, $bm{input}, $bm{output}, $bm{errout});
-            $m5cmd .= " --physmem=2GB";
+            $m5cmd .= " --mem-size=8GB";
 
             $gcfg->add(name => $bmark,
                        tree => [ "cpu2006", $size, $ctx_str, ${CPU2006_data::isFP}{$name} ? "FP" : "INT" ],
