@@ -36,9 +36,9 @@ Packagehint=leap-multifpga
 fpga_mapping=Null FPGA Mapping
 build_pipeline=LIM Compiler Pipeline
 connected_application=Inorder Alpha Mesh with shared LLC and MESI Coherence (0064 cores)
-environment_description=VC707 HW/SW Environment (Synplify)
+environment_description=VC707 HW/SW Environment
 
 
-[VC707 HW/SW Environment (Synplify)]
-File=modules/leap-platforms/fpga-environments/vc707/vc707_hwsw_synplify.awb
+[VC707 HW/SW Environment]
+File=modules/leap-platforms/fpga-environments/vc707/vc707_hwsw.awb
 Packagehint=leap-multifpga
