@@ -1,0 +1,121 @@
+
+[Global]
+SaveParameters=0
+Description=Inorder Alpha with Magic Memory (0016 cores)
+File=app_alpha_inorder_0016
+Version=2.2
+Name=Inorder Alpha with Magic Memory (0016 cores)
+Type=HAsim
+Class=Asim::Model
+DefaultBenchmark=
+DefaultRunOpts=
+RootName=HAsim Performance Model
+RootProvides=connected_application
+
+[Model]
+DefaultAttributes=hasim inorder alpha
+model=HAsim Performance Model
+
+[Alpha ISA Definition]
+File=modules/hasim/functional-partition/isa/definition/isa_definition_alpha.awb
+Packagehint=hasim-alpha
+
+[Pipeline and Caches]
+File=modules/hasim/timing-models/core/core-with-cache/core-with-cache.awb
+Packagehint=hasim-models
+
+[Pipeline and Caches/Requires]
+hasim_pipeline=Inorder Pipeline, 2-bit branch predictor
+hasim_private_caches=Null Private caches
+
+[Single Core Chip/Requires]
+hasim_core=Pipeline and Caches
+chip_base_types=Chip Base Types
+hasim_chip_topology=Standard Topology Manager
+
+[Single Core Chip]
+File=modules/hasim/timing-models/chip/single-core-chip.awb
+Packagehint=hasim-models
+
+[Chip Base Types]
+File=modules/hasim/timing-models/chip/base-types/chip-base-types.awb
+Packagehint=hasim-models
+
+[HAsim Modeling Library/Requires]
+hasim_cache_algorithms=Cache Modeling Algorithms
+
+[Cache Modeling Algorithms]
+File=modules/hasim/timing-models/caches/cache-algorithms/cache-algorithms.awb
+Packagehint=hasim-models
+
+[HAsim Modeling Library]
+File=modules/hasim/util/modellib/hasim-modellib.awb
+Packagehint=hasim
+
+[Single Chip Timing Partition/Requires]
+hasim_memory=Null Memory
+hasim_modellib=HAsim Modeling Library
+hasim_chip=Single Core Chip
+
+[Single Chip Timing Partition]
+File=modules/hasim/timing-partition/single-chip/single-chip-timing-partition.awb
+Packagehint=hasim
+
+[HAsim Performance Model/Requires]
+hasim_common=HAsim Common Default Configuration
+hasim_timep=Single Chip Timing Partition
+hasim_isa=Alpha ISA Definition
+hasim_funcp=Alpha Functional Model
+hasim_model_services=Default HAsim Model Services
+
+[HAsim Performance Model]
+File=modules/hasim/model/hasim-model.awb
+Packagehint=hasim
+
+[Null Memory/Requires]
+memory_base_types=Memory Base Types
+
+[Null Memory]
+File=modules/hasim/timing-models/memory/memory-null.awb
+Packagehint=hasim-models
+
+[Memory Base Types]
+File=modules/hasim/timing-models/memory/base-types/memory-base-types.awb
+Packagehint=hasim-models
+
+[HAsim Common Default Configuration]
+File=config/pm/hasim/submodels/common/hasim_common.apm
+Packagehint=hasim
+
+[Inorder Pipeline, 2-bit branch predictor]
+File=config/pm/hasim-models/pipeline/inorder/inorder.apm
+Packagehint=hasim-models
+
+[Alpha Functional Model]
+File=config/pm/hasim-alpha/submodels/funcp/alpha_funcp_v3.apm
+Packagehint=hasim-alpha
+
+[Default HAsim Model Services]
+File=config/pm/hasim/submodels/common/hasim-model-services.apm
+Packagehint=hasim
+
+[HAsim Common Default Configuration/Params]
+CONTEXT_ID_BITS=4
+TOKEN_ID_BITS=6
+
+[Chip Base Types/Params]
+MAX_NUM_CPUS=16
+
+[Alpha Functional Model/Params]
+FUNCP_PHYSICAL_REG_INDEX_BITS=11
+FUNCP_PVT_CACHE_ENTRIES=16384
+MAX_NUM_CONTEXTS=16
+FUNCP_TLB_PVT_ENTRIES=8192
+
+[Standard Topology Manager]
+File=modules/hasim/timing-models/chip/topology/std/topology-std.awb
+Packagehint=hasim-models
+
+[Null Private caches]
+File=config/pm/hasim-models/private-caches/null-private-caches.apm
+Packagehint=hasim-models

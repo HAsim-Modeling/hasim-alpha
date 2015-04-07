@@ -1,10 +1,10 @@
 
 [Global]
 SaveParameters=0
-Description=Inorder Alpha with Magic Memory (0064 cores) VC707
-File=alpha_inorder_vc707
+Description=Inorder Alpha with Magic Memory (0008 cores) VC707
+File=alpha_inorder_vc707_0008
 Version=2.2
-Name=Inorder Alpha with Magic Memory (0064 cores) VC707
+Name=Inorder Alpha with Magic Memory (0008 cores) VC707
 Type=HAsim
 Class=Asim::Model
 DefaultBenchmark=
@@ -33,8 +33,6 @@ environment_description=VC707 HW/SW Environment
 [Null FPGA Mapping]
 File=modules/leap/build-support/project/null_mapping.awb
 Packagehint=leap-multifpga
-
-
 
 [Inorder Alpha with Magic Memory (0008 cores)]
 File=config/pm/hasim-alpha/alpha-inorder/submodels/app_alpha_inorder_0008.apm
