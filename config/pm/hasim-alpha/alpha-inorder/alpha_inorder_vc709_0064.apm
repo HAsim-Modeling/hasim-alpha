@@ -1,0 +1,44 @@
+
+[Global]
+SaveParameters=0
+Description=Inorder Alpha with Magic Memory (0064 cores) VC709
+File=alpha_inorder_vc709_0064
+Version=2.2
+Name=Inorder Alpha with Magic Memory (0064 cores) VC709
+Type=HAsim
+Class=Asim::Model
+DefaultBenchmark=
+DefaultRunOpts=
+RootName=HW/SW Hybrid Multifpga Project Foundation
+RootProvides=model
+
+[Model]
+DefaultAttributes=hasim inorder alpha simulation
+model=HW/SW Hybrid Multifpga Project Foundation
+
+[HW/SW Hybrid Multifpga Project Foundation]
+File=modules/leap/build-support/project/project-multifpga.awb
+Packagehint=leap-multifpga
+
+[LIM Compiler Pipeline]
+File=config/pm/leap/submodels/pipelines/build-pipeline-lim.apm
+Packagehint=leap-multifpga
+
+[HW/SW Hybrid Multifpga Project Foundation/Requires]
+fpga_mapping=Null FPGA Mapping
+build_pipeline=LIM Compiler Pipeline
+connected_application=Inorder Alpha with Magic Memory (0064 cores)
+environment_description=VC709 HW/SW Environment
+
+[Null FPGA Mapping]
+File=modules/leap/build-support/project/null_mapping.awb
+Packagehint=leap-multifpga
+
+
+[Inorder Alpha with Magic Memory (0064 cores)]
+File=config/pm/hasim-alpha/alpha-inorder/submodels/app_alpha_inorder_0064.apm
+Packagehint=hasim-alpha
+
+[VC709 HW/SW Environment]
+File=modules/leap-platforms/fpga-environments/vc709/vc709_hwsw.awb
+Packagehint=leap-multifpga
